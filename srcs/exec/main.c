@@ -2,14 +2,21 @@
 
 int	main(void)
 {
-	char	*rl;
+	loop();
+	return(0);
+}
 
+
+void	loop()
+{
+	char *rl;
+
+	ft_signal_handler();
 	while (1)
 	{
-		signal(SIGINT, SIG_IGN);
-		signal(SIGQUIT, SIG_IGN);
-		rl = readline("megashell >  ");
-		read_line_handler(rl);
+		rl = readline("minishell >");
+		if (ft_strncmp(rl, "exit", 4) == 0)
+			exit(0);
 		free(rl);
 	}
 }

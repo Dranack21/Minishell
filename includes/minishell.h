@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 15:02:37 by habouda           #+#    #+#             */
-/*   Updated: 2025/01/04 17:42:22 by habouda          ###   ########.fr       */
+/*   Updated: 2025/01/05 00:14:13 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,15 @@
 # include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+
+
+//////////////////SIGNAUX///////////////
+
+void	ft_signal_handler(void);
+void	ft_handle_sigint();
+void	ft_handle_sigsegv();
+
+
+void	loop();
 
 #endif

@@ -1,9 +1,9 @@
 
-#include "minishell.h"
+// #include "minishell.h"
 
-int	read_line_handler(char *rl)
-{
-	char **lines;
+// int	read_line_handler(char *rl)
+// {
+// 	char **lines;
 
-	lines = ft_split(' ', rl);
-}
+// 	lines = ft_split(' ', rl);
+// }
