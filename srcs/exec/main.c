@@ -9,8 +9,7 @@ int	main(void)
 		signal(SIGINT, SIG_IGN);
 		signal(SIGQUIT, SIG_IGN);
 		rl = readline("megashell >  ");
-		if (ft_strlen(rl) == 4 && ft_strncmp(rl, "exit", 4) == 0)
-			exit(0);
+		read_line_handler(rl);
 		free(rl);
 	}
 }
