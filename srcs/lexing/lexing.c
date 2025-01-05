@@ -27,7 +27,10 @@ int	token_counter(char *rl)
 		if (rl[i] == '|' && tokens++ > -1 && rl[i])
 			i++;
 		if (rl[i] == '-' && tokens++ > -1 && rl[i])
-			i = skip_string_in_quotes(rl, i);
+		{
+			while (ft_is_space(rl[i]) == 0 && rl[i])
+				i++;
+		}
 	}
 	return (tokens);
 }
