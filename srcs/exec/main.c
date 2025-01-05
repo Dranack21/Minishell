@@ -9,14 +9,14 @@ int	main(void)
 
 void	loop()
 {
-	char *rl;
+	char	*rl;
 
 	ft_signal_handler();
 	while (1)
 	{
-		rl = readline("minishell >");
-		if (ft_strncmp(rl, "exit", 4) == 0)
-			exit(0);
+		rl = readline("minishell>");
+		add_history(rl);
+		printf("nombre de tokens :%d\n", token_counter(rl));
 		free(rl);
 	}
 }
