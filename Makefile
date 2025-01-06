@@ -6,7 +6,7 @@
 #    By: habouda <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/28 01:37:02 by habouda           #+#    #+#              #
-#    Updated: 2025/01/05 18:57:43 by habouda          ###   ########.fr        #
+#    Updated: 2025/01/06 17:23:24 by habouda          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ SRCS_PARSING = $(SRCS_DIR)/parsing
 SRCS_BUILTIN = $(SRCS_DIR)/builtin
 SRCS_UTILS	 = $(SRCS_DIR)/utils
 SRCS_SIGNALS = $(SRCS_DIR)/signals
+SRCS_FREES 	 = $(SRCS_DIR)/frees
 
 OBJS_DIR 	= objs
 INCLUDES_DIR = includes
@@ -39,6 +40,7 @@ SRCS		= $(wildcard $(SRCS_EXEC)/*.c) \
 			  $(wildcard $(SRCS_BUILTIN)/*.c) \
 			  $(wildcard $(SRCS_UTILS)/*.c) \
 			  $(wildcard $(SRCS_SIGNALS)/*.c) \
+			   $(wildcard $(SRCS_FREES)/*.c) \
 
 OBJS		= $(patsubst $(SRCS_DIR)/%, $(OBJS_DIR)/%, $(SRCS:.c=.o))
 
