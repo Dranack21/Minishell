@@ -16,7 +16,7 @@ void	loop()
 	{
 		rl = readline("minishell>");
 		add_history(rl);
-		printf("nombre de tokens :%d\n", token_counter(rl));
+		lexing(rl);
 		free(rl);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 15:02:37 by habouda           #+#    #+#             */
-/*   Updated: 2025/01/05 20:22:14 by habouda          ###   ########.fr       */
+/*   Updated: 2025/01/06 17:03:03 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,20 @@ typedef struct	s_token
 ///////// TOKENS ///////
 
 int	token_counter(char *rl);
+int	token_separator(char *rl, int i);
 int	skip_string_in_quotes(char *rl, int i);
+int	lexing(char *rl);
+
+//////// TOKEN TAB MAKER //////////
+
+void	ft_lstadd_end_shell(t_token **head);
+void	ft_add_in_list_shell(t_token **head);
+void	*create_node_shell();
+void	print_list(t_token *head);
+void	free_tab(t_token *head);
+
+char	*str_maker(char *rl, int debut, int fin);
+
 
 
 //////////////////SIGNAUX///////////////
