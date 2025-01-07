@@ -13,7 +13,7 @@ void	loop()
 	ft_signal_handler();
 	while (1)
 	{
-		rl = readline("salut a tous c'est mini yannick et bienvenue a mini ville>");
+		rl = readline("Minishell>");
 		if (parse_for_quotes(rl) % 2 == 1)
 		{
 			printf("uneven single quote go die please");

@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 15:02:37 by habouda           #+#    #+#             */
-/*   Updated: 2025/01/07 20:06:46 by habouda          ###   ########.fr       */
+/*   Updated: 2025/01/07 21:02:10 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,11 @@ typedef struct	s_token
 int	parse_for_quotes(char *rl);
 
 
-
-
-///////// TOKENS ///////
+///////// LEXING  ///////
 
 void	lexing(char *rl);
+
+int		ft_is_not_quote(char c);
 int		token_counter(char *rl, int i);
 int		token_separator(char *rl, int i);
 int		skip_string_in_quotes(char *rl, int i);

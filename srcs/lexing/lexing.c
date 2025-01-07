@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	lexing(char *rl)
+void lexing(char *rl)
 {
 	int		i;
 	int		debut;
@@ -68,9 +68,9 @@ int	token_counter(char *rl, int i)
 	{
 		while (ft_is_space(rl[i]) == 1 && rl[i])
 			i++;
-		if (ft_isalpha(rl[i]) == 1 && rl[i])
+		if (ft_is_not_quote(rl[i]) == 1 && rl[i])
 		{
-			while (ft_isalpha(rl[i]) == 1 && rl[i])
+			while (ft_is_not_quote(rl[i]) == 1 && rl[i])
 				i++;
 			tokens++;
 		}
@@ -96,9 +96,9 @@ int	token_separator(char *rl, int i)
 	tokens = 0;
 	while (rl[i])
 	{
-		if (ft_isalpha(rl[i]) == 1 && rl[i])
+		if (ft_is_not_quote(rl[i]) == 1 && rl[i])
 		{
-			while (ft_isalpha(rl[i]) == 1 && rl[i])
+			while (ft_is_not_quote(rl[i]) == 1 && rl[i])
 				i++;
 			return (i - 1);
 		}
