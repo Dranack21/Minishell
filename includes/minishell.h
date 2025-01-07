@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 15:02:37 by habouda           #+#    #+#             */
-/*   Updated: 2025/01/06 17:34:20 by habouda          ###   ########.fr       */
+/*   Updated: 2025/01/07 19:42:48 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,13 @@ typedef struct	s_token
 	struct s_token	*prev;
 	struct s_token	*next;
 }				t_token;
+
+/////// EARLY PARSING //////////////
+
+int	parse_for_quotes(char *rl);
+
+
+
 
 ///////// TOKENS ///////
 
