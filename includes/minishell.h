@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 15:02:37 by habouda           #+#    #+#             */
-/*   Updated: 2025/01/07 19:42:48 by habouda          ###   ########.fr       */
+/*   Updated: 2025/01/07 20:06:46 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@
 # define CMD 1 
 # define ARG 2
 # define PIPE 3
+# define INPUT 4
+# define OUPUT 5
 
 
 typedef struct	s_token
@@ -51,11 +53,11 @@ int	parse_for_quotes(char *rl);
 
 ///////// TOKENS ///////
 
-int	lexing(char *rl);
-int	token_counter(char *rl, int i);
-int	token_separator(char *rl, int i);
-int	skip_string_in_quotes(char *rl, int i);
-int	skip_string_in_single_quotes(char *rl, int i);
+void	lexing(char *rl);
+int		token_counter(char *rl, int i);
+int		token_separator(char *rl, int i);
+int		skip_string_in_quotes(char *rl, int i);
+int		skip_string_in_single_quotes(char *rl, int i);
 
 //////// TOKEN TAB MAKER //////////
 

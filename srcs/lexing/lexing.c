@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	lexing(char *rl)
+void	lexing(char *rl)
 {
 	int		i;
 	int		debut;
@@ -32,7 +32,6 @@ int	lexing(char *rl)
 	}
 	print_list(head);
 	free_tab(head);
-	return (0);
 }
 
 char *str_maker(char *rl, int debut, int fin)

@@ -1,9 +1,21 @@
+#include "minishell.h"
 
-// #include "minishell.h"
+int	parse_for_quotes(char *rl)
+{
+	int	counter;
+	int	i;
 
-// int	read_line_handler(char *rl)
-// {
-// 	char **lines;
-
-// 	lines = ft_split(' ', rl);
-// }
+	i = 0;
+	counter = 0;
+	while (rl[i])
+	{
+		if (rl[i] == '\'')
+			counter++;
+		if (rl[i] == '"')
+		{
+			i = skip_string_in_quotes(rl, i);
+		}
+		i++;
+	}
+	return(counter);
+}
