@@ -10,8 +10,12 @@ int	lexing(char *rl)
 
 	head = NULL;
 	i = token_counter(rl, 0);
-	while (--i >= 0)
+	printf("nombre de tokens, %d \n", i);
+	while (i > 0)
+	{
 		ft_add_in_list_shell(&head);
+		i--;
+	}
 	i = 0;
 	current = head;
 	while (rl[i])
@@ -20,7 +24,7 @@ int	lexing(char *rl)
 			i++;
 		debut = i;
 		fin = token_separator(rl, i);
-		if (fin == 0)
+		if (fin == -1)
 			break;
 		current->str = str_maker(rl, debut, fin);
 		current = current->next;
@@ -38,6 +42,14 @@ char *str_maker(char *rl, int debut, int fin)
 
 	if (fin < debut)
 		return (NULL);
+	if (fin == debut)
+	{
+		str = malloc(sizeof(char) * 2);
+		if (!str)
+			return (NULL);
+		str[0] = rl[debut];
+		str[1] = '\0';
+	}
     i = 0;
     str = malloc(sizeof(char) * (fin - debut + 2));
     if (!str)
@@ -103,7 +115,7 @@ int	token_separator(char *rl, int i)
 			return (i - 1);
 		}
 	}
-	return (0);
+	return (-1);
 }
 
 int	skip_string_in_quotes(char *rl, int i)
