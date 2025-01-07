@@ -48,6 +48,7 @@ int	lexing(char *rl);
 int	token_counter(char *rl, int i);
 int	token_separator(char *rl, int i);
 int	skip_string_in_quotes(char *rl, int i);
+int	skip_string_in_single_quotes(char *rl, int i);
 
 //////// TOKEN TAB MAKER //////////
 

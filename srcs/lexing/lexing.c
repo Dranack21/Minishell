@@ -77,6 +77,8 @@ int	token_counter(char *rl, int i)
 		}
 		if (rl[i] == '"' && tokens++ > -1 && rl[i])
 			i = skip_string_in_quotes(rl, i);
+		if (rl[i] == '\'' && tokens++ > -1 && rl[i])
+			i = skip_string_in_single_quotes(rl, i);
 		if (rl[i] == '|' && tokens++ > -1 && rl[i])
 			i++;
 		if (rl[i] == '-' && tokens++ > -1 && rl[i])
@@ -106,6 +108,11 @@ int	token_separator(char *rl, int i)
 			i = skip_string_in_quotes(rl, i);
 				return (i - 1);
 		}
+		if (rl[i] == '\'' && tokens++ > -1 && rl[i])
+		{
+			i = skip_string_in_single_quotes(rl, i);
+				return (i - 1);
+		}
 		if (rl[i] == '|' && tokens++ > -1 && rl[i])
 			return (i);
 		if (rl[i] == '-' && tokens++ > -1 && rl[i])
@@ -124,6 +131,15 @@ int	skip_string_in_quotes(char *rl, int i)
 	while (rl[i] && rl[i] != '"')
 		i++;
 	if (rl[i] == '"')
+		i++;
+	return (i);
+}
+int	skip_string_in_single_quotes(char *rl, int i)
+{
+	i++;
+	while (rl[i] && rl[i] != '\'')
+		i++;
+	if (rl[i] == '\'')
 		i++;
 	return (i);
 }
