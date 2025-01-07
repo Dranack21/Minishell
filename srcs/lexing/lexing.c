@@ -10,7 +10,7 @@ int	lexing(char *rl)
 
 	head = NULL;
 	i = token_counter(rl, 0);
-	while (i-- >= 0)
+	while (--i >= 0)
 		ft_add_in_list_shell(&head);
 	i = 0;
 	current = head;
@@ -20,12 +20,13 @@ int	lexing(char *rl)
 			i++;
 		debut = i;
 		fin = token_separator(rl, i);
-		i = fin;
-		head->str = str_maker(rl, debut, fin);
-		head = head->next;
-		i++;
+		if (fin == 0)
+			break;
+		current->str = str_maker(rl, debut, fin);
+		current = current->next;
+		i = fin + 1;
 	}
-	print_list(current);
+	print_list(head);
 	free_tab(head);
 	return (0);
 }
@@ -35,8 +36,10 @@ char *str_maker(char *rl, int debut, int fin)
     char *str;
     int i;
 
+	if (fin < debut)
+		return (NULL);
     i = 0;
-    str = malloc(sizeof(char) * (fin - debut + 1));
+    str = malloc(sizeof(char) * (fin - debut + 2));
     if (!str)
         return (NULL);
     while (debut <= fin)
@@ -92,7 +95,7 @@ int	token_separator(char *rl, int i)
 				return (i - 1);
 		}
 		if (rl[i] == '|' && tokens++ > -1 && rl[i])
-			return (i++);
+			return (i);
 		if (rl[i] == '-' && tokens++ > -1 && rl[i])
 		{
 			while (ft_is_space(rl[i]) == 0 && rl[i])

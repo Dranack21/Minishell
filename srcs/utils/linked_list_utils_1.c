@@ -53,5 +53,7 @@ void	*create_node_shell()
 		return (NULL);
 	new_node->prev = NULL;
 	new_node->next = NULL;
+	new_node->str  = NULL;
+	new_node->type  = 0;
 	return (new_node);
 }

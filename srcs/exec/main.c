@@ -16,7 +16,13 @@ void	loop()
 	{
 		rl = readline("minishell>");
 		add_history(rl);
+		if (ft_strncmp(rl, "exit", 4) == 0)
+		{
+			free(rl);
+			rl_clear_history();
+			exit(0);
+		}
 		lexing(rl);
-		free(rl);
 	}
+	rl_clear_history();
 }

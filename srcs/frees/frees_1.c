@@ -8,7 +8,7 @@ void	free_tab(t_token *head)
 {
 	t_token	*temp;
 
-	while(head->next != NULL)
+	while(head != NULL)
 	{
 		temp = head->next;
 		free(head->str);
