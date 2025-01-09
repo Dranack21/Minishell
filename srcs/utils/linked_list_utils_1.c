@@ -44,16 +44,16 @@ void	ft_add_in_list_shell(t_token **head)
 	ft_lstadd_end_shell(head);
 }
 
-void	*create_node_shell()
+void	*create_node_shell(void)
 {
-	t_token	*new_node;
+	t_token *new_node;
 
 	new_node = (t_token *)malloc(sizeof(t_token));
 	if (!new_node)
 		return (NULL);
 	new_node->prev = NULL;
 	new_node->next = NULL;
-	new_node->str  = NULL;
-	new_node->type  = 0;
+	new_node->str = NULL;
+	new_node->type = 0;
 	return (new_node);
 }

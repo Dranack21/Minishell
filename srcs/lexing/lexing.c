@@ -1,12 +1,12 @@
 #include "minishell.h"
 
-void lexing(char *rl)
+void	lexing(char *rl)
 {
-	int		i;
-	int		debut;
-	int		fin;
-	t_token	*head;
-	t_token	*current;
+	int			i;
+	int			debut;
+	int			fin;
+	t_token		*head;
+	t_token		*current;
 
 	head = NULL;
 	i = token_counter(rl, 0);
@@ -25,7 +25,7 @@ void lexing(char *rl)
 		debut = i;
 		fin = token_separator(rl, i);
 		if (fin == -1)
-			break;
+			break ;
 		current->str = str_maker(rl, debut, fin);
 		current = current->next;
 		i = fin + 1;
@@ -34,10 +34,10 @@ void lexing(char *rl)
 	free_tab(head);
 }
 
-char *str_maker(char *rl, int debut, int fin)
+char	*str_maker(char *rl, int debut, int fin)
 {
-    char *str;
-    int i;
+	char	*str;
+	int		i;
 
 	if (fin < debut)
 		return (NULL);
@@ -49,19 +49,19 @@ char *str_maker(char *rl, int debut, int fin)
 		str[0] = rl[debut];
 		str[1] = '\0';
 	}
-    i = 0;
-    str = malloc(sizeof(char) * (fin - debut + 2));
-    if (!str)
-        return (NULL);
-    while (debut <= fin)
-        str[i++] = rl[debut++];
-    str[i] = '\0'; 
-    return (str);
+	i = 0;
+	str = malloc(sizeof(char) * (fin - debut + 2));
+	if (!str)
+		return (NULL);
+	while (debut <= fin)
+		str[i++] = rl[debut++];
+	str[i] = '\0';
+	return (str);
 }
 
 int	token_counter(char *rl, int i)
 {
-	int tokens;
+	int	tokens;
 
 	tokens = 0;
 	while (rl[i])
@@ -91,7 +91,7 @@ int	token_counter(char *rl, int i)
 
 int	token_separator(char *rl, int i)
 {
-	int tokens;
+	int	tokens;
 
 	tokens = 0;
 	while (rl[i])
@@ -105,12 +105,12 @@ int	token_separator(char *rl, int i)
 		if (rl[i] == '"' && tokens++ > -1 && rl[i])
 		{
 			i = skip_string_in_quotes(rl, i);
-				return (i - 1);
+			return (i - 1);
 		}
 		if (rl[i] == '\'' && tokens++ > -1 && rl[i])
 		{
 			i = skip_string_in_single_quotes(rl, i);
-				return (i - 1);
+			return (i - 1);
 		}
 		if (rl[i] == '|' && tokens++ > -1 && rl[i])
 			return (i);
@@ -133,6 +133,7 @@ int	skip_string_in_quotes(char *rl, int i)
 		i++;
 	return (i);
 }
+
 int	skip_string_in_single_quotes(char *rl, int i)
 {
 	i++;

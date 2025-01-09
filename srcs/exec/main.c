@@ -3,10 +3,10 @@
 int	main(void)
 {
 	loop();
-	return(0);
+	return (0);
 }
 
-void	loop()
+void	loop(void)
 {
 	char	*rl;
 
@@ -31,4 +31,3 @@ void	loop()
 	}
 	rl_clear_history();
 }
-
