@@ -9,7 +9,9 @@ void	print_list(t_token *head)
 	temp = head;
 	while (temp != NULL)
 	{
-		ft_printf("%s\n", temp->str);
+		ft_printf("str value :%s", temp->str);
+		ft_printf("   type value :%d", temp->type);
+		ft_printf("   path if there's one :%s\n", temp->full_path);
 		temp = temp->next;
 	}
 }
@@ -54,6 +56,7 @@ void	*create_node_shell(void)
 	new_node->prev = NULL;
 	new_node->next = NULL;
 	new_node->str = NULL;
+	new_node->full_path = NULL;
 	new_node->type = 0;
 	return (new_node);
 }

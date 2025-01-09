@@ -16,15 +16,24 @@
 
 ////// TOKENS //////////////
 
+# define EMPTY 0
 # define CMD 1
-# define ARG 2
-# define PIPE 3
-# define INPUT 4
-# define OUPUT 5
+# define BUILTIN 2
+# define ARG 3
+
+
+
+# define HERE_DOC 4
+# define APPEND_REDIR 5
+# define INPUT 6
+# define OUPUT 7
+# define PIPE 8
+# define END 9
 
 typedef struct s_token
 {
 	char			*str;
+	char			*full_path;
 	int				type;
 	struct s_token	*prev;
 	struct s_token	*next;
@@ -36,13 +45,20 @@ int					parse_for_quotes(char *rl);
 
 ///////// LEXING  ///////
 
-void				lexing(char *rl);
+void				get_token_type(t_token *token, char *envp[]);
 
 int					ft_is_not_quote(char c);
 int					token_counter(char *rl, int i);
 int					token_separator(char *rl, int i);
 int					skip_string_in_quotes(char *rl, int i);
 int					skip_string_in_single_quotes(char *rl, int i);
+int					check_if_builtin(char *str);
+int					check_if_command(t_token *token, char *envp[]);
+int					get_path(char *envp[]);
+
+char				*find_cmd_path(char **paths, char *cmd);
+void	token_manager(t_token *token, char *envp[]);
+t_token				*lexing(char *rl);
 
 //////// TOKEN TAB MAKER //////////
 
@@ -60,6 +76,6 @@ void				ft_signal_handler();
 void				ft_handle_sigint();
 void				ft_handle_sigsegv();
 
-void				loop();
+void	loop(char *envp[]);
 
 #endif
