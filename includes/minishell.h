@@ -59,6 +59,8 @@ void				token_manager(t_token *token, char *envp[]);
 
 t_token				*lexing(char *rl);
 
+int	check_if_command_ACT2(char *str, char **envp);
+int		check_if_export(t_token *token, char **env);
 //////// TOKEN TAB MAKER //////////
 
 void				ft_lstadd_end_shell(t_token **head);
@@ -76,5 +78,6 @@ void				ft_handle_sigint();
 void				ft_handle_sigsegv();
 
 void	loop(char *envp[]);
+char	**copy_env(char **envp);
 
 #endif

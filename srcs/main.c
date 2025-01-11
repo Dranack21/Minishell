@@ -2,10 +2,23 @@
 
 int	main(int argc, char *argv[], char *envp[])
 {
+	char	**env;
+	int		i;
+
+	i = 0;
+	env = copy_env(envp);
+	if (!env)
+		return (0);
+	while(env[i])
+	{
+		printf("%s\n", env[i]);
+		i++;
+	}
 	(void)argc;
 	(void)argv;
 
-	loop(envp);
+	loop(env);
+	ft_free_array(env);
 	return (0);
 }
 
@@ -48,4 +61,32 @@ void	token_manager(t_token *token, char *envp[])
 		current = current->next;
 	}
 	print_list(token);
+}
+
+char	**copy_env(char **envp)
+{
+	char	**env;
+	int		i;
+
+	i = 0;
+	while (envp[i])
+		i++;
+	env = malloc((i + 1) * sizeof(char *));
+	if (!env)
+		return(NULL);
+	i = 0;
+	while (envp[i])
+	{
+		env[i] = ft_strdup(envp[i]);
+		if (!env[i])
+		{
+			while (i--)
+				free(env[i]);
+			free(env);
+			return(NULL);
+		}
+		i++;
+	}
+	env[i] = NULL;
+	return (env);
 }
