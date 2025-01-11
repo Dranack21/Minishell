@@ -46,6 +46,7 @@ void	loop(char *envp[])
 		}
 		token = lexing(rl);
 		token_manager(token, envp);
+		free_tab(token);
 	}
 	rl_clear_history();
 }
