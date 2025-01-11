@@ -2,22 +2,43 @@
 
 void	get_token_type(t_token *token, char *envp[])
 {
-	if (ft_strcmp(token->str, "") == 0)
+	if (token->type != -1)
+		return ;
+	else if (check_if_special_char(token) == 0)
+		return ;
+	else if (ft_strcmp(token->str, "") == 0)
 		token->type = EMPTY;
-	else if (ft_strcmp(token->str, "|") == 0)
-		token->type = PIPE;
-	else if (check_if_builtin(token->str) == 0)
-		token->type = BUILTIN;
-	else if (ft_strcmp(token->str, ">") == 0)
-		token->type	= OUPUT;
-	else if (ft_strcmp(token->str, "<") == 0)
-		token->type	= INPUT;
-	else if (ft_strcmp(token->str, "<<") == 0)
-		token->type = HERE_DOC;
-	else if (ft_strcmp(token->str, ">>") == 0)
-		token->type = APPEND_REDIR;
-	else if (check_if_command(token , envp) == 0)
-		token->type = CMD;
+	else if (check_if_command(token , envp) == 0 || check_if_builtin(token->str) == 0)
+	{
+		if (check_if_command(token , envp) == 0)
+			token->type = CMD;
+		if (check_if_builtin(token->str) == 0)
+			token->type = BUILTIN;
+		token = token->next;
+		while (token != NULL)
+		{
+			if (check_if_special_char(token) == 1)
+				token->type = ARG;
+			else	
+				break;
+			token = token->next;
+		}
+	}
+}
+
+int		check_if_special_char(t_token *token)
+{
+	if (ft_strcmp(token->str, "|") == 0)
+		return(token->type = PIPE, 0);
+	if (ft_strcmp(token->str, ">") == 0)
+		return(token->type = OUPUT ,0);
+	else if(ft_strcmp(token->str, "<") == 0)
+		 return (token->type = INPUT, 0);
+	else if(ft_strcmp(token->str, "<<") == 0)
+		return (token->type = HERE_DOC, 0);
+	else if(ft_strcmp(token->str, ">>") == 0)
+		return (token->type = APPEND_REDIR, 0);
+	return (1);
 }
 
 int		check_if_builtin(char *str)

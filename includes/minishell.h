@@ -20,9 +20,6 @@
 # define CMD 1
 # define BUILTIN 2
 # define ARG 3
-
-
-
 # define HERE_DOC 4
 # define APPEND_REDIR 5
 # define INPUT 6
@@ -55,9 +52,11 @@ int					skip_string_in_single_quotes(char *rl, int i);
 int					check_if_builtin(char *str);
 int					check_if_command(t_token *token, char *envp[]);
 int					get_path(char *envp[]);
+int					check_if_special_char(t_token *token);
 
 char				*find_cmd_path(char **paths, char *cmd);
-void	token_manager(t_token *token, char *envp[]);
+void				token_manager(t_token *token, char *envp[]);
+
 t_token				*lexing(char *rl);
 
 //////// TOKEN TAB MAKER //////////
