@@ -1,28 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_count_words.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/04 14:57:50 by habouda           #+#    #+#             */
-/*   Updated: 2025/01/04 17:42:04 by habouda          ###   ########.fr       */
+/*   Created: 2025/01/04 18:55:12 by habouda           #+#    #+#             */
+/*   Updated: 2025/01/04 18:55:54 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main(void)
+int	count_words(const char *str, char c)
 {
-	char	*rl;
+	int	word;
+	int	counter;
 
-	while (1)
+	word = 0;
+	counter = 0;
+	while (*str)
 	{
-		signal(SIGINT, SIG_IGN);
-		signal(SIGQUIT, SIG_IGN);
-		rl = readline("megashell >  ");
-		if (ft_strlen(rl) == 4 && ft_strncmp(rl, "exit", 4) == 0)
-			exit(0);
-		free(rl);
+		if (*str != c && !word)
+		{
+			word = 1;
+			counter++;
+		}
+		if (*str == c && word)
+			word = 0;
+		str++;
 	}
+	return (counter);
 }

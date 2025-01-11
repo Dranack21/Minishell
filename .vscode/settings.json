@@ -1,6 +1,11 @@
 {
 	"files.associations": {
 		"minishell.h": "c",
-		"readline.h": "c"
-	}
+		"readline.h": "c",
+		"libft.h": "c",
+		"limits.h": "c",
+		"cctype": "cpp",
+		"wait.h": "c"
+	},
+	"C_Cpp.errorSquiggles": "enabled"
 }

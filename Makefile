@@ -6,7 +6,7 @@
 #    By: habouda <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/28 01:37:02 by habouda           #+#    #+#              #
-#    Updated: 2025/01/04 16:24:45 by habouda          ###   ########.fr        #
+#    Updated: 2025/01/09 17:43:49 by habouda          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,10 +19,14 @@ READLINE_FLAGS = -lreadline -ltermcap
 
 ### DIRECTORIES ################################################################
 
-SRCS_DIR 	= srcs
-SRCS_LEXING = $(SRCS_DIR)/lexing
-SRCS_EXEC 	= $(SRCS_DIR)/exec
+SRCS_DIR 	 = srcs
+SRCS_LEXING  = $(SRCS_DIR)/lexing
+SRCS_EXEC 	 = $(SRCS_DIR)/exec
 SRCS_PARSING = $(SRCS_DIR)/parsing
+SRCS_BUILTIN = $(SRCS_DIR)/builtin
+SRCS_UTILS	 = $(SRCS_DIR)/utils
+SRCS_SIGNALS = $(SRCS_DIR)/signals
+SRCS_FREES 	 = $(SRCS_DIR)/frees
 
 OBJS_DIR 	= objs
 INCLUDES_DIR = includes
@@ -32,7 +36,12 @@ INCLUDES_DIRS = -I$(INCLUDES_DIR) -I$(LIBFT_DIR)
 
 SRCS		= $(wildcard $(SRCS_EXEC)/*.c) \
 			  $(wildcard $(SRCS_PARSING)/*.c) \
-			  $(wildcard $(SRCS_LEXING)/*.c)
+			  $(wildcard $(SRCS_LEXING)/*.c) \
+			  $(wildcard $(SRCS_BUILTIN)/*.c) \
+			  $(wildcard $(SRCS_UTILS)/*.c) \
+			  $(wildcard $(SRCS_SIGNALS)/*.c) \
+			  $(wildcard $(SRCS_FREES)/*.c) \
+			  srcs/main.c \
 
 OBJS		= $(patsubst $(SRCS_DIR)/%, $(OBJS_DIR)/%, $(SRCS:.c=.o))
 
