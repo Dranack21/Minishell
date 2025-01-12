@@ -42,22 +42,28 @@ int					parse_for_quotes(char *rl);
 
 ///////// LEXING  ///////
 
+t_token				*lexing(char *rl);
+
 void				get_token_type(t_token *token, char *envp[]);
+void				token_manager(t_token *token, char *envp[]);
 
 int					ft_is_not_quote(char c);
 int					token_counter(char *rl, int i);
 int					token_separator(char *rl, int i);
+
 int					skip_string_in_quotes(char *rl, int i);
 int					skip_string_in_single_quotes(char *rl, int i);
-int					check_if_builtin(char *str);
-int					check_if_command(t_token *token, char *envp[]);
+
 int					get_path(char *envp[]);
-int					check_if_special_char(t_token *token);
-
 char				*find_cmd_path(char **paths, char *cmd);
-void				token_manager(t_token *token, char *envp[]);
 
-t_token				*lexing(char *rl);
+//// LEXING CHECKERS ///////
+
+int					check_if_builtin(t_token *token);
+int					check_if_command(t_token *token, char *envp[]);
+int					check_if_command_ACT2(char *str, char **envp);
+int					check_if_export(t_token *token, char **env);
+int					check_if_special_char(t_token *token);
 
 //////// TOKEN TAB MAKER //////////
 
@@ -76,5 +82,6 @@ void				ft_handle_sigint();
 void				ft_handle_sigsegv();
 
 void	loop(char *envp[]);
+char	**copy_env(char **envp);
 
 #endif

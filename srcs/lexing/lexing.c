@@ -33,31 +33,6 @@ t_token	*lexing(char *rl)
 	return (head);
 }
 
-char	*str_maker(char *rl, int debut, int fin)
-{
-	char	*str;
-	int		i;
-
-	if (fin < debut)
-		return (NULL);
-	if (fin == debut)
-	{
-		str = malloc(sizeof(char) * 2);
-		if (!str)
-			return (NULL);
-		str[0] = rl[debut];
-		str[1] = '\0';
-	}
-	i = 0;
-	str = malloc(sizeof(char) * (fin - debut + 2));
-	if (!str)
-		return (NULL);
-	while (debut <= fin)
-		str[i++] = rl[debut++];
-	str[i] = '\0';
-	return (str);
-}
-
 int	token_counter(char *rl, int i)
 {
 	int	tokens;
@@ -123,22 +98,19 @@ int	token_separator(char *rl, int i)
 	return (-1);
 }
 
-int	skip_string_in_quotes(char *rl, int i)
+char	*str_maker(char *rl, int debut, int fin)
 {
-	i++;
-	while (rl[i] && rl[i] != '"')
-		i++;
-	if (rl[i] == '"')
-		i++;
-	return (i);
-}
+	char	*str;
+	int		i;
 
-int	skip_string_in_single_quotes(char *rl, int i)
-{
-	i++;
-	while (rl[i] && rl[i] != '\'')
-		i++;
-	if (rl[i] == '\'')
-		i++;
-	return (i);
+	if (fin < debut)
+		return (NULL);
+	i = 0;
+	str = malloc(sizeof(char) * (fin - debut + 2));
+	if (!str)
+		return (NULL);
+	while (debut <= fin)
+		str[i++] = rl[debut++];
+	str[i] = '\0';
+	return (str);
 }
