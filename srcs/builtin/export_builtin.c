@@ -85,7 +85,7 @@ int ft_export(char **args, char ***env)
                 update_env_var(env, args[i]);
             else
             {
-                printf("no write better %s\n", args[i]);
+                printf("no, write better %s\n", args[i]);
             }
             free(name);
         }

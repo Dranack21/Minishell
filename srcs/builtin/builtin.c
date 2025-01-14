@@ -1,33 +1,33 @@
 #include "minishell.h"
 
-//check if no options before 
-// int ft_pwd(void)
-// {
-//     char *cwd;
+// check if no options before 
+int ft_pwd(void)
+{
+    char *cwd;
 
-//     cwd = getcwd(NULL, 0);
-//     if (cwd = NULL)
-//     {
-//         perror("getcwd");
-//         return(EXIT_FAILURE);
-//     }
-//     printf("%s\n", cwd);
-//     free(cwd);
-//     return(EXIT_SUCCESS);
-// }
+    cwd = getcwd(NULL, 0);
+    if (cwd == NULL)
+    {
+        perror("getcwd");
+        return(EXIT_FAILURE);
+    }
+    printf("%s\n", cwd);
+    free(cwd);
+    return(EXIT_SUCCESS);
+}
 
-// //check if no arguments or options before 
-// int ft_envp(char **envp)
-// {
-//     while(*envp)
-//     {
-//         printf("%s\n", *envp);
-//         envp++;
-//     }
-//     return(EXIT_SUCCESS);
-// }
+//check if no arguments or options before 
+int ft_envp(char **envp)
+{
+    while(*envp)
+    {
+        printf("%s\n", *envp);
+        envp++;
+    }
+    return(EXIT_SUCCESS);
+}
 
-
+//If export then search for var name first
 int ft_echo(t_token *tokens)
 {
     int newline;
@@ -36,7 +36,7 @@ int ft_echo(t_token *tokens)
 
     first = 1;
     newline = 1;
-    token = token->next; 
+    token = tokens->next; 
     if (token && strcmp(token->str, "-n") == 0)
     {
         newline = 0;
