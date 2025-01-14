@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-t_token	*lexing(char *rl)
+t_token	*lexing(t_shell *shell, char *rl)
 {
 	int			i;
 	int			debut;
@@ -10,6 +10,7 @@ t_token	*lexing(char *rl)
 
 	head = NULL;
 	i = token_counter(rl, 0);
+	shell->token_count = i;
 	printf("nombre de tokens, %d \n", i);
 	while (i > 0)
 	{

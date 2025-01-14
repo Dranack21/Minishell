@@ -36,13 +36,32 @@ typedef struct s_token
 	struct s_token	*next;
 }					t_token;
 
+
+typedef struct s_pipe
+{
+	int				id;
+	int				fd[2];
+	pid_t 			pid;
+	struct s_pipe	*prev;
+	struct  s_pipe	*next;
+}					t_pipe;
+
+
+typedef	struct s_shell
+{
+	int	pipe_count;
+	int	token_count;
+	int	export;
+}			t_shell;
+
+
 /////// EARLY PARSING //////////////
 
 int					parse_for_quotes(char *rl);
 
 ///////// LEXING  ///////
 
-t_token				*lexing(char *rl);
+t_token	*lexing(t_shell *shell, char *rl);
 
 void				get_token_type(t_token *token, char *envp[]);
 void				token_manager(t_token *token, char *envp[]);
@@ -53,8 +72,8 @@ int					token_separator(char *rl, int i);
 
 int					skip_string_in_quotes(char *rl, int i);
 int					skip_string_in_single_quotes(char *rl, int i);
-
 int					get_path(char *envp[]);
+
 char				*find_cmd_path(char **paths, char *cmd);
 
 //// LEXING CHECKERS ///////
@@ -75,13 +94,25 @@ void				free_tab(t_token *head);
 
 char				*str_maker(char *rl, int debut, int fin);
 
+
+
+/////////// EXECUTE ////////////
+
+int					count_pipes(t_token *token);
+
+void				execute(t_shell *shell, t_token *token, char *envp[]);
+void				ft_lstadd_end_pipes(t_pipe **head);
+void				ft_add_in_list_pipes(t_pipe **head);
+void				*create_node_pipes();
+
+
 //////////////////SIGNAUX///////////////
 
 void				ft_signal_handler();
 void				ft_handle_sigint();
 void				ft_handle_sigsegv();
 
-void	loop(char *envp[]);
+void	loop(t_shell *shell ,char **envp);
 char	**copy_env(char **envp);
 
 #endif
