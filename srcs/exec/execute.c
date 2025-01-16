@@ -2,12 +2,9 @@
 
 void	execute_main(t_shell *shell, t_token *token)
 {
-	int	pipe_count;
-
-	printf("SEGFAULT ?\n");
-	pipe_count = count_pipes(token);
-	printf("%d\n", pipe_count);
-	if (pipe_count == 0)
+	shell->pipe_count = count_pipes(token);
+	printf("AAAAAA %d\n", shell->pipe_count);
+	if (shell->pipe_count == 0)
 		return ;
 	else
 		create_pipes(shell, token);
@@ -23,6 +20,7 @@ void	create_pipes(t_shell *shell, t_token *token)
 
 	i = 0;
 	temp = shell->pipe_count;
+	printf("pipe nbr %d\n", temp);
 	head = NULL;
 	while (temp >= 0)
 	{
@@ -33,6 +31,7 @@ void	create_pipes(t_shell *shell, t_token *token)
 	while (current != NULL)
 	{
 		current->id = i;
+		printf("Pipe créé: ID = %d\n", current->id);
 		current = current->next;
 		i++;
 	}
@@ -42,10 +41,17 @@ void	create_pipes(t_shell *shell, t_token *token)
 		current->pid = fork();
 		if (current->pid == 0)
 		{
+			printf("Process %d: forked with PID %d\n", current->id, current->pid);
 			redirect_exe(shell, token, current);
 			exit(0);
 		}
 		current = current->next;
+	}
+	current = head;
+	while (current != NULL)
+	{
+    	waitpid(current->pid, NULL, 0);
+    	current = current->next;
 	}
 }
 
@@ -54,7 +60,7 @@ void	redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe)
 { 
 	if (pipe->id == 0)
 		return ;
-	if (pipe->id == shell->pipe_count - 1)
+	if (pipe->id == shell->pipe_count)
 		return ;
 	else
 	execute_cmd(token, pipe);
