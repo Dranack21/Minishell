@@ -7,7 +7,7 @@ int	main(int argc, char *argv[], char *envp[])
 
 	shell = malloc(sizeof(t_shell));
 	if (!shell)
-		return (NULL);
+		return (0);
 	env = copy_env(envp);
 	if (!env)
 		return (0);
@@ -43,7 +43,7 @@ void	loop(t_shell *shell ,char **envp)
 		}
 		token = lexing(shell, rl);
 		token_manager(token, envp);
-		execute(shell, token, envp);
+		execute_main(shell, token);
 		free_tab(token);
 	}
 	rl_clear_history();

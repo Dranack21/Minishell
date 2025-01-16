@@ -9,7 +9,7 @@ int	count_pipes(t_token *token)
 	current = token;
 	while(current != NULL)
 	{
-		if (current->type = PIPE)
+		if (current->type == PIPE)
 			i++;
 		current = current->next;
 	}
@@ -55,7 +55,5 @@ void	*create_node_pipes(void)
 		return (NULL);
 	new_node->prev = NULL;
 	new_node->next = NULL;
-	new_node->pid = NULL;
-	new_node->id = NULL; 
 	return (new_node);
 }

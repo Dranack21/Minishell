@@ -48,7 +48,7 @@ int	check_if_command(t_token *token, char *envp[])
 		cmd_str = ft_strdup(token->str);
 	if (access(cmd_str, X_OK) == 0)
 	{
-		return (token->type = CMD ,free(cmd_str), EXIT_SUCCESS);
+		return (token->type = CMD, free(cmd_str), EXIT_SUCCESS);
 	}
 	paths = ft_split(envp[get_path(envp)] + 5, ':');
 	full_p = find_cmd_path(paths, cmd_str);

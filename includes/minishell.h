@@ -31,6 +31,7 @@ typedef struct s_token
 {
 	char			*str;
 	char			*full_path;
+	char			**full_cmd;
 	int				type;
 	struct s_token	*prev;
 	struct s_token	*next;
@@ -97,13 +98,23 @@ char				*str_maker(char *rl, int debut, int fin);
 
 
 /////////// EXECUTE ////////////
+void				create_pipes(t_shell *shell, t_token *token);
+void				redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe);
 
 int					count_pipes(t_token *token);
+int					count_for_cmd_tab(t_token *token);
 
-void				execute(t_shell *shell, t_token *token, char *envp[]);
+char				**create_cmd_tab(t_token *token);
+
+void	execute_cmd(t_token *token, t_pipe *pipe);
+void	execute_main(t_shell *shell, t_token *token);
+
+///// LINKED LIST OF PIPES ///////
 void				ft_lstadd_end_pipes(t_pipe **head);
 void				ft_add_in_list_pipes(t_pipe **head);
 void				*create_node_pipes();
+
+
 
 
 //////////////////SIGNAUX///////////////
