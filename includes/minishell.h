@@ -115,7 +115,7 @@ void				ft_lstadd_end_pipes(t_pipe **head);
 void				ft_add_in_list_pipes(t_pipe **head);
 void				*create_node_pipes();
 
-
+void close_unused_pipes(t_pipe *pipe);
 
 
 //////////////////SIGNAUX///////////////

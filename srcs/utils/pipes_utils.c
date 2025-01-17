@@ -55,6 +55,18 @@ void	*create_node_pipes(void)
 		return (NULL);
 	new_node->prev = NULL;
 	new_node->next = NULL;
-	pipe(new_node->fd);
 	return (new_node);
 }
+
+// void	close_unsued_pipes(t_pipe *pipe)
+// {
+// 	t_pipe	*current;
+
+// 	current = pipe;
+// 	while(current != NULL)
+// 	{
+// 		close(current->fd[0]);
+// 		close(current->fd[1]);
+// 		current = current->next;
+// 	}
+// }

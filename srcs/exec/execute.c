@@ -25,8 +25,6 @@ void create_pipes(t_shell *shell, t_token *token)
         ft_add_in_list_pipes(&head);
         temp--;
     }
-    
-    // Create all pipes before forking
     current = head;
     while (current != NULL)
     {
@@ -36,12 +34,11 @@ void create_pipes(t_shell *shell, t_token *token)
             exit(1);
         }
         current->id = i++;
+		printf("created pipe ID : %d\n", current->id);
         current = current->next;
     }
-
-    // Fork processes
     current = head;
-    while(current != NULL)
+    while(current->next != NULL)
     {
         current->pid = fork();
         if (current->pid == -1)
@@ -56,8 +53,6 @@ void create_pipes(t_shell *shell, t_token *token)
         }
         current = current->next;
     }
-
-    // Close all pipes in parent
     current = head;
     while (current != NULL)
     {
@@ -65,8 +60,6 @@ void create_pipes(t_shell *shell, t_token *token)
         close(current->fd[1]);
         current = current->next;
     }
-
-    // Wait for all children
     current = head;
     while (current != NULL)
     {
@@ -77,48 +70,53 @@ void create_pipes(t_shell *shell, t_token *token)
 
 void redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe)
 {
-    t_pipe *current = pipe;
-    
-    // Close all pipes except the ones we need
-    while (current != NULL)
-    {
-        if (current != pipe && (pipe->id == 0 || current != pipe->prev))
-        {
-            close(current->fd[0]);
-            close(current->fd[1]);
-        }
-        current = current->next;
+    // Ensure pipes are properly closed for this specific process
+    if (pipe->id == 0) 
+	{
+        close(pipe->fd[0]);  // Close read end (not used by the first command)
+        dup2(pipe->fd[1], STDOUT_FILENO); // Redirect the write end to stdout
+    } 
+    else if (pipe->id == shell->pipe_count) 
+	{
+        dup2(pipe->prev->fd[0], STDIN_FILENO); // Redirect the previous pipe's read end to stdin
+    } 
+    else 
+	{
+        close(pipe->fd[0]);    // Close the read end of this pipe
+        close(pipe->prev->fd[1]); // Close the write end of the previous pipe
+        dup2(pipe->prev->fd[0], STDIN_FILENO); // Redirect input from previous pipe
+        dup2(pipe->fd[1], STDOUT_FILENO); // Redirect output to current pipe
     }
 
-    // First process (j'ai peur)
-    if (pipe->id == 0)
-    {
-        close(pipe->fd[0]);  // Close read end of first pipe
-        dup2(pipe->fd[1], STDOUT_FILENO);
-        close(pipe->fd[1]);
-    }
-    // Last process (wc -l)
-    else if (pipe->id == shell->pipe_count)
-    {
-        close(pipe->prev->fd[1]);  // Close write end of previous pipe
-        dup2(pipe->prev->fd[0], STDIN_FILENO);
-        close(pipe->prev->fd[0]);
-    }
-    // Middle process (ls -l)
-    else
-    {
-        close(pipe->fd[0]);  // Close read end of current pipe
-        close(pipe->prev->fd[1]);  // Close write end of previous pipe
-        
-        dup2(pipe->prev->fd[0], STDIN_FILENO);  // Read from previous pipe
-        dup2(pipe->fd[1], STDOUT_FILENO);       // Write to current pipe
-        
-        close(pipe->prev->fd[0]);  // Close original fds after dup2
-        close(pipe->fd[1]);
-    }
+    // Close all unused pipe file descriptors (this will clean up)
+    close_unused_pipes(pipe);
 
+    // Now attempt to execute the command, exit if failed
     execute_cmd(token, shell, pipe);
 }
+
+void close_unused_pipes(t_pipe *pipe)
+{
+    t_pipe *current = pipe;
+    
+    // Close unused file descriptors (pipes) that belong to other commands in the pipeline
+    // It's already ensured that the current process only has open the necessary pipe fds
+    if (current->prev)
+    {
+        close(current->prev->fd[0]);
+        close(current->prev->fd[1]);
+    }
+    if (current->next)
+    {
+        close(current->next->fd[0]);
+        close(current->next->fd[1]);
+    }
+    
+    // Close the current pipe after we're done with it
+    close(current->fd[0]);
+    close(current->fd[1]);
+}
+
 void    execute_cmd(t_token *token, t_shell *shell, t_pipe *pipe)
 {
     int    i;
