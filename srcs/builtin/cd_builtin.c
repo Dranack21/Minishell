@@ -14,7 +14,7 @@ char *get_home_dir(char **envp)
     return (NULL);
 }
 
-int ft_setenv(char **envp, const char *name, const char *value)
+int ft_setenv(char **envp,char *name,char *value)
 {
     int     i;
     int     len;

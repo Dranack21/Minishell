@@ -73,7 +73,6 @@ int ft_export(char **args, char ***env, t_shell *data)
     int i;
     char *name;
 
-    data->export = 1;
     if (!args[1])
         return (0);
     i = 1;
@@ -83,7 +82,10 @@ int ft_export(char **args, char ***env, t_shell *data)
         {
             name = get_var_name(args[i]);
             if (is_valid_identifier(name))
+            {
                 update_env_var(env, args[i]);
+                data->export = 1;
+            }
             else
             {
                 printf("no, write better %s\n", args[i]);

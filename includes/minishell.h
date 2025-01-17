@@ -96,7 +96,19 @@ void				free_tab(t_token *head);
 
 char				*str_maker(char *rl, int debut, int fin);
 
+/////////// BUILTIN ////////////
 
+int 	ft_pwd(void);
+int 	ft_envp(char **envp);
+int 	ft_echo(t_token *token, t_shell *data, char ***env);
+int 	cd_builtin(t_token *token, char **env);
+int 	ft_setenv(char **envp, char *name, char *value);
+
+void    is_export_echo(t_token *token, char ***env);
+void    update_pwd_vars(char **env);
+
+char 	*search_if_export(t_token *token, char ***env);
+char 	*get_home_dir(char **envp);
 
 /////////// EXECUTE ////////////
 void				create_pipes(t_shell *shell, t_token *token);
