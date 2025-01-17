@@ -19,26 +19,35 @@ void create_pipes(t_shell *shell, t_token *token)
 
     i = 0;
     temp = shell->pipe_count;
+    printf("pipe count %d\n", temp);
     head = NULL;
+    //// CREATE LIST ////
     while (temp >= 0)
     {
         ft_add_in_list_pipes(&head);
         temp--;
     }
     current = head;
-    while (current != NULL)
+    //// CREATE PIPE////
+    while (current->next != NULL)
     {
         if (pipe(current->fd) == -1)
         {
             perror("pipe");
             exit(1);
         }
+        current = current->next;
+    }
+    current = head;
+    while (current != NULL)
+    {
         current->id = i++;
 		printf("created pipe ID : %d\n", current->id);
         current = current->next;
     }
+    //// FORK ////
     current = head;
-    while(current->next != NULL)
+    while(current != NULL)
     {
         current->pid = fork();
         if (current->pid == -1)
@@ -54,13 +63,15 @@ void create_pipes(t_shell *shell, t_token *token)
         current = current->next;
     }
     current = head;
-    while (current != NULL)
+    /// CLEAN UP /////
+    while (current->next != NULL)
     {
         close(current->fd[0]);
         close(current->fd[1]);
         current = current->next;
     }
     current = head;
+    //// wait for childs ////
     while (current != NULL)
     {
         waitpid(current->pid, NULL, 0);
@@ -70,51 +81,36 @@ void create_pipes(t_shell *shell, t_token *token)
 
 void redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe)
 {
-    // Ensure pipes are properly closed for this specific process
     if (pipe->id == 0) 
 	{
-        close(pipe->fd[0]);  // Close read end (not used by the first command)
-        dup2(pipe->fd[1], STDOUT_FILENO); // Redirect the write end to stdout
+        dup2(pipe->fd[1], STDOUT_FILENO);
     } 
     else if (pipe->id == shell->pipe_count) 
 	{
-        dup2(pipe->prev->fd[0], STDIN_FILENO); // Redirect the previous pipe's read end to stdin
+        dup2(pipe->prev->fd[0], STDIN_FILENO);
     } 
     else 
 	{
-        close(pipe->fd[0]);    // Close the read end of this pipe
-        close(pipe->prev->fd[1]); // Close the write end of the previous pipe
-        dup2(pipe->prev->fd[0], STDIN_FILENO); // Redirect input from previous pipe
-        dup2(pipe->fd[1], STDOUT_FILENO); // Redirect output to current pipe
+        dup2(pipe->prev->fd[0], STDIN_FILENO);
+        dup2(pipe->fd[1], STDOUT_FILENO);
     }
-
-    // Close all unused pipe file descriptors (this will clean up)
     close_unused_pipes(pipe);
-
-    // Now attempt to execute the command, exit if failed
     execute_cmd(token, shell, pipe);
 }
 
 void close_unused_pipes(t_pipe *pipe)
 {
-    t_pipe *current = pipe;
+    t_pipe *current;
     
-    // Close unused file descriptors (pipes) that belong to other commands in the pipeline
-    // It's already ensured that the current process only has open the necessary pipe fds
-    if (current->prev)
+    current = pipe;
+    while (current->prev)
+        current = current->prev;
+    while (current->next)
     {
-        close(current->prev->fd[0]);
-        close(current->prev->fd[1]);
+        close(current->fd[0]);
+        close(current->fd[1]);
+        current = current->next;
     }
-    if (current->next)
-    {
-        close(current->next->fd[0]);
-        close(current->next->fd[1]);
-    }
-    
-    // Close the current pipe after we're done with it
-    close(current->fd[0]);
-    close(current->fd[1]);
 }
 
 void    execute_cmd(t_token *token, t_shell *shell, t_pipe *pipe)
