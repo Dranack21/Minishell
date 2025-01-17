@@ -52,7 +52,7 @@ typedef	struct s_shell
 {
 	int		pipe_count;
 	int		token_count;
-	int		xport;
+	int		export;
 	char	**env;
 }			t_shell;
 

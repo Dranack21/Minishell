@@ -62,7 +62,6 @@ int ft_setenv(char **envp, const char *name, const char *value)
 void    update_pwd_vars(char **env)
 {
     char    *oldpwd;
-    char    *pwd;
     char    current_dir[1024];
 
     oldpwd = getenv("PWD");

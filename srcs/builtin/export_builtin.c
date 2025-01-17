@@ -68,7 +68,7 @@ void update_env_var(char ***env, char *var)
     free(name);
 }
 
-int ft_export(char **args, char ***env, t_data data)
+int ft_export(char **args, char ***env, t_shell *data)
 {
     int i;
     char *name;
