@@ -2,23 +2,23 @@
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	char	**env;
 	t_shell	*shell;
 
 	shell = malloc(sizeof(t_shell));
 	if (!shell)
 		return (0);
-	env = copy_env(envp);
-	if (!env)
+	shell->env = NULL;
+	shell->env = copy_env(envp);
+	if (!shell->env)
 		return (0);
 	(void)argc;
 	(void)argv;
-	loop(shell, env);
-	ft_free_array(env);
+	loop(shell);
+	ft_free_array(shell->env);
 	return (0);
 }
 
-void	loop(t_shell *shell ,char **envp)
+void	loop(t_shell *shell)
 {
 	char	*rl;
 	t_token	*token;
@@ -37,12 +37,12 @@ void	loop(t_shell *shell ,char **envp)
 		if (ft_strncmp(rl, "exit", 4) == 0)
 		{
 			free(rl);
-			ft_free_array(envp);
+			ft_free_array(shell->env);
 			rl_clear_history();
 			exit(0);
 		}
 		token = lexing(shell, rl);
-		token_manager(token, envp);
+		token_manager(token, shell->env);
 		execute_main(shell, token);
 		free_tab(token);
 	}

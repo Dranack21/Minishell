@@ -3,7 +3,6 @@
 void	execute_main(t_shell *shell, t_token *token)
 {
 	shell->pipe_count = count_pipes(token);
-	printf("AAAAAA %d\n", shell->pipe_count);
 	if (shell->pipe_count == 0)
 		return ;
 	else
@@ -20,7 +19,6 @@ void	create_pipes(t_shell *shell, t_token *token)
 
 	i = 0;
 	temp = shell->pipe_count;
-	printf("pipe nbr %d\n", temp);
 	head = NULL;
 	while (temp >= 0)
 	{
@@ -31,7 +29,7 @@ void	create_pipes(t_shell *shell, t_token *token)
 	while (current != NULL)
 	{
 		current->id = i;
-		printf("Pipe créé: ID = %d\n", current->id);
+		printf("Pipe créé : ID = %d\n", current->id);
 		current = current->next;
 		i++;
 	}
@@ -55,18 +53,23 @@ void	create_pipes(t_shell *shell, t_token *token)
 	}
 }
 
-
 void	redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe)
 { 
 	if (pipe->id == 0)
-		return ;
+		dup2(pipe->fd[1],STDOUT_FILENO);
 	if (pipe->id == shell->pipe_count)
-		return ;
+	{
+		dup2(pipe->fd[0],STDIN_FILENO);
+	}
 	else
-	execute_cmd(token, pipe);
+	{
+		printf("pipe id test %d\n", pipe->id);
+		dup2(pipe->fd[1], STDOUT_FILENO);
+		dup2(pipe->prev->fd[0], STDIN_FILENO);
+		execute_cmd(token, shell, pipe);
+	}
 }
-
-void	execute_cmd(t_token *token, t_pipe *pipe)
+void	execute_cmd(t_token *token, t_shell *shell, t_pipe *pipe)
 {
 	int	i;
 
@@ -80,6 +83,8 @@ void	execute_cmd(t_token *token, t_pipe *pipe)
 	while(token->type != CMD)
 		token = token->next;
 	token->full_cmd =create_cmd_tab(token);
+	printf("a?\n");
+	execve(token->full_path, token->full_cmd, shell->env);
 	ft_print_array(token->full_cmd);
 	ft_free_array(token->full_cmd);
 }

@@ -9,9 +9,9 @@ void	print_list(t_token *head)
 	temp = head;
 	while (temp != NULL)
 	{
-		ft_printf("str value :%s", temp->str);
-		ft_printf("   type value :%d", temp->type);
-		ft_printf("   path if there's one :%s\n", temp->full_path);
+		printf("str value :%s", temp->str);
+		printf("   type value :%d", temp->type);
+		printf("   path if there's one :%s\n", temp->full_path);
 		temp = temp->next;
 	}
 }

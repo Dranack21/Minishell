@@ -50,9 +50,10 @@ typedef struct s_pipe
 
 typedef	struct s_shell
 {
-	int	pipe_count;
-	int	token_count;
-	int	export;
+	int		pipe_count;
+	int		token_count;
+	int		xport;
+	char	**env;
 }			t_shell;
 
 
@@ -106,7 +107,7 @@ int					count_for_cmd_tab(t_token *token);
 
 char				**create_cmd_tab(t_token *token);
 
-void	execute_cmd(t_token *token, t_pipe *pipe);
+void	execute_cmd(t_token *token, t_shell *shell, t_pipe *pipe);
 void	execute_main(t_shell *shell, t_token *token);
 
 ///// LINKED LIST OF PIPES ///////
@@ -123,7 +124,7 @@ void				ft_signal_handler();
 void				ft_handle_sigint();
 void				ft_handle_sigsegv();
 
-void	loop(t_shell *shell ,char **envp);
+void	loop(t_shell *shell);
 char	**copy_env(char **envp);
 
 #endif

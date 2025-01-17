@@ -55,5 +55,6 @@ void	*create_node_pipes(void)
 		return (NULL);
 	new_node->prev = NULL;
 	new_node->next = NULL;
+	pipe(new_node->fd);
 	return (new_node);
 }
