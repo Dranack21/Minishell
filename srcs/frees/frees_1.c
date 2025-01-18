@@ -3,7 +3,7 @@
 //// FREE DU TABLEAU DE TOKEN LORS DE SA CREATION ET ASSIGNATION DE CHAQUE STR
 	///////
 
-void	free_tab(t_token *head)
+void	free_token_tab(t_token *head)
 {
     t_token	*temp;
 
