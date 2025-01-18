@@ -63,7 +63,6 @@ void create_pipes(t_shell *shell, t_token *token)
         current = current->next;
     }
     current = head;
-    /// CLEAN UP /////
     while (current->next != NULL)
     {
         close(current->fd[0]);
@@ -77,6 +76,7 @@ void create_pipes(t_shell *shell, t_token *token)
         waitpid(current->pid, NULL, 0);
         current = current->next;
     }
+    free_pipes(head);
 }
 
 void redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe)
@@ -98,21 +98,6 @@ void redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe)
     execute_cmd(token, shell, pipe);
 }
 
-void close_unused_pipes(t_pipe *pipe)
-{
-    t_pipe *current;
-    
-    current = pipe;
-    while (current->prev)
-        current = current->prev;
-    while (current->next)
-    {
-        close(current->fd[0]);
-        close(current->fd[1]);
-        current = current->next;
-    }
-}
-
 void    execute_cmd(t_token *token, t_shell *shell, t_pipe *pipe)
 {
     int    i;
@@ -127,60 +112,10 @@ void    execute_cmd(t_token *token, t_shell *shell, t_pipe *pipe)
     while(token->type != CMD)
         token = token->next;
     token->full_cmd = create_cmd_tab(token);
-    execve(token->full_path, token->full_cmd, shell->env);
-    ft_print_array(token->full_cmd);
-    ft_free_array(token->full_cmd);
-}
-
-char    **create_cmd_tab(t_token *token)
-{
-    int        i;
-    int        count;
-    char    	**cmd;
-
-    count = count_for_cmd_tab(token);
-    i = 0;
-    cmd = malloc(sizeof(char*) * count + 1);
-    while (token)
+    if (token->full_cmd && token->full_path)
     {
-        if (token->type == CMD || token->type == BUILTIN)
-        {
-            cmd[i++] = ft_strdup(token->str);
-            token = token->next;
-            while (token && token->type == ARG)
-            {
-                cmd[i++] = ft_strdup(token->str);
-                token = token->next;
-            }
-            break;
-        }
-        token = token->next;
+        execve(token->full_path, token->full_cmd, shell->env);
+        ft_print_array(token->full_cmd);
+        ft_free_array(token->full_cmd);
     }
-    cmd[i] = NULL;
-    return (cmd);
-}
-
-int    count_for_cmd_tab(t_token *token)
-{
-    int        count;
-    t_token    *current;
-
-    current = token;
-    count = 0;
-    while(current)
-    {
-        if (current->type == CMD || current->type == BUILTIN)
-        {
-            count++;
-            current = current->next;
-            while (current && current->type == ARG)
-            {
-                count++;
-                current = current->next;
-            }
-            break;
-        }
-        current = current->next;
-    }
-    return(count);
 }

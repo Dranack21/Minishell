@@ -38,6 +38,7 @@ void	loop(t_shell *shell)
 		{
 			free(rl);
 			ft_free_array(shell->env);
+			free(shell);
 			rl_clear_history();
 			exit(0);
 		}

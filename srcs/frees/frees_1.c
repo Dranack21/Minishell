@@ -17,3 +17,15 @@ void	free_tab(t_token *head)
         head = temp;
     }
 }
+
+void    free_pipes(t_pipe *pipe)
+{
+    t_pipe *temp;
+
+    while (pipe)
+    {
+        temp = pipe->next;
+        free(pipe);
+        pipe = temp;
+    }
+}

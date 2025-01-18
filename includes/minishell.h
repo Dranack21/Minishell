@@ -96,7 +96,7 @@ void				free_tab(t_token *head);
 
 char				*str_maker(char *rl, int debut, int fin);
 
-
+void    free_pipes(t_pipe *pipe);
 
 /////////// EXECUTE ////////////
 void				create_pipes(t_shell *shell, t_token *token);

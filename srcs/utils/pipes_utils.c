@@ -46,6 +46,21 @@ void	ft_add_in_list_pipes(t_pipe **head)
 	ft_lstadd_end_pipes(head);
 }
 
+void close_unused_pipes(t_pipe *pipe)
+{
+    t_pipe *current;
+    
+    current = pipe;
+    while (current->prev)
+        current = current->prev;
+    while (current->next)
+    {
+        close(current->fd[0]);
+        close(current->fd[1]);
+        current = current->next;
+    }
+}
+
 void	*create_node_pipes(void)
 {
 	t_pipe *new_node;
@@ -57,16 +72,3 @@ void	*create_node_pipes(void)
 	new_node->next = NULL;
 	return (new_node);
 }
-
-// void	close_unsued_pipes(t_pipe *pipe)
-// {
-// 	t_pipe	*current;
-
-// 	current = pipe;
-// 	while(current != NULL)
-// 	{
-// 		close(current->fd[0]);
-// 		close(current->fd[1]);
-// 		current = current->next;
-// 	}
-// }
