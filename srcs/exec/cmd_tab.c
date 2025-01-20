@@ -1,10 +1,10 @@
 #include "minishell.h"
 
-char    **create_cmd_tab(t_token *token)
+char **create_cmd_tab(t_token *token)
 {
-    int        i;
-    int        count;
-    char    	**cmd;
+    int     i;
+    int     count;
+    char    **cmd;
 
     count = count_for_cmd_tab(token);
     i = 0;
@@ -15,11 +15,11 @@ char    **create_cmd_tab(t_token *token)
     {
         if (token->type == CMD || token->type == BUILTIN)
         {
-            cmd[i++] = ft_strdup(token->str);
+            cmd[i++] = strip_quotes(token->str);
             token = token->next;
             while (token && token->type == ARG)
             {
-                cmd[i++] = ft_strdup(token->str);
+                cmd[i++] = strip_quotes(token->str);
                 token = token->next;
             }
             break;
