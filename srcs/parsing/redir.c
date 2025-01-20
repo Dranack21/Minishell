@@ -36,9 +36,10 @@ void	prepare_redir(t_token *token)
 
 void handle_file_redirection(t_token *cmd_token)
 {
+    int fd;
+
     if (cmd_token->int_redir != 0 && cmd_token->file_redir != NULL)
     {
-        int fd;
         if (cmd_token->int_redir == O_APPEND)
             fd = open(cmd_token->file_redir, O_WRONLY | O_APPEND, 0644);
         else if (cmd_token->int_redir == 577)
@@ -52,6 +53,8 @@ void handle_file_redirection(t_token *cmd_token)
         close(fd);
     }
 }
+
+
 
 void handle_append_redir(t_token *token)
 {
@@ -73,6 +76,8 @@ void handle_append_redir(t_token *token)
         current->int_redir = O_APPEND;
     }
 }
+
+
 
 void handle_output_redir(t_token *token)
 {

@@ -12,6 +12,8 @@ void    execute_main(t_shell *shell, t_token *token)
 void redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe)
 {
     t_token *cmd_token;
+    t_token *temp;
+
     int     i;
 
     i = 0;
@@ -24,7 +26,7 @@ void redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe)
 	{
         dup2(pipe->prev->fd[0], STDIN_FILENO);
     }
-    else 
+    else
 	{
         dup2(pipe->prev->fd[0], STDIN_FILENO);
         dup2(pipe->fd[1], STDOUT_FILENO);
@@ -35,9 +37,15 @@ void redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe)
             i++;
         cmd_token = cmd_token->next;
     }
+    temp = cmd_token;
+    while (temp && temp->type != PIPE)
+    {
+        if (temp->int_redir != 0 && cmd_token->file_redir != NULL)
+            handle_file_redirection(temp);
+        temp = temp->next;
+    }
     while(cmd_token->type != CMD && cmd_token->type != BUILTIN)
         cmd_token = cmd_token->next;
-    handle_file_redirection(cmd_token);
     close_unused_pipes(pipe);
     execute_cmd(token, shell, pipe);
 }
