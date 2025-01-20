@@ -15,7 +15,6 @@ int ft_pwd(void)
     return(EXIT_SUCCESS);
 }
 
-//check if no arguments or options before 
 int ft_envp(char **envp)
 {
     while(*envp)
@@ -36,9 +35,7 @@ int ft_echo(t_token *token, t_shell *data, char ***env)
     newline = 1;
     current = token->next;
     if (data->export == 1)
-    {
         is_export_echo(token, env);
-    } 
     if (token && strcmp(token->str, "-n") == 0)
     {
         newline = 0;
