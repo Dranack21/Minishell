@@ -33,6 +33,8 @@ typedef struct s_token
 	char			*full_path;
 	char			**full_cmd;
 	int				type;
+	int				int_redir;
+	char			*file_redir;
 	struct s_token	*prev;
 	struct s_token	*next;
 }					t_token;
@@ -119,6 +121,12 @@ void				ft_lstadd_end_shell(t_token **head);         ///create t_shell node/////
 void				ft_add_in_list_shell(t_token **head);		///create t_shell node/////
 void				*create_node_shell();						///create t_shell node/////
 char				**copy_env(char **envp);					//// copies env /////
+/////////// REDIRECTIONS ////////////////
+void	handle_file_redirection(t_token *cmd_token); //// MAIN PART OF REDIRECTIONS /////
+void	prepare_redir(t_token *token);
+// void	handle_append_redir(t_token *token);
+// void	handle_output_redir(t_token *token);
+
 //////////////////SIGNAUX///////////////
 
 void				ft_signal_handler();

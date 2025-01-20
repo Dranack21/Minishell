@@ -58,6 +58,9 @@ void	*create_node_shell(void)
 	new_node->str = NULL;
 	new_node->full_path = NULL;
 	new_node->full_cmd = NULL;
+	new_node->file_redir = NULL;
 	new_node->type = -1;
+	new_node->int_redir = 0;
+
 	return (new_node);
 }
