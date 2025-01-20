@@ -45,6 +45,7 @@ void	loop(t_shell *shell)
 		token = lexing(shell, rl);
 		token_manager(token, shell->env);
 		prepare_redir(token);
+		print_list(token);
 		execute_main(shell, token);
 		free_token_tab(token);
 	}
@@ -61,6 +62,5 @@ void	token_manager(t_token *token, char *envp[])
 		get_token_type(current, envp);
 		current = current->next;
 	}
-	print_list(token);
 }
 

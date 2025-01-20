@@ -11,6 +11,8 @@ void	print_list(t_token *head)
 	{
 		printf("str value :%s", temp->str);
 		printf("   type value :%d", temp->type);
+		printf("     File redir if it exists %d", temp->int_redir);
+		printf("   File name if it exists %s", temp->file_redir);
 		printf("   path if there's one :%s\n", temp->full_path);
 		temp = temp->next;
 	}
