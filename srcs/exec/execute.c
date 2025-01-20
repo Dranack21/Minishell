@@ -145,4 +145,24 @@ int	count_for_cmd_tab(t_token *token)
 	}
 	return(count);
 }
+int execute_builtin(t_token *token, char ***env, t_shell *data)
+{
+    char *cmd = token->str;
 
+    if (!strcmp(cmd, "cd"))
+        return (cd_builtin(token, *env));
+    if (!strcmp(cmd, "echo"))
+        return (ft_echo(token, data, env));
+    if (!strcmp(cmd, "pwd"))
+        return (ft_pwd());
+    if (!strcmp(cmd, "export"))
+        return (ft_export(token->str, env, data));
+    if (!strcmp(cmd, "unset"))
+        return (ft_unset(token, *env));
+    if (!strcmp(cmd, "env"))
+        return (ft_envp(*env));
+    if (!strcmp(cmd, "exit"))
+        ft_exit(token);
+
+    return (EXIT_FAILURE);
+}
