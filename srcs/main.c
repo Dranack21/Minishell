@@ -45,6 +45,7 @@ void	loop(t_shell *shell)
 		token = lexing(shell, rl);
 		token_manager(token, shell->env);
 		prepare_redir(token);
+		prepare_redir_input(token);
 		print_list(token);
 		execute_main(shell, token);
 		free_token_tab(token);
