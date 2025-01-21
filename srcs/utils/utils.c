@@ -17,7 +17,6 @@ int	get_path(char *envp[])
 	return (i);
 }
 
-
 int	skip_string_in_quotes(char *rl, int i)
 {
 	i++;

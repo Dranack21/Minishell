@@ -50,7 +50,7 @@ void	ft_add_in_list_shell(t_token **head)
 
 void	*create_node_shell(void)
 {
-	t_token *new_node;
+	t_token	*new_node;
 
 	new_node = (t_token *)malloc(sizeof(t_token));
 	if (!new_node)
@@ -63,6 +63,5 @@ void	*create_node_shell(void)
 	new_node->file_redir = NULL;
 	new_node->type = -1;
 	new_node->int_redir = 0;
-
 	return (new_node);
 }

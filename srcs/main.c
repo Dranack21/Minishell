@@ -63,4 +63,3 @@ void	token_manager(t_token *token, char *envp[])
 		current = current->next;
 	}
 }
-

@@ -7,7 +7,7 @@ int	count_pipes(t_token *token)
 
 	i = 0;
 	current = token;
-	while(current != NULL)
+	while (current != NULL)
 	{
 		if (current->type == PIPE)
 			i++;
@@ -46,24 +46,24 @@ void	ft_add_in_list_pipes(t_pipe **head)
 	ft_lstadd_end_pipes(head);
 }
 
-void close_unused_pipes(t_pipe *pipe)
+void	close_unused_pipes(t_pipe *pipe)
 {
-    t_pipe *current;
-    
-    current = pipe;
-    while (current->prev)
-        current = current->prev;
-    while (current->next)
-    {
-        close(current->fd[0]);
-        close(current->fd[1]);
-        current = current->next;
-    }
+	t_pipe	*current;
+
+	current = pipe;
+	while (current->prev)
+		current = current->prev;
+	while (current->next)
+	{
+		close(current->fd[0]);
+		close(current->fd[1]);
+		current = current->next;
+	}
 }
 
 void	*create_node_pipes(void)
 {
-	t_pipe *new_node;
+	t_pipe	*new_node;
 
 	new_node = (t_pipe *)malloc(sizeof(t_pipe));
 	if (!new_node)

@@ -17,5 +17,5 @@ int	parse_for_quotes(char *rl)
 		}
 		i++;
 	}
-	return(counter);
+	return (counter);
 }
