@@ -3,12 +3,10 @@
 char **create_cmd_tab(t_token *token)
 {
     int     i;
-    int     count;
     char    **cmd;
 
-    count = count_for_cmd_tab(token);
     i = 0;
-    cmd = malloc(sizeof(char*) * (count + 1));
+    cmd = malloc(sizeof(char*) * (count_for_cmd_tab(token) + 1));
     if (!cmd)
         return (NULL);
     while (token)

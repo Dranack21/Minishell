@@ -54,8 +54,6 @@ void handle_file_redirection(t_token *cmd_token)
     }
 }
 
-
-
 void handle_append_redir(t_token *token)
 {
     t_token *current;
@@ -77,8 +75,6 @@ void handle_append_redir(t_token *token)
     }
 }
 
-
-
 void handle_output_redir(t_token *token)
 {
     t_token *current;
@@ -99,5 +95,3 @@ void handle_output_redir(t_token *token)
         current->int_redir = OUPUT;
     }
 }
-
-
