@@ -101,6 +101,10 @@ void				execute_main(t_shell *shell, t_token *token);				/// redirect you from p
 void				redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe); /// redirects first intermediates and last commands////
 void				execute_cmd(t_token *token, t_shell *shell, t_pipe *pipe); ////execute the command and free full_p/////
 
+
+////////////// EXECUTE COMMANDS WHEN NO PIPES /////////////
+void	no_pipes(t_token *token, t_shell *shell);
+void	cmd_wo_pipes(t_token *token, t_shell *shell);
 /////////// CMD ARRAY OF ARRAY FOR EXCVE ////////////
 char				**create_cmd_tab(t_token *token);         /// create the **cmd array/////
 

@@ -4,7 +4,7 @@ void	execute_main(t_shell *shell, t_token *token)
 {
 	shell->pipe_count = count_pipes(token);
 	if (shell->pipe_count == 0)
-		return ;
+		no_pipes(token, shell);
 	else
 		create_pipes(shell, token);
 }
