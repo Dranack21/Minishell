@@ -16,7 +16,7 @@ int ft_echo(t_token *tokens, t_shell *shell, char **env)
         current = current->next;
     }
     first = 1;
-    while (current->type == ARG)
+    while (current && current->type == ARG)
     {
         if (!first)
             printf(" ");
