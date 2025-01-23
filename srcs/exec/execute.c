@@ -42,7 +42,10 @@ void	redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe)
 	while (cmd_token->type != CMD && cmd_token->type != BUILTIN)
 		cmd_token = cmd_token->next;
 	close_unused_pipes(pipe);
-	execute_cmd(token, shell, pipe);
+	if (cmd_token->type == CMD)
+		execute_cmd(token, shell, pipe);
+	else 
+		builtin_wo_pipes(token, shell);
 }
 
 void	execute_cmd(t_token *token, t_shell *shell, t_pipe *pipe)
