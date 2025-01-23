@@ -93,7 +93,6 @@ void				print_list(t_token *head);				//// prints linked list of t token////
 void				free_token_tab(t_token *head);			///free tabs//////
 
 char				*str_maker(char *rl, int debut, int fin);		//jsplu//
-
 void				close_fds_and_wait_for_childs(t_pipe *head);			//// read the function name////
 
 ///////////////////////// EXECUTE //////////////////////
@@ -137,5 +136,18 @@ void				ft_handle_sigint();
 void				ft_handle_sigsegv();
 
 void	loop(t_shell *shell);
+
+/////////// BUILTIN ////////////
+
+int 	ft_pwd(void);
+int 	ft_envp(char **envp);
+int 	ft_echo(t_token *tokens, t_shell *shell, char **env);
+int 	cd_builtin(t_token *token, char **env);
+int 	ft_setenv(char **envp, char *name, char *value);
+
+void    update_pwd_vars(char **env);
+
+char 	*get_home_dir(char **envp);
+char 	*get_env_value(char *var_name, char **env);
 
 #endif

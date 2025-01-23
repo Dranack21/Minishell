@@ -7,5 +7,6 @@
 		"cctype": "cpp",
 		"wait.h": "c"
 	},
-	"C_Cpp.errorSquiggles": "enabled"
+	"C_Cpp.errorSquiggles": "enabled",
+	"makefile.configureOnOpen": false
 }
