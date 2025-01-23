@@ -7,7 +7,7 @@ char *get_home_dir(char **envp)
     i = 0;
     while (envp[i])
     {
-        if (strncmp(envp[i], "HOME=", 5) == 0)
+        if (ft_strncmp(envp[i], "HOME=", 5) == 0)
             return (envp[i] + 5);
         i++;
     }
@@ -20,7 +20,7 @@ static char *create_env_string(const char *name, const char *value)
     int     len = 0;
     char    *new_var;
     
-    new_var = malloc(strlen(name) + strlen(value) + 2);
+    new_var = malloc(ft_strlen(name) + ft_strlen(value) + 2);
     if (!new_var)
         return (NULL);
     while (name[i])
@@ -36,11 +36,11 @@ static char *create_env_string(const char *name, const char *value)
 static int update_existing_env(char **envp, const char *name, char *new_var)
 {
     int i = 0;
-    int name_len = strlen(name);
+    int name_len = ft_strlen(name);
 
     while (envp[i])
     {
-        if (strncmp(envp[i], name, name_len) == 0 && 
+        if (ft_strncmp(envp[i], name, name_len) == 0 && 
             envp[i][name_len] == '=')
         {
             free(envp[i]);
@@ -110,9 +110,9 @@ static int get_cd_path(t_token *token, char **env, char **path)
 {
     t_token *arg = token->next;
 
-    if (!arg || (strcmp(arg->str, "~") == 0))
+    if (!arg || (ft_strcmp(arg->str, "~") == 0))
         return (handle_home_path(env, path));
-    else if (strcmp(arg->str, "-") == 0)
+    else if (ft_strcmp(arg->str, "-") == 0)
         return (handle_oldpwd(path));
     *path = arg->str;
     return (EXIT_SUCCESS);

@@ -38,13 +38,14 @@ void	loop(t_shell *shell)
 		{
 			free(rl);
 			ft_free_array(shell->env);
+			free(shell);
 			rl_clear_history();
 			exit(0);
 		}
 		token = lexing(shell, rl);
 		token_manager(token, shell->env);
 		execute_main(shell, token);
-		free_tab(token);
+		free_token_tab(token);
 	}
 	rl_clear_history();
 }

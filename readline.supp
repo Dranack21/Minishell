@@ -4,3 +4,10 @@
    ...
    obj:*/libreadline.so.*
 }
+
+#{
+#   ignore_libc_leaks
+#   Memcheck:Leak
+#   ...
+#   obj:*/libc.so.*
+#}
