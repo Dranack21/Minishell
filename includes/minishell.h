@@ -102,8 +102,9 @@ void				execute_cmd(t_token *token, t_shell *shell, t_pipe *pipe); ////execute t
 
 
 ////////////// EXECUTE COMMANDS WHEN NO PIPES /////////////
-void	no_pipes(t_token *token, t_shell *shell);
-void	cmd_wo_pipes(t_token *token, t_shell *shell);
+void				no_pipes(t_token *token, t_shell *shell);
+void				cmd_wo_pipes(t_token *token, t_shell *shell);
+void				builtin_wo_pipes(t_token *token, t_shell *shell, char **envp);
 /////////// CMD ARRAY OF ARRAY FOR EXCVE ////////////
 char				**create_cmd_tab(t_token *token);         /// create the **cmd array/////
 
@@ -125,9 +126,9 @@ void				ft_add_in_list_shell(t_token **head);		///create t_shell node/////
 void				*create_node_shell();						///create t_shell node/////
 char				**copy_env(char **envp);					//// copies env /////
 /////////// REDIRECTIONS ////////////////
-void	handle_file_redirection(t_token *cmd_token); //// MAIN PART OF REDIRECTIONS /////
-void	prepare_redir(t_token *token);
-void    prepare_redir_input(t_token *token);
+void				handle_file_redirection(t_token *cmd_token); //// MAIN PART OF REDIRECTIONS /////
+void				prepare_redir(t_token *token);
+void   				prepare_redir_input(t_token *token);
 
 //////////////////SIGNAUX///////////////
 
@@ -135,19 +136,20 @@ void				ft_signal_handler();
 void				ft_handle_sigint();
 void				ft_handle_sigsegv();
 
-void	loop(t_shell *shell);
+void				loop(t_shell *shell);
 
 /////////// BUILTIN ////////////
 
-int 	ft_pwd(void);
-int 	ft_envp(char **envp);
-int 	ft_echo(t_token *tokens, t_shell *shell, char **env);
-int 	cd_builtin(t_token *token, char **env);
-int 	ft_setenv(char **envp, char *name, char *value);
-
-void    update_pwd_vars(char **env);
-
-char 	*get_home_dir(char **envp);
-char 	*get_env_value(char *var_name, char **env);
-
+int 				ft_pwd(void);
+int 				ft_envp(char **envp);
+int 				ft_echo(t_token *tokens, t_shell *shell, char **env);
+int 				cd_builtin(t_token *token, char **env);
+int 				ft_setenv(char **envp, char *name, char *value);
+int					ft_unset(t_token *tokens, char **env);
+void				ft_exit(t_token *tokens);
+void   				 update_pwd_vars(char **env);
+int 				ft_export(char **args, char ***env, t_shell *data);
+char 				*get_home_dir(char **envp);
+char 				*get_env_value(char *var_name, char **env);
+void				identify_builtin(t_token *token, t_shell *shell, char **envp);
 #endif

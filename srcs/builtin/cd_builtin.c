@@ -59,8 +59,7 @@ int ft_setenv(char **envp, char *name, char *value)
 
     new_var = create_env_string(name, value);
     if (!new_var)
-        return (-1);
-    
+        return (-1);    
     if (update_existing_env(envp, name, new_var))
         return (0);
         

@@ -7,6 +7,7 @@ int ft_echo(t_token *tokens, t_shell *shell, char **env)
     int first;
     char *value;
 
+    shell->export = 1;
     print_newline = 1;
     current = tokens->next;
     if (current && ft_strcmp(current->str, "-n") == 0)
@@ -15,7 +16,7 @@ int ft_echo(t_token *tokens, t_shell *shell, char **env)
         current = current->next;
     }
     first = 1;
-    while (current)
+    while (current->type == ARG)
     {
         if (!first)
             printf(" ");

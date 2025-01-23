@@ -8,8 +8,8 @@ void	get_token_type(t_token *token, char *envp[])
 		return ;
 	else if (ft_strcmp(token->str, "") == 0)
 		token->type = EMPTY;
-	else if (check_if_command(token, envp) == 0
-		|| check_if_builtin(token) == 0 || check_if_export(token,
+	else if (check_if_builtin(token) == 0
+		|| check_if_command(token, envp) == 0 || check_if_export(token,
 			envp) == 0)
 	{
 		token = token->next;

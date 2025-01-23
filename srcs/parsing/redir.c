@@ -77,8 +77,10 @@ void	handle_file_redirection(t_token *cmd_token)
 			fd = open(cmd_token->file_redir, O_WRONLY | O_APPEND | O_CREAT,
 					0644);
 		else if (cmd_token->int_redir == 577)
+		{
 			fd = open(cmd_token->file_redir, O_WRONLY | O_CREAT | O_TRUNC,
 					0644);
+		}
 		if (fd < 0)
 		{
 			perror("open");
@@ -96,7 +98,11 @@ void	handle_file_redirection(t_token *cmd_token)
 			perror("open");
 			exit(1);
 		}
-        dup2(fd, STDIN_FILENO);
+		if (dup2(fd, STDOUT_FILENO) < 0)
+		{
+    		perror("dup2");
+    		exit(1);
+		}
         close(fd);
     }
 }
