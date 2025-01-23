@@ -104,7 +104,6 @@ void				execute_cmd(t_token *token, t_shell *shell, t_pipe *pipe); ////execute t
 ////////////// EXECUTE COMMANDS WHEN NO PIPES /////////////
 void				no_pipes(t_token *token, t_shell *shell);
 void				cmd_wo_pipes(t_token *token, t_shell *shell);
-void				builtin_wo_pipes(t_token *token, t_shell *shell, char **envp);
 /////////// CMD ARRAY OF ARRAY FOR EXCVE ////////////
 char				**create_cmd_tab(t_token *token);         /// create the **cmd array/////
 
@@ -151,5 +150,8 @@ void   				 update_pwd_vars(char **env);
 int 				ft_export(char **args, char ***env, t_shell *data);
 char 				*get_home_dir(char **envp);
 char 				*get_env_value(char *var_name, char **env);
-void				identify_builtin(t_token *token, t_shell *shell, char **envp);
+
+
+void				identify_builtin(t_token *token, t_shell *shell);
+void				builtin_wo_pipes(t_token *token, t_shell *shell);
 #endif
