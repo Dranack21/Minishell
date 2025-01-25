@@ -98,7 +98,7 @@ void	handle_file_redirection(t_token *cmd_token)
 			perror("open");
 			exit(1);
 		}
-		if (dup2(fd, STDOUT_FILENO) < 0)
+		if (dup2(fd, STDIN_FILENO) < 0)
 		{
     		perror("dup2");
     		exit(1);
