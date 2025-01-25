@@ -15,9 +15,10 @@ char	**create_cmd_tab(t_token *token)
 		{
 			cmd[i++] = strip_quotes(token->str);
 			token = token->next;
-			while (token && token->type == ARG)
+			while (token && token->type != PIPE)
 			{
-				cmd[i++] = strip_quotes(token->str);
+				if (token->type == ARG)
+					cmd[i++] = strip_quotes(token->str);
 				token = token->next;
 			}
 			break ;
@@ -41,9 +42,10 @@ int	count_for_cmd_tab(t_token *token)
 		{
 			count++;
 			current = current->next;
-			while (current && current->type == ARG)
+			while (current && current->type != PIPE)
 			{
-				count++;
+				if (token->type == ARG)
+					count++;
 				current = current->next;
 			}
 			break ;

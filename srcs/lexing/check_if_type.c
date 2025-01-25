@@ -4,7 +4,7 @@ int	check_if_special_char(t_token *token)
 {
 	if (ft_strcmp(token->str, "|") == 0)
 		return (token->type = PIPE, 0);
-	if (ft_strcmp(token->str, ">") == 0)
+	else if (ft_strcmp(token->str, ">") == 0)
 		return (token->type = OUPUT, 0);
 	else if (ft_strcmp(token->str, "<") == 0)
 		return (token->type = INPUT, 0);
@@ -93,3 +93,11 @@ int	check_if_export(t_token *token, char **env)
 	free(cmd_str);
 	return (1);
 }
+
+// int	check_if_arg(t_token *token)
+// {
+// 	t_token	*current;
+
+// 	current = token;
+
+// }
