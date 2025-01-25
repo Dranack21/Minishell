@@ -20,19 +20,19 @@ int	check_if_builtin(t_token *token)
 	if (!token->str)
 		return (EXIT_FAILURE);
 	else if (ft_strcmp(token->str, "echo") == 0)
-		return (token->type = BUILTIN ,EXIT_SUCCESS);
+		return (token->type = BUILTIN, EXIT_SUCCESS);
 	else if (ft_strcmp(token->str, "cd") == 0)
-		return (token->type = BUILTIN ,EXIT_SUCCESS);
+		return (token->type = BUILTIN, EXIT_SUCCESS);
 	else if (ft_strcmp(token->str, "pwd") == 0)
-		return (token->type = BUILTIN ,EXIT_SUCCESS);
+		return (token->type = BUILTIN, EXIT_SUCCESS);
 	else if (ft_strcmp(token->str, "export") == 0)
-		return (token->type = BUILTIN ,EXIT_SUCCESS);
+		return (token->type = BUILTIN, EXIT_SUCCESS);
 	else if (ft_strcmp(token->str, "unset") == 0)
-		return (token->type = BUILTIN ,EXIT_SUCCESS);
+		return (token->type = BUILTIN, EXIT_SUCCESS);
 	else if (ft_strcmp(token->str, "exit") == 0)
-		return (token->type = BUILTIN ,EXIT_SUCCESS);
+		return (token->type = BUILTIN, EXIT_SUCCESS);
 	else if (ft_strcmp(token->str, "env") == 0)
-		return (token->type = BUILTIN ,EXIT_SUCCESS);
+		return (token->type = BUILTIN, EXIT_SUCCESS);
 	return (EXIT_FAILURE);
 }
 
@@ -87,7 +87,7 @@ int	check_if_export(t_token *token, char **env)
 	while (env[i])
 	{
 		if (ft_strncmp(env[i], cmd_str, ft_strlen(cmd_str)) == 0)
-			return (token->type = CMD ,free(cmd_str), 0);
+			return (token->type = CMD, free(cmd_str), 0);
 		i++;
 	}
 	free(cmd_str);

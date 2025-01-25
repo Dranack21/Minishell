@@ -51,9 +51,9 @@ void	prepare_redir_input(t_token *token)
 				file = current->next;
 		}
 		backward = current;
-        while (backward && backward->type != CMD
-				&& backward->type != BUILTIN && backward->type != -1)
-				backward = backward->prev;
+		while (backward && backward->type != CMD && backward->type != BUILTIN
+			&& backward->type != -1)
+			backward = backward->prev;
 		if (backward && (backward->type == CMD || backward->type == BUILTIN
 				|| backward->type == -1))
 		{
@@ -71,7 +71,8 @@ void	handle_file_redirection(t_token *cmd_token)
 {
 	int	fd;
 
-	if (cmd_token->int_redir != 0 && cmd_token->file_redir != NULL && cmd_token->int_redir != INPUT)
+	if (cmd_token->int_redir != 0 && cmd_token->file_redir != NULL
+		&& cmd_token->int_redir != INPUT)
 	{
 		if (cmd_token->int_redir == O_APPEND)
 			fd = open(cmd_token->file_redir, O_WRONLY | O_APPEND | O_CREAT,
@@ -89,20 +90,20 @@ void	handle_file_redirection(t_token *cmd_token)
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}
-    else if (cmd_token->int_redir != 0 && cmd_token->file_redir != NULL)
-    {
-        if (cmd_token->int_redir == INPUT)
-            fd = open(cmd_token->file_redir, O_RDONLY);
-        if (fd < 0)
+	else if (cmd_token->int_redir != 0 && cmd_token->file_redir != NULL)
+	{
+		if (cmd_token->int_redir == INPUT)
+			fd = open(cmd_token->file_redir, O_RDONLY);
+		if (fd < 0)
 		{
 			perror("open");
 			exit(1);
 		}
 		if (dup2(fd, STDIN_FILENO) < 0)
 		{
-    		perror("dup2");
-    		exit(1);
+			perror("dup2");
+			exit(1);
 		}
-        close(fd);
-    }
+		close(fd);
+	}
 }

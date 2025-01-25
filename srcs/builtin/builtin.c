@@ -1,27 +1,26 @@
 #include "minishell.h"
 
-
-int ft_pwd(void)
+int	ft_pwd(void)
 {
-    char *cwd;
+	char	*cwd;
 
-    cwd = getcwd(NULL, 0);
-    if (cwd == NULL)
-    {
-        perror("getcwd");
-        return(EXIT_FAILURE);
-    }
-    printf("%s\n", cwd);
-    free(cwd);
-    return(EXIT_SUCCESS);
+	cwd = getcwd(NULL, 0);
+	if (cwd == NULL)
+	{
+		perror("getcwd");
+		return (EXIT_FAILURE);
+	}
+	printf("%s\n", cwd);
+	free(cwd);
+	return (EXIT_SUCCESS);
 }
 
-int ft_envp(char **envp)
+int	ft_envp(char **envp)
 {
-    while(*envp)
-    {
-        printf("%s\n", *envp);
-        envp++;
-    }
-    return(EXIT_SUCCESS);
+	while (*envp)
+	{
+		printf("%s\n", *envp);
+		envp++;
+	}
+	return (EXIT_SUCCESS);
 }

@@ -2,10 +2,10 @@
 
 void	no_pipes(t_token *token, t_shell *shell)
 {
-	t_token* current;
+	t_token	*current;
 
 	current = token;
-	while(current->type != CMD && current->type != BUILTIN)
+	while (current->type != CMD && current->type != BUILTIN)
 		current = current->next;
 	if (current->type == CMD)
 		cmd_wo_pipes(current, shell);
@@ -13,10 +13,9 @@ void	no_pipes(t_token *token, t_shell *shell)
 		builtin_wo_pipes(token, shell);
 }
 
-
 void	builtin_wo_pipes(t_token *token, t_shell *shell)
 {
-	int original_stdout;
+	int	original_stdout;
 
 	original_stdout = dup(STDOUT_FILENO);
 	handle_file_redirection(token);
@@ -35,7 +34,7 @@ void	identify_builtin(t_token *token, t_shell *shell)
 	{
 		if (current->next)
 			current = current->next;
-		while(current && current->type == ARG)
+		while (current && current->type == ARG)
 		{
 			current->str = strip_quotes(current->str);
 			current = current->next;
