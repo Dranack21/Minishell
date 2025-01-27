@@ -48,7 +48,7 @@ int	check_if_command(t_token *token, char *envp[])
 		cmd_str = ft_strdup(token->str);
 	if (access(cmd_str, X_OK) == 0)
 	{
-		return (token->type = CMD, free(cmd_str), EXIT_SUCCESS);
+		return (free(cmd_str), EXIT_SUCCESS);
 	}
 	paths = ft_split(envp[get_path(envp)] + 5, ':');
 	full_p = find_cmd_path(paths, cmd_str);
@@ -57,7 +57,7 @@ int	check_if_command(t_token *token, char *envp[])
 		token->full_path = full_p;
 		ft_free_array(paths);
 		free(cmd_str);
-		return (token->type = CMD, EXIT_SUCCESS);
+		return (EXIT_SUCCESS);
 	}
 	ft_free_array(paths);
 	free(full_p);
