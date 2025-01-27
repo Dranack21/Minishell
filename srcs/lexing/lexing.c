@@ -2,34 +2,35 @@
 
 t_token	*lexing(t_shell *shell, char *rl)
 {
-	int			i;
-	int			debut;
-	int			fin;
-	t_token		*head;
-	t_token		*current;
+	int		i;
+	int		start;
+	int		end;
+	int		token_count;
+	t_token	*head;
+	t_token	*current;
 
+	i = 0;
 	head = NULL;
-	i = token_counter(rl, 0);
-	shell->token_count = i;
-	printf("nombre de tokens, %d \n", i);
-	while (i > 0)
+	token_count = token_counter(rl, 0);
+	shell->token_count = token_count;
+	printf("nombre de tokens: %d\n", token_count);
+	while (token_count > 0)
 	{
 		ft_add_in_list_shell(&head);
-		i--;
+		token_count--;
 	}
-	i = 0;
 	current = head;
-	while (rl[i])
+	while (rl[i] && current)
 	{
-		while (ft_is_space(rl[i]) == 0 && rl[i])
+		while (ft_is_space(rl[i]) == 0)
 			i++;
-		debut = i;
-		fin = token_separator(rl, i);
-		if (fin == -1)
+		start = i;
+		end = token_separator(rl, i);
+		if (end == -1)
 			break ;
-		current->str = str_maker(rl, debut, fin);
+		current->str = str_maker(rl, start, end);
 		current = current->next;
-		i = fin + 1;
+		i = end + 1;
 	}
 	return (head);
 }
@@ -41,23 +42,36 @@ int	token_counter(char *rl, int i)
 	tokens = 0;
 	while (rl[i])
 	{
-		while (ft_is_space(rl[i]) == 0 && rl[i])
+		while (ft_is_space(rl[i]) == 0)
 			i++;
-		if (ft_is_not_quote(rl[i]) == 0 && rl[i])
+		if (!rl[i])
+			break ;
+		if (rl[i] == '"')
 		{
-			while (ft_is_not_quote(rl[i]) == 0 && rl[i])
-				i++;
 			tokens++;
-		}
-		if (rl[i] == '"' && tokens++ > -1 && rl[i])
 			i = skip_string_in_quotes(rl, i);
-		if (rl[i] == '\'' && tokens++ > -1 && rl[i])
-			i = skip_string_in_single_quotes(rl, i);
-		if (rl[i] == '|' && tokens++ > -1 && rl[i])
-			i++;
-		if (rl[i] == '-' && tokens++ > -1 && rl[i])
+			continue ;
+		}
+		if (rl[i] == '\'')
 		{
-			while (ft_is_space(rl[i]) == 1 && rl[i])
+			tokens++;
+			i = skip_string_in_single_quotes(rl, i);
+			continue ;
+		}
+		if (rl[i] == '|' || rl[i] == '>' || rl[i] == '<')
+		{
+			tokens++;
+			i++;
+			if ((rl[i - 1] == '>' || rl[i - 1] == '<') && rl[i] == rl[i - 1])
+				i++;
+			continue ;
+		}
+		if (ft_is_not_quote(rl[i]) == 0)
+		{
+			tokens++;
+			while (rl[i] && ft_is_space(rl[i]) != 0
+				&& ft_is_not_quote(rl[i]) == 0 && rl[i] != '|' && rl[i] != '>'
+				&& rl[i] != '<')
 				i++;
 		}
 	}
@@ -66,37 +80,22 @@ int	token_counter(char *rl, int i)
 
 int	token_separator(char *rl, int i)
 {
-	int	tokens;
-
-	tokens = 0;
-	while (rl[i])
+	while (ft_is_space(rl[i]) == 0)
+		i++;
+	if (rl[i] == '"')
+		return (skip_string_in_quotes(rl, i) - 1);
+	if (rl[i] == '\'')
+		return (skip_string_in_single_quotes(rl, i) - 1);
+	if (rl[i] == '|' || rl[i] == '>' || rl[i] == '<')
 	{
-		if (ft_is_not_quote(rl[i]) == 0 && rl[i])
-		{
-			while (ft_is_not_quote(rl[i]) == 0 && rl[i])
-				i++;
-			return (i - 1);
-		}
-		if (rl[i] == '"' && tokens++ > -1 && rl[i])
-		{
-			i = skip_string_in_quotes(rl, i);
-			return (i - 1);
-		}
-		if (rl[i] == '\'' && tokens++ > -1 && rl[i])
-		{
-			i = skip_string_in_single_quotes(rl, i);
-			return (i - 1);
-		}
-		if (rl[i] == '|' && tokens++ > -1 && rl[i])
-			return (i);
-		if (rl[i] == '-' && tokens++ > -1 && rl[i])
-		{
-			while (ft_is_space(rl[i]) == 1 && rl[i])
-				i++;
-			return (i - 1);
-		}
+		if ((rl[i] == '>' || rl[i] == '<') && rl[i + 1] == rl[i])
+			return (i + 1);
+		return (i);
 	}
-	return (-1);
+	while (rl[i] && ft_is_space(rl[i]) != 0 && rl[i] != '"' && rl[i] != '\''
+		&& rl[i] != '|' && rl[i] != '>' && rl[i] != '<')
+		i++;
+	return (i - 1);
 }
 
 char	*str_maker(char *rl, int debut, int fin)
