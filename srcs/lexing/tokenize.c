@@ -11,9 +11,9 @@ void	get_token_type(t_token *token, char *envp[])
 	}
 	else if (ft_strcmp(token->str, "") == 0)
 		token->type = EMPTY;
-	else if (check_if_builtin(token) == 0)
+	else if (check_if_builtin(token) == 0 && check_if_command_before(token) == 0)
 		token->type = BUILTIN;
-	else if (check_if_command(token, envp) == 0)
+	else if (check_if_command(token, envp) == 0 && check_if_command_before(token) == 0)
 		token->type = CMD;
 	else if (check_if_export(token, envp) == 0)
 		token->type = CMD;
@@ -23,7 +23,22 @@ void	get_token_type(t_token *token, char *envp[])
 		token->type = ARG;
 }
 
+int		check_if_command_before(t_token	*token)
+{
+	t_token	*current;
 
+	current = token;
+	while (current->prev && current->type != PIPE)
+	{
+		if (current->type == CMD || current->type == BUILTIN)
+			return (1);
+		if (current->prev)
+			current = current->prev;
+		else
+			break;
+	}
+	return (0);
+}
 char	*find_cmd_path(char **paths, char *cmd)
 {
 	char	*temp;

@@ -79,10 +79,7 @@ int					skip_string_in_single_quotes(char *rl, int i);
 
 ///////// LEXING CHECKERS ///////////
 
-
-int is_double_operator(char *str, int i);
-int is_operator(char c);
-
+int			check_if_command_before(t_token	*token);
 int					check_if_builtin(t_token *token);
 int					check_if_command(t_token *token, char *envp[]);
 int					check_if_export(t_token *token, char **env);
