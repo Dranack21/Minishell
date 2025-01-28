@@ -13,6 +13,8 @@ void	free_token_tab(t_token *head)
 		free(head->str);
 		if (head->full_path != NULL)
 			free(head->full_path);
+		if (head->file_redir != NULL)
+			free(head->file_redir);
 		free(head);
 		head = temp;
 	}

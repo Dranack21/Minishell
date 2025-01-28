@@ -36,6 +36,7 @@ int	count_for_cmd_tab(t_token *token)
 
 	current = token;
 	count = 0;
+	fprintf(stderr, "%s\n", current->str);
 	while (current)
 	{
 		if (current->type == CMD || current->type == BUILTIN)
@@ -44,7 +45,7 @@ int	count_for_cmd_tab(t_token *token)
 			current = current->next;
 			while (current && current->type != PIPE)
 			{
-				if (token->type == ARG)
+				if (current->type == ARG)
 					count++;
 				current = current->next;
 			}
@@ -52,5 +53,6 @@ int	count_for_cmd_tab(t_token *token)
 		}
 		current = current->next;
 	}
+	fprintf(stderr, "count for command tab %d\n", count);
 	return (count);
 }
