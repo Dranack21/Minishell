@@ -5,24 +5,28 @@ int	ft_echo(t_token *tokens, t_shell *shell, char **env)
 	int		print_newline;
 	t_token	*current;
 	int		first;
+	int i;
 	char	*value;
 
 	shell->export = 1;
 	print_newline = 1;
 	current = tokens->next;
-	if (current && ft_strcmp(current->str, "-n") == 0)
+	i = 0;
+	quote(tokens);
+	if (current && is_n_arg(current->str) == 0)
 	{
 		print_newline = 0;
 		current = current->next;
 	}
 	first = 1;
-	while (current && current->type == ARG)
+	while (current)
 	{
 		if (!first)
 			printf(" ");
-		if (shell->export && current->str[0] == '$')
-		{
-			value = get_env_value(current->str + 1, env);
+		if (shell->export && position_dollar(current->str) != -1)
+		{;
+			i = position_dollar(current->str) + 1;
+			value = get_env_value(current->str + i, env);
 			if (value)
 				printf("%s", value);
 			else
@@ -35,6 +39,51 @@ int	ft_echo(t_token *tokens, t_shell *shell, char **env)
 	}
 	if (print_newline)
 		printf("\n");
+	return (0);
+}
+
+int	position_dollar(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '$')
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+
+void	quote(t_token *token)
+{
+	t_token	*current;
+
+	current = token;
+	while (current && current->type == ARG)
+	{
+		current->str = strip_quotes(current->str);
+		current = current->next;
+	}
+}
+
+int	is_n_arg(char *arg)
+{
+	int	i;
+
+	i = 1;
+	if (arg[0] == '-')
+	{
+		while (arg[i] == 'n')
+		{
+			i++;
+		}
+		if (arg[i] != '\0')
+			return (1);
+	}
+	else 
+		return (1);
 	return (0);
 }
 
