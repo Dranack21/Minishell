@@ -11,6 +11,7 @@ void	print_list(t_token *head)
 	{
 		printf("str value :%s", temp->str);
 		printf("   type value :%d", temp->type);
+		printf("    valid ? : %d  ", temp->is_valid);
 		printf("     File redir if it exists %d", temp->int_redir);
 		printf("   File name if it exists %s", temp->file_redir);
 		printf("   path if there's one :%s\n", temp->full_path);
@@ -62,6 +63,7 @@ void	*create_node_shell(void)
 	new_node->full_cmd = NULL;
 	new_node->file_redir = NULL;
 	new_node->type = -2;
+	new_node->is_valid = IS_VALID;
 	new_node->int_redir = 0;
 	return (new_node);
 }

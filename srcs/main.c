@@ -47,6 +47,7 @@ void	loop(t_shell *shell)
 		prepare_redir(token);
 		prepare_redir_input(token);
 		prepare_heredoc(token);
+		verify_all(shell, token);
 		print_list(token);
 		execute_main(shell, token);
 		free_token_tab(token);
