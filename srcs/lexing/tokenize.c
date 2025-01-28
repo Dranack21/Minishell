@@ -11,7 +11,7 @@ void	get_token_type(t_token *token, char *envp[])
 	}
 	else if (ft_strcmp(token->str, "") == 0)
 		token->type = EMPTY;
-	else if (check_if_builtin(token) == 0  && check_if_command_before(token) == 0)
+	else if (check_if_builtin(token) == 0)
 		token->type = BUILTIN;
 	else if (check_if_command(token, envp) == 0 && check_if_command_before(token) == 0)
 		token->type = CMD;
