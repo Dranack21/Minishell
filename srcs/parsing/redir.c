@@ -22,7 +22,7 @@ void	prepare_heredoc(t_token *token)
 				|| backward->type == -1))
 			{
 				backward->file_redir = ft_strdup(file->str);
-				backward->type = HERE_DOC;
+				backward->int_redir = HERE_DOC;
 				if (process_heredoc(backward) != 0)
 					printf("dedge heredoc\n");
 			}
@@ -30,6 +30,7 @@ void	prepare_heredoc(t_token *token)
 		current = current->next;
 	}
 }
+
 int process_heredoc(t_token *token)
 {
     int fd;
@@ -51,7 +52,6 @@ int process_heredoc(t_token *token)
         free(line);
     }
     close(fd);
-    token->type = HERE_DOC;
     return 0;
 }
 
@@ -127,8 +127,9 @@ void	handle_file_redirection(t_token *cmd_token)
 {
 	int	fd;
 
+	fd = 0;
 	if (cmd_token->int_redir != 0 && cmd_token->file_redir != NULL
-		&& cmd_token->int_redir != INPUT)
+		&& cmd_token->int_redir != INPUT && cmd_token->int_redir != HERE_DOC)
 	{
 		if (cmd_token->int_redir == O_APPEND)
 			fd = open(cmd_token->file_redir, O_WRONLY | O_APPEND | O_CREAT,
@@ -148,7 +149,7 @@ void	handle_file_redirection(t_token *cmd_token)
 	}
 	else if (cmd_token->int_redir != 0 && cmd_token->file_redir != NULL)
 	{
-		if (cmd_token->type == HERE_DOC)
+		if (cmd_token->int_redir == HERE_DOC)
 		{
 			fd = open(".heredoc", O_RDONLY);
 			if (fd < 0)
