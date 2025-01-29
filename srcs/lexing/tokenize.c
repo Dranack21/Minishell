@@ -6,7 +6,7 @@ void	get_token_type(t_token *token, char *envp[])
 		return;
 	if (check_if_special_char(token) == 0 && token->type != PIPE)
 	{
-		if (token->next)
+		if (token->next && check_if_special_char(token->next) == 1)
 			token->next->type = -1;
 	}
 	else if (ft_strcmp(token->str, "") == 0)

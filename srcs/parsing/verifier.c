@@ -9,20 +9,26 @@ void	verify_all(t_shell *shell, t_token *token)
 		verify_for_pipes(token);
 }
 
-void verify_for_pipes(t_token *token)
+void	verify_for_pipes(t_token *token)
 {
-    t_token *current;
+	t_token	*current;
 
-    current = token;
-    while (current)
-    {
-        if (pipeline_destroyer(current) == EXIT_FAILURE)
-            current->is_valid = IS_NOT_VALID;
-        while (current && current->type != PIPE)
-            current = current->next;
-        if (current && current->type == PIPE)
-            current = current->next;
-    }
+	current = token;
+	if (current && current->type == PIPE)
+		current->is_valid = IS_NOT_VALID;
+	while (current)
+	{
+		if (pipeline_destroyer(current) == EXIT_FAILURE)
+			current->is_valid = IS_NOT_VALID;
+		if (current->type == PIPE)
+		{
+			if (!current->next || current->next->type == PIPE)
+				current->is_valid = IS_NOT_VALID;
+			current = current->next;
+		}
+		if (current)
+			current = current->next;
+	}
 }
 
 int	pipeline_destroyer(t_token	*token)

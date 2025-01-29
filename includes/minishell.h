@@ -76,6 +76,11 @@ void				verify_for_pipes(t_token *token);
 int					pipeline_destroyer(t_token	*token);
 
 
+////////// SYNTHAX CHECKER ////////////
+int					synthax_parser(t_token *token);
+int					check_pipes_parser(t_token *token);
+int					check_for_redirs_parser(t_token *token);
+int					is_redir(t_token *current);
 ///////// LEXING  ///////
 
 t_token				*lexing(t_shell *shell, char *rl);			////create t_token list and calls token manager strmaker////
