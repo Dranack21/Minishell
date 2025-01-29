@@ -30,6 +30,9 @@
 # define IS_VALID 0
 # define IS_NOT_VALID 1
 
+#define HEREDOC_PREFIX "/tmp/.heredoc_"
+#define RAND_LEN 8
+
 typedef struct s_token
 {
 	char			*str;
@@ -39,6 +42,7 @@ typedef struct s_token
 	int				int_redir;
 	char			*file_redir;
 	int				is_valid;
+	char			*heredoc_file;
 	struct s_token	*prev;
 	struct s_token	*next;
 }					t_token;
@@ -149,6 +153,8 @@ void				prepare_redir(t_token *token);
 void   				prepare_redir_input(t_token *token);
 void				prepare_heredoc(t_token *token);
 int					process_heredoc(t_token *token);
+char				*generate_random_filename();
+int					ft_rand_char(void);
 //////////////////SIGNAUX///////////////
 
 void				ft_signal_handler();

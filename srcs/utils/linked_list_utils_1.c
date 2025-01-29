@@ -61,6 +61,7 @@ void	*create_node_shell(void)
 	new_node->str = NULL;
 	new_node->full_path = NULL;
 	new_node->full_cmd = NULL;
+	new_node->heredoc_file = NULL;
 	new_node->file_redir = NULL;
 	new_node->type = -2;
 	new_node->is_valid = IS_VALID;

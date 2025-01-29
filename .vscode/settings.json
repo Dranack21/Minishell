@@ -5,7 +5,8 @@
 		"libft.h": "c",
 		"limits.h": "c",
 		"cctype": "cpp",
-		"wait.h": "c"
+		"wait.h": "c",
+		"*.tcc": "c"
 	},
 	"C_Cpp.errorSquiggles": "enabled",
 	"makefile.configureOnOpen": false
