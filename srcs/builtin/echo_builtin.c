@@ -13,7 +13,7 @@ int	ft_echo(t_token *tokens, t_shell *shell, char **env)
 	print_newline = 1;
 	current = tokens->next;
 	i = 0;
-	quote(tokens);
+	quote(current);
 	if (current && is_n_arg(current->str) == 0)
 	{
 		print_newline = 0;
@@ -54,9 +54,9 @@ void	quote(t_token *token)
 	t_token	*current;
 
 	current = token;
-	while (current && current->type == ARG)
+	while (current && (current->type == ARG || current->type == CMD))
 	{
-		current->str = strip_quotes(current->str);
+		current->str = strip_quote_plus_plus(current->str);
 		current = current->next;
 	}
 }
