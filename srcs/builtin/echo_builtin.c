@@ -7,6 +7,7 @@ int	ft_echo(t_token *tokens, t_shell *shell, char **env)
 	int		first;
 	int i;
 	char	*value;
+	char    *before_dollar;
 
 	shell->export = 1;
 	print_newline = 1;
@@ -24,13 +25,19 @@ int	ft_echo(t_token *tokens, t_shell *shell, char **env)
 		if (!first)
 			printf(" ");
 		if (shell->export && position_dollar(current->str) != -1)
-		{;
+		{
 			i = position_dollar(current->str) + 1;
+			before_dollar = ft_substr(current->str, 0, i - 1);
+            if (before_dollar)
+            {
+                printf("%s", before_dollar);
+                free(before_dollar);
+            }
 			value = get_env_value(current->str + i, env);
 			if (value)
 				printf("%s", value);
 			else
-				printf("%s", current->str);
+				printf("%s",current->str);
 		}
 		else
 			printf("%s", current->str);
@@ -40,6 +47,18 @@ int	ft_echo(t_token *tokens, t_shell *shell, char **env)
 	if (print_newline)
 		printf("\n");
 	return (0);
+}
+
+void	quote(t_token *token)
+{
+	t_token	*current;
+
+	current = token;
+	while (current && current->type == ARG)
+	{
+		current->str = strip_quotes(current->str);
+		current = current->next;
+	}
 }
 
 int	position_dollar(char *str)
@@ -54,18 +73,6 @@ int	position_dollar(char *str)
 		i++;
 	}
 	return (-1);
-}
-
-void	quote(t_token *token)
-{
-	t_token	*current;
-
-	current = token;
-	while (current && current->type == ARG)
-	{
-		current->str = strip_quotes(current->str);
-		current = current->next;
-	}
 }
 
 int	is_n_arg(char *arg)
@@ -86,6 +93,48 @@ int	is_n_arg(char *arg)
 		return (1);
 	return (0);
 }
+char *strip_quote_plus_plus(const char *str)
+{
+    char    *new_str;
+    int     len;
+    int     count = 0;
+    int     i = 0;
+    int     j = 0;
+	char quote_char;
+
+    if (!str)
+        return (NULL);
+    len = ft_strlen(str);
+    if (len < 2)
+        return (ft_strdup(str));
+    if (str[0] != '"' && str[0] != '\'')
+        return (ft_strdup(str));
+    quote_char = str[0];
+    if (str[len - 1] != quote_char)
+        return (ft_strdup(str));
+    while (i < len)
+    {
+        if (str[i] == quote_char)
+            count++;
+        i++;
+    }
+    if (count != 2)
+        return (ft_strdup(str));
+    new_str = malloc(sizeof(char) * (len - 1)); 
+    if (!new_str)
+        return (NULL);
+    i = 1; 
+    j = 0;
+    while (i < len - 1) 
+    {
+        new_str[j] = str[i];
+        i++;
+        j++;
+    }
+    new_str[j] = '\0';
+    return (new_str);
+}
+ 
 
 char	*get_env_value(char *var_name, char **env)
 {

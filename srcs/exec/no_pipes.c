@@ -31,7 +31,16 @@ void	identify_builtin(t_token *token, t_shell *shell)
 	current = token;
 	handle_file_redirection(current);
 	if (ft_strcmp("echo", token->str) == 0)
+	{
+		if (current->next)
+			current = current->next;
+		while (current && current->type == ARG)
+		{
+			current->str = strip_quotes(current->str);
+			current = current->next;
+		}
 		ft_echo(token, shell, shell->env);
+	}
 	if (ft_strcmp("pwd", token->str) == 0)
 		ft_pwd();
 	if (ft_strcmp("cd", token->str) == 0)

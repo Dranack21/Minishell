@@ -111,7 +111,7 @@ char				**create_cmd_tab(t_token *token);         /// create the **cmd array////
 int					count_pipes(t_token *token);				//// count of all our pipes////
 int					count_for_cmd_tab(t_token *token);			//// count for the size of the malloc for our **cmd array/////
 char				*strip_quotes(const char *str);				//// STRIPS QUOTES FOR PASSED ARGS ///
-
+char				*strip_quote_plus_plus(const char *str);
 ///// LINKED LIST OF PIPES ///////
 void				ft_lstadd_end_pipes(t_pipe **head); 					///create t_pipes node/////
 void				ft_add_in_list_pipes(t_pipe **head);			///create t_pipes node/////
