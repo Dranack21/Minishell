@@ -1,11 +1,7 @@
 #include "minishell.h"
 
-
 void	verify_all(t_shell *shell, t_token *token)
 {
-	t_token	*current;
-
-	current = token;
 	shell->pipe_count = count_pipes(token);
 	if (shell->pipe_count == 0)
 		return ;
@@ -16,9 +12,7 @@ void	verify_all(t_shell *shell, t_token *token)
 void verify_for_pipes(t_token *token)
 {
     t_token *current;
-    int     i;
 
-    i = 0;
     current = token;
     while (current)
     {
