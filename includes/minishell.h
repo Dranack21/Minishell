@@ -42,6 +42,7 @@ typedef struct s_token
 	int				int_redir;
 	char			*file_redir;
 	int				is_valid;
+	int				has_trailing_spaces;
 	char			*heredoc_file;
 	struct s_token	*prev;
 	struct s_token	*next;

@@ -29,8 +29,13 @@ t_token	*lexing(t_shell *shell, char *rl)
 		if (end == -1)
 			break ;
 		current->str = str_maker(rl, start, end);
-		current = current->next;
 		i = end + 1;
+		while (rl[i] && ft_is_space(rl[i]) == 0)
+        {
+            current->has_trailing_spaces = 1;
+            i++;
+        }
+		current = current->next;
 	}
 	return (head);
 }
