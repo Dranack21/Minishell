@@ -1,61 +1,5 @@
 #include "minishell.h"
 
-void	prepare_heredoc(t_token *token)
-{
-	t_token *current;
-	t_token *file;
-	t_token *backward;
-
-	current = token;
-	while (current)
-	{
-		if (current->type == HERE_DOC)
-		{
-			if (!current->next)
-				return;
-			file = current->next;
-			backward = current;
-			while (backward && backward->type != CMD
-				&& backward->type != BUILTIN && backward->type != -1)
-				backward = backward->prev;
-			if (backward && (backward->type == CMD || backward->type == BUILTIN 
-				|| backward->type == -1))
-			{
-				backward->file_redir = ft_strdup(file->str);
-				backward->int_redir = HERE_DOC;
-				if (process_heredoc(backward) != 0)
-					printf("dedge heredoc\n");
-			}
-		}
-		current = current->next;
-	}
-}
-
-int process_heredoc(t_token *token)
-{
-    int fd;
-    char *line;
-
-    fd = open(".heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (fd < 0) 
-        return -1;
-    while (1)
-    {
-        line = readline("heredoc> ");
-        if (line == NULL || ft_strcmp(line, token->file_redir) == 0)
-        {
-            free(line);
-            break;
-        }
-        write(fd, line, ft_strlen(line));
-        write(fd, "\n", 1);
-        free(line);
-    }
-    close(fd);
-    return 0;
-}
-
-
 void	prepare_redir(t_token *token)
 {
 	t_token	*current;
@@ -147,11 +91,11 @@ void	handle_file_redirection(t_token *cmd_token)
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}
-	else if (cmd_token->int_redir != 0 && cmd_token->file_redir != NULL)
+	else if (cmd_token->int_redir != 0 && cmd_token->file_redir != NULL && cmd_token->heredoc_file != NULL)
 	{
 		if (cmd_token->int_redir == HERE_DOC)
 		{
-			fd = open(".heredoc", O_RDONLY);
+			fd = open(cmd_token->heredoc_file , O_RDONLY);
 			if (fd < 0)
 			{
 				perror("heredoc open");
@@ -163,7 +107,7 @@ void	handle_file_redirection(t_token *cmd_token)
 				exit(1);
 			}
 			close(fd);
-			unlink(".heredoc");
+			unlink(cmd_token->heredoc_file);
 			return;
 		}
 		if (cmd_token->int_redir == INPUT)

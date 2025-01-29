@@ -27,6 +27,12 @@
 # define PIPE 8
 # define END 9
 
+# define IS_VALID 0
+# define IS_NOT_VALID 1
+
+#define HEREDOC_PREFIX "/tmp/.heredoc_"
+#define RAND_LEN 8
+
 typedef struct s_token
 {
 	char			*str;
@@ -35,6 +41,9 @@ typedef struct s_token
 	int				type;
 	int				int_redir;
 	char			*file_redir;
+	int				is_valid;
+	int				has_trailing_spaces;
+	char			*heredoc_file;
 	struct s_token	*prev;
 	struct s_token	*next;
 }					t_token;
@@ -63,6 +72,20 @@ typedef	struct s_shell
 
 int					parse_for_quotes(char *rl); ///check if quotes are even or not///
 
+
+
+////////// BIG ASS PARSING ////////////////
+
+void				verify_all(t_shell *shell, t_token *token);
+void				verify_for_pipes(t_token *token);
+int					pipeline_destroyer(t_token	*token);
+
+
+////////// SYNTHAX CHECKER ////////////
+int					synthax_parser(t_token *token);
+int					check_pipes_parser(t_token *token);
+int					check_for_redirs_parser(t_token *token);
+int					is_redir(t_token *current);
 ///////// LEXING  ///////
 
 t_token				*lexing(t_shell *shell, char *rl);			////create t_token list and calls token manager strmaker////
@@ -79,7 +102,7 @@ int					skip_string_in_single_quotes(char *rl, int i);
 
 ///////// LEXING CHECKERS ///////////
 
-int			check_if_command_before(t_token	*token);
+int					check_if_command_before(t_token	*token);
 int					check_if_builtin(t_token *token);
 int					check_if_command(t_token *token, char *envp[]);
 int					check_if_export(t_token *token, char **env);
@@ -131,6 +154,8 @@ void				prepare_redir(t_token *token);
 void   				prepare_redir_input(t_token *token);
 void				prepare_heredoc(t_token *token);
 int					process_heredoc(t_token *token);
+char				*generate_random_filename();
+int					ft_rand_char(void);
 //////////////////SIGNAUX///////////////
 
 void				ft_signal_handler();

@@ -59,8 +59,11 @@ void	execute_cmd(t_token *token, t_shell *shell, t_pipe *pipe)
 			i++;
 		token = token->next;
 	}
-	while (token->type != CMD)
-		token = token->next;
+	if (token->is_valid == EXIT_FAILURE)
+	{
+		fprintf(stderr, "%s : command not found gros bouffon", token->str);
+		return ;
+	}
 	token->full_cmd = create_cmd_tab(token);
 	if (token->full_cmd && token->full_path)
 	{

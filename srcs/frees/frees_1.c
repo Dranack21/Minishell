@@ -15,6 +15,8 @@ void	free_token_tab(t_token *head)
 			free(head->full_path);
 		if (head->file_redir != NULL)
 			free(head->file_redir);
+		if (head->heredoc_file != NULL)
+			free(head->heredoc_file);
 		free(head);
 		head = temp;
 	}
