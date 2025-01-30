@@ -24,19 +24,20 @@ int	ft_echo(t_token *tokens, t_shell *shell, char **env)
 	{
 		if (!first && current->has_trailing_spaces == 1)
 			printf(" ");
-		if (shell->export && position_dollar(current->str) != -1)
+		if (shell->export && position_dollar(current->str) != -1 && current->quote_type != 1)
 		{
 			i = position_dollar(current->str) + 1;
-			before_dollar = ft_substr(current->str, 0, i - 1);
-            if (before_dollar)
-            {
-                printf("%s", before_dollar);
-                free(before_dollar);
-            }
+			if (current->quote_type != 2)
+				before_dollar = ft_substr(current->str, 0, i - 1);
+            	if (before_dollar)
+            	{
+                	printf("%s", before_dollar);
+                	free(before_dollar);
+            	}
 			value = get_env_value(current->str + i, env);
 			if (value)
 				printf("%s", value);
-			else
+			if (!value && current->quote_type != 2)
 				printf("%s",current->str);
 		}
 		else
@@ -56,7 +57,7 @@ void	quote(t_token *token)
 	current = token;
 	while (current && (current->type == ARG || current->type == CMD))
 	{
-		current->str = strip_quote_plus_plus(current->str);
+		current->str = strip_quote_plus_plus(current->str, current);
 		current = current->next;
 	}
 }
@@ -93,15 +94,18 @@ int	is_n_arg(char *arg)
 		return (1);
 	return (0);
 }
-char *strip_quote_plus_plus(const char *str)
+char *strip_quote_plus_plus(const char *str, t_token *token)
 {
     char    *new_str;
     int     len;
-    int     count = 0;
-    int     i = 0;
-    int     j = 0;
+    int     count;
+    int     i;
+    int     j;
 	char quote_char;
-
+	
+	count = 0;
+	i = 0;
+	j = 0;
     if (!str)
         return (NULL);
     len = ft_strlen(str);
@@ -110,6 +114,10 @@ char *strip_quote_plus_plus(const char *str)
     if (str[0] != '"' && str[0] != '\'')
         return (ft_strdup(str));
     quote_char = str[0];
+	if (quote_char == '"')
+		token->quote_type = 2;
+	if (quote_char == '\'')
+		token->quote_type = 1;
     if (str[len - 1] != quote_char)
         return (ft_strdup(str));
     while (i < len)

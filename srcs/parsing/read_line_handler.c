@@ -11,11 +11,19 @@ int	parse_for_quotes(char *rl)
 	{
 		if (rl[i] == '\'')
 			counter++;
-		if (rl[i] == '"')
-		{
-			i = skip_string_in_quotes(rl, i);
-		}
 		i++;
 	}
-	return (counter);
+	if (counter %2 == 1)
+		return (EXIT_FAILURE);
+	i = 0;
+	counter = 0;
+	while (rl[i])
+	{
+		if (rl[i] == '"')
+			counter++;
+		i++;
+	}
+	if (counter %2 == 1)
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }
