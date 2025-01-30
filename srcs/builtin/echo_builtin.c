@@ -22,7 +22,7 @@ int	ft_echo(t_token *tokens, t_shell *shell, char **env)
 	first = 1;
 	while (current)
 	{
-		if (!first)
+		if (!first && current->has_trailing_spaces == 1)
 			printf(" ");
 		if (shell->export && position_dollar(current->str) != -1)
 		{
