@@ -23,19 +23,24 @@ void	verify_for_pipes(t_token *token)
 	t_token	*current;
 
 	current = token;
-	if (current && current->type == PIPE)
-		current->is_valid = IS_NOT_VALID;
 	while (current)
 	{
 		if (pipeline_destroyer(current) == EXIT_FAILURE)
-			current->is_valid = IS_NOT_VALID;
-		if (current->type == PIPE)
 		{
-			if (!current->next || current->next->type == PIPE)
+			while (current && current->type != PIPE)
+			{
 				current->is_valid = IS_NOT_VALID;
+				if (current->next)
+					current = current->next;
+				else
+					break;
+			}
+		}
+		while (current && current->type != PIPE)
+		{
 			current = current->next;
 		}
-		if (current)
+		if (current && current->type == PIPE)
 			current = current->next;
 	}
 }

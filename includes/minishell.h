@@ -60,6 +60,7 @@ typedef struct s_pipe
 }					t_pipe;
 
 
+
 typedef	struct s_shell
 {
 	int		pipe_count;

@@ -52,6 +52,7 @@ int	check_if_command(t_token *token, char *envp[])
 		return (free(cmd_str), EXIT_SUCCESS);
 	}
 	path = get_path(envp);
+	printf("path %d\n", path);
 	if (path == -1)
 		return (EXIT_FAILURE);
 	paths = ft_split(envp[path] + 5, ':');

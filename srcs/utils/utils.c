@@ -12,8 +12,10 @@ int	get_path(char *envp[])
 	int	i;
 
 	i = 0;
-	while (ft_strnstr(envp[i], "PATH", 4) == 0)
+	while (envp[i] && ft_strnstr(envp[i], "PATH", 4) == 0)
 		i++;
+	if (!envp[i])
+		return (-1);
 	return (i);
 }
 
