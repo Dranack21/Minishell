@@ -79,6 +79,7 @@ int					parse_for_quotes(char *rl); ///check if quotes are even or not///
 
 void				verify_all(t_shell *shell, t_token *token);
 void				verify_for_pipes(t_token *token);
+void				verify_for_no_pipes(t_token	*token);
 int					pipeline_destroyer(t_token	*token);
 
 

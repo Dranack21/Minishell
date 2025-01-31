@@ -4,9 +4,18 @@ void	verify_all(t_shell *shell, t_token *token)
 {
 	shell->pipe_count = count_pipes(token);
 	if (shell->pipe_count == 0)
-		return ;
+		verify_for_no_pipes(token);
 	else if (shell->pipe_count > 0)	
 		verify_for_pipes(token);
+}
+
+void	verify_for_no_pipes(t_token	*token)
+{
+	t_token	*current;
+
+	current = token;
+	if (pipeline_destroyer(current) == EXIT_FAILURE)
+			current->is_valid = IS_NOT_VALID;
 }
 
 void	verify_for_pipes(t_token *token)
