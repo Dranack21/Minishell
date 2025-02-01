@@ -153,10 +153,13 @@ char				**copy_env(char **envp);					//// copies env /////
 void				handle_file_redirection(t_token *cmd_token); //// MAIN PART OF REDIRECTIONS /////
 void				prepare_redir(t_token *token);
 void   				prepare_redir_input(t_token *token);
-void				prepare_heredoc(t_token *token);
-int					process_heredoc(t_token *token);
+void				prepare_heredoc(t_token *token, char **env);
+int					process_heredoc(t_token *token, char **env);
+char 				*search_if_env(char *line, char **env);
 char				*generate_random_filename();
 int					ft_rand_char(void);
+char 				*ft_strcat(char *dst, const char *src);
+char				*ft_strncpy(char *dst, const char *src, size_t len);
 //////////////////SIGNAUX///////////////
 
 void				ft_signal_handler();

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	prepare_heredoc(t_token *token)
+void prepare_heredoc(t_token *token, char **env)
 {
 	t_token *current;
 	t_token *file;
@@ -23,7 +23,7 @@ void	prepare_heredoc(t_token *token)
 			{
 				backward->file_redir = ft_strdup(file->str);
 				backward->int_redir = HERE_DOC;
-				if (process_heredoc(backward) != 0)
+				if (process_heredoc(backward, env) != 0)
 					printf("dedge heredoc\n");
 			}
 		}
@@ -31,11 +31,12 @@ void	prepare_heredoc(t_token *token)
 	}
 }
 
-int process_heredoc(t_token *token)
+int process_heredoc(t_token *token, char **env)
 {
     int fd;
     char *line;
-    fprintf(stderr, "heredoc file name \n");
+	char *expanded_line;
+
 	token->heredoc_file = generate_random_filename();
     fprintf(stderr, "heredoc file name : %s \n", token->heredoc_file);
 	if (!token->heredoc_file)
@@ -51,12 +52,60 @@ int process_heredoc(t_token *token)
             free(line);
             break;
         }
-        write(fd, line, ft_strlen(line));
-        write(fd, "\n", 1);
-        free(line);
+		expanded_line = search_if_env(line, env);
+        write(fd, expanded_line, ft_strlen(expanded_line));
+		write(fd, "\n", 1);
+		free(expanded_line); 
     }
     close(fd);
     return 0;
+}
+char *search_if_env(char *line, char **env)
+{
+    int     i;
+    char    *var_name;
+    char    *value;
+    int     j;
+    int     var_len;
+    char    *result;
+
+    printf("Input line: %s\n", line);
+    while ((i = position_dollar(line)) != -1)
+    {
+        printf("Dollar position: %d\n", i);
+        j = i + 1;
+        var_len = 0;
+        while (line[j] && ((line[j] >= 'A' && line[j] <= 'Z') || 
+                           (line[j] >= 'a' && line[j] <= 'z') || 
+                           (line[j] >= '0' && line[j] <= '9') || 
+                           line[j] == '_')) //for now
+        {
+            var_len++;
+            j++;
+        }
+        printf("Variable length: %d\n", var_len);
+        var_name = ft_substr(line, i + 1, var_len);
+        if (!var_name)
+            return (line);
+        printf("Variable name: %s\n", var_name);
+        value = get_env_value(var_name, env);
+        printf("Value found: %s\n", value ? value : "NULL");
+        free(var_name);
+        if (!value)
+            return (line);
+        result = malloc(i + strlen(value) + strlen(line + i + var_len + 1) + 1);
+        if (!result)
+            return (line);
+        ft_strncpy(result, line, i);
+        result[i] = '\0';
+        ft_strcat(result, value);
+        ft_strcat(result, line + i + var_len + 1);
+        printf("Intermediate result: %s\n", result);
+        free(line);
+        line = result;
+    }
+    printf("Final result: %s\n", line);
+    return (line);
 }
 
 char	*generate_random_filename(void)
@@ -102,4 +151,40 @@ int	ft_rand_char(void)
 	}
 	close(fd);
 	return ('a' + (c % 26)); 
+}
+
+char *ft_strcat(char *dst, const char *src)
+{
+    size_t i;
+    size_t j;
+
+    i = 0;
+    while (dst[i])
+        i++;
+    j = 0;
+    while (src[j])
+    {
+        dst[i + j] = src[j];
+        j++;
+    }
+    dst[i + j] = '\0';
+    return (dst);
+}
+
+char *ft_strncpy(char *dst, const char *src, size_t len)
+{
+    size_t i;
+
+    i = 0;
+    while (i < len && src[i])
+    {
+        dst[i] = src[i];
+        i++;
+    }
+    while (i < len)
+    {
+        dst[i] = '\0';
+        i++;
+    }
+    return (dst);
 }
