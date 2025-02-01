@@ -42,29 +42,37 @@ void	prepare_redir(t_token *token)
 						close(fd);
 				}
 			}
-			// else
-			// {
-			// 	backward = current;
-			// 	while (backward->next && backward->type != CMD && backward->type != BUILTIN)
-			// 	{
-			// 		if (backward->next)
-			// 			backward = backward->next;
-			// 	}
-			// 	if (backward && (backward->type == CMD || backward->type == BUILTIN
-			// 		|| backward->type == -1))
-			// 	{
-			// 		if (current->type == APPEND_REDIR)
-			// 		{
-			// 			backward->file_redir = ft_strdup(file->str);
-			// 			backward->int_redir = O_APPEND;
-			// 		}
-			// 		else if (current->type == OUPUT)
-			// 		{
-			// 			backward->file_redir = ft_strdup(file->str);
-			// 			backward->int_redir = O_WRONLY | O_CREAT | O_TRUNC;
-			// 		}
-			// 	}
-			// }
+			else if (!backward)
+			{
+				backward = current;
+				while (backward && backward->type != CMD && backward->type != BUILTIN)
+				{
+					backward = backward->next;
+				}
+				if (backward && (backward->type == CMD || backward->type == BUILTIN))
+				{
+					if (current->type == APPEND_REDIR)
+					{
+						backward->file_redir = ft_strdup(file->str);
+						backward->int_redir = O_APPEND;
+						fd = open(backward->file_redir, O_CREAT , 0644);
+						if (fd < 0)
+							perror (backward->file_redir);
+						else
+							close(fd);
+					}
+					else if (current->type == OUPUT)
+					{
+						backward->file_redir = ft_strdup(file->str);
+						backward->int_redir = O_WRONLY | O_CREAT | O_TRUNC;
+						fd = open(backward->file_redir, O_CREAT , 0644);
+						if (fd < 0)
+							perror (backward->file_redir);
+						else
+							close(fd);
+					}
+				}
+			}
 		}
 		current = current->next;
 	}
