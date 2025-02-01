@@ -41,6 +41,7 @@ int	check_if_command(t_token *token, char *envp[])
 	char	**paths;
 	char	*full_p;
 	char	*cmd_str;
+	int		path;
 
 	if (token->str[0] == '"' && token->str[ft_strlen(token->str) - 1] == '"')
 		cmd_str = ft_strndup(token->str + 1, ft_strlen(token->str) - 2);
@@ -48,9 +49,13 @@ int	check_if_command(t_token *token, char *envp[])
 		cmd_str = ft_strdup(token->str);
 	if (access(cmd_str, X_OK) == 0)
 	{
+		token->full_path = ft_strdup(token->str);
 		return (free(cmd_str), EXIT_SUCCESS);
 	}
-	paths = ft_split(envp[get_path(envp)] + 5, ':');
+	path = get_path(envp);
+	if (path == -1)
+		return (EXIT_FAILURE);
+	paths = ft_split(envp[path] + 5, ':');
 	full_p = find_cmd_path(paths, cmd_str);
 	if (full_p)
 	{
@@ -93,11 +98,3 @@ int	check_if_export(t_token *token, char **env)
 	free(cmd_str);
 	return (1);
 }
-
-// int	check_if_arg(t_token *token)
-// {
-// 	t_token	*current;
-
-// 	current = token;
-
-// }

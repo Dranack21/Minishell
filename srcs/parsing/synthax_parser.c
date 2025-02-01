@@ -53,8 +53,13 @@ int	check_pipes_parser(t_token *token)
 	{
 		if (current->type == PIPE && current->next)
 		{
-			if (current->next->type == PIPE)
-				return (EXIT_FAILURE);		
+			if (current->next && current->next->type == PIPE)
+				return (EXIT_FAILURE);
+		}
+		if (is_redir(current) == EXIT_SUCCESS)
+		{
+			if (!current->next || (current->next && current->next->type == PIPE))
+				return (EXIT_FAILURE);
 		}
 		current = current->next;
 	}

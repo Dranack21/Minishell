@@ -10,7 +10,8 @@ void	free_token_tab(t_token *head)
 	while (head != NULL)
 	{
 		temp = head->next;
-		free(head->str);
+		if (head->str != NULL)
+			free(head->str);
 		if (head->full_path != NULL)
 			free(head->full_path);
 		if (head->file_redir != NULL)

@@ -23,6 +23,17 @@ void	get_token_type(t_token *token, char *envp[])
 		token->type = ARG;
 }
 
+int		check_if_path(t_token *token)
+{
+	struct stat	stats;
+
+	if (stat(token->str, &stats) == 0)
+		return (EXIT_SUCCESS);
+	else
+		return (EXIT_FAILURE);
+	
+}
+
 int		check_if_command_before(t_token	*token)
 {
 	t_token	*current;

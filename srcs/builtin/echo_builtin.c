@@ -20,7 +20,7 @@ int	ft_echo(t_token *tokens, t_shell *shell, char **env)
 		current = current->next;
 	}
 	first = 1;
-	while (current)
+	while (current && current->type != ARG)
 	{
 		if (!first && current->has_trailing_spaces == 1)
 			printf(" ");

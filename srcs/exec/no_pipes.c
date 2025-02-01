@@ -5,11 +5,21 @@ void	no_pipes(t_token *token, t_shell *shell)
 	t_token	*current;
 
 	current = token;
-	while (current->type != CMD && current->type != BUILTIN)
+	if (current->is_valid == IS_NOT_VALID)
+	{
+		printf("%s : command not found\n", token->str);
+		while(current)
+		{
+			current->is_valid = IS_NOT_VALID;
+			current = current->next;
+		}
+	}
+	current = token;
+	while (current->type != CMD && current->type != BUILTIN && current->next)
 		current = current->next;
-	if (current->type == CMD)
+	if (current->type == CMD && current)
 		cmd_wo_pipes(current, shell);
-	if (current->type == BUILTIN)
+	if (current->type == BUILTIN && current)
 		builtin_wo_pipes(token, shell);
 }
 
@@ -19,17 +29,16 @@ void	builtin_wo_pipes(t_token *token, t_shell *shell)
 
 	original_stdout = dup(STDOUT_FILENO);
 	handle_file_redirection(token);
-	identify_builtin(token, shell);
-	dup2(original_stdout, STDOUT_FILENO);
-	close(original_stdout);
+	if (token->is_valid == IS_VALID)
+	{
+		identify_builtin(token, shell);
+		dup2(original_stdout, STDOUT_FILENO);
+		close(original_stdout);
+	}
 }
 
 void	identify_builtin(t_token *token, t_shell *shell)
 {
-	t_token	*current;
-
-	current = token;
-	handle_file_redirection(current);
 	if (ft_strcmp("echo", token->str) == 0)
 		ft_echo(token, shell, shell->env);
 	if (ft_strcmp("pwd", token->str) == 0)
@@ -59,8 +68,10 @@ void	cmd_wo_pipes(t_token *token, t_shell *shell)
 		for (int j = 0; token->full_cmd[j]; j++)
 			fprintf(stderr, "arg[%d]: '%s'\n", j, token->full_cmd[j]);
 		handle_file_redirection(token);
-		execve(token->full_path, token->full_cmd, shell->env);
-		return ;
+		if (token->is_valid == IS_VALID)
+			if (execve(token->full_path, token->full_cmd, shell->env) == -1)
+				handle_err_execve(token);
+		exit(0);
 	}
 	waitpid(pid, NULL, 0);
 	ft_free_array(token->full_cmd);
