@@ -12,8 +12,9 @@
 # include <stdlib.h>
 # include <string.h>
 # include <sys/wait.h>
+# include <errno.h>
 # include <unistd.h>
-
+# include <sys/stat.h> 
 ////// TOKENS //////////////
 
 # define EMPTY 0
@@ -26,6 +27,7 @@
 # define OUPUT 7
 # define PIPE 8
 # define END 9
+# define PATH 10
 
 # define IS_VALID 0
 # define IS_NOT_VALID 1
@@ -110,6 +112,7 @@ int					check_if_builtin(t_token *token);
 int					check_if_command(t_token *token, char *envp[]);
 int					check_if_export(t_token *token, char **env);
 int					check_if_special_char(t_token *token);
+int					check_if_path(t_token *token);
 int					get_path(char *envp[]);			////gets path////
 
 char				*find_cmd_path(char **paths, char *cmd); ////checks if yo have a path returns null if not////
@@ -166,6 +169,10 @@ void				ft_handle_sigint();
 void				ft_handle_sigsegv();
 
 void				loop(t_shell *shell);
+
+///// ERRORS///////////////////////////
+void	handle_err_execve(t_token *token);
+char	*get_prompt_name(t_token *token);
 
 /////////// BUILTIN ////////////
 

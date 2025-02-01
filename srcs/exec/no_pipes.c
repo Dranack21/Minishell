@@ -69,7 +69,8 @@ void	cmd_wo_pipes(t_token *token, t_shell *shell)
 			fprintf(stderr, "arg[%d]: '%s'\n", j, token->full_cmd[j]);
 		handle_file_redirection(token);
 		if (token->is_valid == IS_VALID)
-			execve(token->full_path, token->full_cmd, shell->env);
+			if (execve(token->full_path, token->full_cmd, shell->env) == -1)
+				handle_err_execve(token);
 		exit(0);
 	}
 	waitpid(pid, NULL, 0);

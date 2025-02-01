@@ -35,7 +35,6 @@ int process_heredoc(t_token *token)
 {
     int fd;
     char *line;
-    fprintf(stderr, "heredoc file name \n");
 	token->heredoc_file = generate_random_filename();
     fprintf(stderr, "heredoc file name : %s \n", token->heredoc_file);
 	if (!token->heredoc_file)

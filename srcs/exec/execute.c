@@ -78,7 +78,8 @@ void	execute_cmd(t_token *token, t_shell *shell, t_pipe *pipe)
 		// Print to stderr before execve
 		for (int j = 0; token->full_cmd[j]; j++)
 			fprintf(stderr, "arg[%d]: '%s'\n", j, token->full_cmd[j]);
-		execve(token->full_path, token->full_cmd, shell->env);
+		if (execve(token->full_path, token->full_cmd, shell->env) == -1)
+			handle_err_execve(token);
 		ft_free_array(token->full_cmd);
 	}
 }
