@@ -48,7 +48,7 @@ void	loop(t_shell *shell)
 			token_manager(token, shell->env);
 			prepare_redir(token);
 			prepare_redir_input(token);
-			prepare_heredoc(token);
+			prepare_heredoc(token, shell->env);
 			if (synthax_parser(token) == EXIT_FAILURE)
 			{
 				printf("synthax error test \n ");

@@ -60,7 +60,6 @@ int process_heredoc(t_token *token, char **env)
     close(fd);
     return 0;
 }
-
 char *search_if_env(char *line, char **env)
 {
     int     i;
