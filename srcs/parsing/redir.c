@@ -19,8 +19,7 @@ void	prepare_redir(t_token *token)
 			{
 					backward = backward->prev;
 			}
-			if (backward && (backward->type == CMD || backward->type == BUILTIN
-					|| backward->type == -1))
+			if (backward && (backward->type == CMD || backward->type == BUILTIN))
 			{
 				if (current->type == APPEND_REDIR)
 				{
