@@ -5,6 +5,7 @@ void	prepare_redir(t_token *token)
 	t_token	*current;
 	t_token	*file;
 	t_token	*backward;
+	int		fd;
 
 	current = token;
 	while (current)
@@ -14,9 +15,10 @@ void	prepare_redir(t_token *token)
 			if (current->next)
 				file = current->next;
 			backward = current;
-			while (backward && backward->type != CMD
-				&& backward->type != BUILTIN && backward->type != -1)
-				backward = backward->prev;
+			while (backward && backward->type != CMD && backward->type != BUILTIN)
+			{
+					backward = backward->prev;
+			}
 			if (backward && (backward->type == CMD || backward->type == BUILTIN
 					|| backward->type == -1))
 			{
@@ -24,13 +26,46 @@ void	prepare_redir(t_token *token)
 				{
 					backward->file_redir = ft_strdup(file->str);
 					backward->int_redir = O_APPEND;
+					fd = open(backward->file_redir, O_CREAT , 0644);
+					if (fd < 0)
+						perror (backward->file_redir);
+					else
+						close(fd);
 				}
 				else if (current->type == OUPUT)
 				{
 					backward->file_redir = ft_strdup(file->str);
 					backward->int_redir = O_WRONLY | O_CREAT | O_TRUNC;
+					fd = open(backward->file_redir, O_CREAT , 0644);
+					if (fd < 0)
+						perror (backward->file_redir);
+					else
+						close(fd);
 				}
 			}
+			// else
+			// {
+			// 	backward = current;
+			// 	while (backward->next && backward->type != CMD && backward->type != BUILTIN)
+			// 	{
+			// 		if (backward->next)
+			// 			backward = backward->next;
+			// 	}
+			// 	if (backward && (backward->type == CMD || backward->type == BUILTIN
+			// 		|| backward->type == -1))
+			// 	{
+			// 		if (current->type == APPEND_REDIR)
+			// 		{
+			// 			backward->file_redir = ft_strdup(file->str);
+			// 			backward->int_redir = O_APPEND;
+			// 		}
+			// 		else if (current->type == OUPUT)
+			// 		{
+			// 			backward->file_redir = ft_strdup(file->str);
+			// 			backward->int_redir = O_WRONLY | O_CREAT | O_TRUNC;
+			// 		}
+			// 	}
+			// }
 		}
 		current = current->next;
 	}

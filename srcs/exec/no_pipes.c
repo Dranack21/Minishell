@@ -39,10 +39,6 @@ void	builtin_wo_pipes(t_token *token, t_shell *shell)
 
 void	identify_builtin(t_token *token, t_shell *shell)
 {
-	t_token	*current;
-
-	current = token;
-	handle_file_redirection(current);
 	if (ft_strcmp("echo", token->str) == 0)
 		ft_echo(token, shell, shell->env);
 	if (ft_strcmp("pwd", token->str) == 0)
