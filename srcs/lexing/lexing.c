@@ -14,6 +14,8 @@ t_token	*lexing(t_shell *shell, char *rl)
 	token_count = token_counter(rl, 0);
 	shell->token_count = token_count;
 	printf("nombre de tokens: %d\n", token_count);
+	if (token_count == 0)
+		return (NULL);
 	while (token_count > 0)
 	{
 		ft_add_in_list_shell(&head);
@@ -47,23 +49,23 @@ int	token_counter(char *rl, int i)
 	tokens = 0;
 	while (rl[i])
 	{
-		while (ft_is_space(rl[i]) == 0)
+		while (rl[i] && ft_is_space(rl[i]) == 0)
 			i++;
 		if (!rl[i])
 			break ;
-		if (rl[i] == '"')
+		if (rl[i] && rl[i] == '"')
 		{
 			tokens++;
 			i = skip_string_in_quotes(rl, i);
 			continue ;
 		}
-		if (rl[i] == '\'')
+		if (rl[i] && rl[i] == '\'')
 		{
 			tokens++;
 			i = skip_string_in_single_quotes(rl, i);
 			continue ;
 		}
-		if (rl[i] == '|' || rl[i] == '>' || rl[i] == '<')
+		if (rl[i] && (rl[i] == '|' || rl[i] == '>' || rl[i] == '<'))
 		{
 			tokens++;
 			i++;
@@ -71,7 +73,7 @@ int	token_counter(char *rl, int i)
 				i++;
 			continue ;
 		}
-		if (ft_is_not_quote(rl[i]) == 0)
+		if (rl[i] && ft_is_not_quote(rl[i]) == 0)
 		{
 			tokens++;
 			while (rl[i] && ft_is_space(rl[i]) != 0

@@ -49,10 +49,10 @@ int	check_if_command(t_token *token, char *envp[])
 		cmd_str = ft_strdup(token->str);
 	if (access(cmd_str, X_OK) == 0)
 	{
+		token->full_path = ft_strdup(token->str);
 		return (free(cmd_str), EXIT_SUCCESS);
 	}
 	path = get_path(envp);
-	printf("path %d\n", path);
 	if (path == -1)
 		return (EXIT_FAILURE);
 	paths = ft_split(envp[path] + 5, ':');
@@ -98,11 +98,3 @@ int	check_if_export(t_token *token, char **env)
 	free(cmd_str);
 	return (1);
 }
-
-// int	check_if_arg(t_token *token)
-// {
-// 	t_token	*current;
-
-// 	current = token;
-
-// }
