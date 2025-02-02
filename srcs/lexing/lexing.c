@@ -45,6 +45,7 @@ t_token	*lexing(t_shell *shell, char *rl)
 int	token_counter(char *rl, int i)
 {
 	int	tokens;
+	char quote_type;
 
 	tokens = 0;
 	while (rl[i])
@@ -53,14 +54,14 @@ int	token_counter(char *rl, int i)
 			i++;
 		if (!rl[i])
 			break ;
-		if (rl[i] && rl[i] == '"')
+		if (rl[i] && (rl[i] == '"' || rl[i] == '\''))
 		{
+			quote_type = rl[i];
 			i++;
-			continue ;
-		}
-		if (rl[i] && rl[i] == '\'')
-		{
-			i++;
+			while (rl[i] && rl[i] != quote_type)
+                i++;
+			if (rl[i] == quote_type)
+				tokens++;
 			continue ;
 		}
 		if (rl[i] && (rl[i] == '|' || rl[i] == '>' || rl[i] == '<'))
