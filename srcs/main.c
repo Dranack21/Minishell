@@ -27,14 +27,13 @@ void	loop(t_shell *shell)
 	while (1)
 	{
 		rl = readline("Minishell>");
+		add_history(rl);
 		if (parse_for_quotes(rl) != 0)
 		{
-			printf("uneven single quote go die please");
+			printf("uneven single quote go die please\n");
 			free(rl);
-			exit(0);
 		}
-		add_history(rl);
-		if (ft_strncmp(rl, "exit", 4) == 0)
+		else if (ft_strncmp(rl, "exit", 4) == 0)
 		{
 			free(rl);
 			ft_free_array(shell->env);
@@ -42,27 +41,31 @@ void	loop(t_shell *shell)
 			rl_clear_history();
 			exit(0);
 		}
-		token = lexing(shell, rl);
-		if (token != NULL)
+		else 
 		{
-			token_traductor(token, shell->env);
-			token_manager(token, shell->env);
-			prepare_redir(token);
-			prepare_redir_input(token);
-			prepare_heredoc(token, shell->env);
-			if (synthax_parser(token) == EXIT_FAILURE)
+			token = lexing(shell, rl);
+			if (token != NULL)
 			{
-				printf("synthax error test \n ");
-				free_token_tab(token);
-			}
-			else
-			{
-				verify_all(shell, token);
-				print_list(token);
-				execute_main(shell, token);
-				free_token_tab(token);
-			}
-		}	
+				token_traductor(token, shell->env);
+				token_manager(token, shell->env);
+				kill_all_quotes(token);
+				prepare_redir(token);
+				prepare_redir_input(token);
+				prepare_heredoc(token, shell->env);
+				if (synthax_parser(token) == EXIT_FAILURE)
+				{
+					printf("synthax error test \n ");
+					free_token_tab(token);
+				}
+				else
+				{
+					verify_all(shell, token);
+					print_list(token);
+					execute_main(shell, token);
+					free_token_tab(token);
+				}
+			}	
+		}
 	}
 	rl_clear_history();
 }
@@ -75,6 +78,27 @@ void	token_manager(t_token *token, char *envp[])
 	while (current != NULL)
 	{
 		get_token_type(current, envp);
+		if (current->next)
+			current = current->next;
+		else
+			break;
+	}
+}
+
+void	kill_all_quotes(t_token	*token)
+{
+	t_token	*current;
+	t_token	*temp;
+
+	current = token;
+	while (current)
+	{
+		temp = malloc(sizeof(t_token));
+		temp->str = truncate_quotes(current->str);
+		if (current->type == ARG)
+			current->str = ft_strdup(temp->str);
+		free(temp->str);
+		free(temp);
 		if (current->next)
 			current = current->next;
 		else
