@@ -98,6 +98,7 @@ void				update_all_tokens_quotes(t_token *token);
 void				update_token_quotes(t_token *token);
 int					get_clean_size(char *str);
 char				*clean_quotes(char *str);
+int					is_special_token(char *str);
 
 ///////// TOKEN TYPE ///////////
 void				token_manager(t_token *token, char *envp[]);	//// calls get token type on all t_tokens and prints the list of token ///
