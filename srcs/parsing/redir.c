@@ -133,7 +133,7 @@ void	handle_file_redirection(t_token *cmd_token)
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}
-	else if (cmd_token->int_redir != 0 && cmd_token->file_redir != NULL)
+	else if (cmd_token->int_redir != 0 && cmd_token->file_redir != NULL && cmd_token->heredoc_file != NULL)
 	{
 		if (cmd_token->int_redir == HERE_DOC)
 		{
@@ -152,6 +152,9 @@ void	handle_file_redirection(t_token *cmd_token)
 			unlink(cmd_token->heredoc_file);
 			return;
 		}
+	}
+	else if (cmd_token->int_redir != 0 && cmd_token->file_redir != NULL)
+	{
 		if (cmd_token->int_redir == INPUT)
 			fd = open(cmd_token->file_redir, O_RDONLY);
 		if (fd < 0)
