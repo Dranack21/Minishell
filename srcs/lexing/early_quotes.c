@@ -10,7 +10,7 @@ void	token_traductor(t_token *token, char *envp[])
 	{
 		temp = malloc(sizeof(t_token));
 		temp->str = truncate_quotes(current->str);
-		printf("AAAAAAAAAAAAAAAAAAtemp->str value %s\n",temp->str);
+		printf("before translation: %s\n after translation: %s\n", current->str, temp->str);
 		if (check_if_command(temp, envp) == EXIT_SUCCESS || check_if_builtin(temp) == 0)
 			current->str = ft_strdup(temp->str);
 		free(temp->str);
