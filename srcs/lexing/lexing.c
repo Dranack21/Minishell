@@ -2,159 +2,90 @@
 
 t_token	*lexing(t_shell *shell, char *rl)
 {
-	int		i;
-	int		start;
-	int		end;
-	int		token_count;
-	t_token	*head;
-	t_token	*current;
+    int		i;
+    t_token	*head;
+    t_token	*current;
 
-	i = 0;
 	head = NULL;
-	token_count = token_counter(rl, shell->token_count);
-	shell->token_count = token_count;
-	printf("nombre de tokens: %d\n", token_count);
-	if (token_count == 0)
-		return (NULL);
-	while (token_count > 0)
-	{
-		ft_add_in_list_shell(&head);
-		token_count--;
-	}
-	current = head;
-	while (rl[i] && current)
-	{
-		while (ft_is_space(rl[i]) == 0)
-			i++;
-		start = i;
-		end = token_separator(rl, i);
-		if (end == -1)
-			break ;
-		current->str = str_maker(rl, start, end);
-		i = end + 1;
-		while (rl[i] && ft_is_space(rl[i]) == 0)
+    i = 0;
+	token_add_list(rl, shell, &head);
+    current = head;
+    while (current && rl[i])
+    {
+        i = skip_spaces(rl, i);
+        if (!rl[i])
+            break ;
+        if (ft_isdelim(rl[i]))
+            i = handle_delim_token(rl, i, current);
+        else
         {
-            current->has_trailing_spaces = 1;
-            i++;
+            int end = get_token_end(rl, i);
+            current->str = extract_token(rl, i, end);
+            i = end;
         }
-		current = current->next;
-	}
-	return (head);
-}
-int	token_counter(char *rl, int token_count)
-{
-	int	i;
-	char	quote_type;
-
-	i = 0;
-	while(rl[i])
-	{
-		while (rl[i] && ft_is_space(rl[i]) == EXIT_SUCCESS)
-			i++;
-		if (rl[i] && (rl[i] == '|' || rl[i] == '>' || rl[i] == '<'))
-
-	}
+        current = current->next;
+    }
+    return (head);
 }
 
-int	token_counter_utils(char *rl, int token_count)
+char	*extract_token(char *str, int start, int end)
 {
-	while (rl[i] &&)
+    char	*token;
+    int		i;
+
+    token = malloc(sizeof(char) * (end - start + 1));
+    if (!token)
+        return (NULL);
+    i = 0;
+    while (start < end)
+        token[i++] = str[start++];
+    token[i] = '\0';
+    return (token);
 }
 
-int	is_meta_char(char *rl, int i)
+int	get_token_end(char *str, int i)
 {
-	while (rl[i])
-	{
-		if (rl[i] && rl[i] == '|')
-			return (0);
-		if (rl[i] && rl[i] == '>')
-		{
-			
-		}
-	}
-}
-
-
-
-
-
-
-
-
-
-
-
-
-int	token_counter(char *rl, int i)
-{
-	int	tokens;
-	char quote_type;
-
-	tokens = 0;
-	while (rl[i])
-	{
-		while (rl[i] && ft_is_space(rl[i]) == 0)
-			i++;
-		if (!rl[i])
-			break ;
-		if (rl[i] && (rl[i] == '"' || rl[i] == '\''))
-		{
-			quote_type = rl[i];
-			i++;
-			while (rl[i] && rl[i] != quote_type)
+    while (str[i] && !ft_isspace(str[i]) && !ft_isdelim(str[i]))
+    {
+        if (ft_isquote(str[i]))
+        {
+            char quote = str[i++];
+            while (str[i] && str[i] != quote)
                 i++;
-			if (rl[i] == quote_type)
-				tokens++;
-			continue ;
-		}
-		if (rl[i] && (rl[i] == '|' || rl[i] == '>' || rl[i] == '<'))
-		{
-			tokens++;
-			i++;
-			if ((rl[i - 1] == '>' || rl[i - 1] == '<') && rl[i] == rl[i - 1])
-				i++;
-			continue ;
-		}
-		if (rl[i] && ft_is_not_quote(rl[i]) == 0)
-		{
-			tokens++;
-			while (rl[i] && ft_is_space(rl[i]) != 0
-				&& ft_is_not_quote(rl[i]) == 0 && rl[i] != '|' && rl[i] != '>'
-				&& rl[i] != '<')
-				i++;
-		}
-	}
-	return (tokens);
+            if (str[i])
+                i++;
+        }
+        else
+            i++;
+    }
+    return (i);
 }
 
-int	token_separator(char *rl, int i)
+int	handle_delim_token(char *str, int i, t_token *current)
 {
-	while (ft_is_space(rl[i]) == 0)
-		i++;
-	if (rl[i] == '|' || rl[i] == '>' || rl[i] == '<')
-	{
-		if ((rl[i] == '>' || rl[i] == '<') && rl[i + 1] == rl[i])
-			return (i + 1);
-		return (i);
-	}
-	while (rl[i] && ft_is_space(rl[i]) != 0 && rl[i] != '|' && rl[i] != '>' && rl[i] != '<')
-		i++;
-	return (i - 1);
+    char	delim[3];
+    int		j;
+
+    j = 0;
+    delim[j++] = str[i++];
+    if (str[i] && str[i - 1] == str[i] && 
+        (str[i] == '>' || str[i] == '<'))
+        delim[j++] = str[i++];
+    delim[j] = '\0';
+    current->str = ft_strdup(delim);
+    return (i);
 }
 
-char	*str_maker(char *rl, int debut, int fin)
+void	token_add_list(char *rl , t_shell *shell, t_token **head)
 {
-	char	*str;
-	int		i;
+	int		temp;
 
-	if (fin < debut)
-		return (NULL);
-	i = 0;
-	str = malloc(sizeof(char) * (fin - debut + 2));
-	if (!str)
-		return (NULL);
-	while (debut <= fin)
-		str[i++] = rl[debut++];
-	str[i] = '\0';
-	return (str);
+	shell->token_count = token_counter(rl);
+    printf("nombre de tokens: %d\n", shell->token_count);
+	temp = shell->token_count;
+    while (temp > 0)
+    {
+        ft_add_in_list_shell(head);
+        temp--;
+    }
 }

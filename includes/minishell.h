@@ -73,7 +73,14 @@ typedef	struct s_shell
 
 
 
+
+
+
+
+
+
 void	kill_all_quotes(t_token	*token);
+
 
 /////// EARLY PARSING //////////////
 
@@ -97,13 +104,17 @@ int					is_redir(t_token *current);
 ///////// LEXING  ///////
 
 t_token				*lexing(t_shell *shell, char *rl);			////create t_token list and calls token manager strmaker////
+char				*extract_token(char *str, int start, int end);
+int					get_token_end(char *str, int i);
+int					handle_delim_token(char *str, int i, t_token *current);
+void	token_add_list(char *rl , t_shell *shell, t_token **head);
 
 void				token_manager(t_token *token, char *envp[]);	//// calls get token type on all t_tokens and prints the list of token ///
 void				get_token_type(t_token *token, char *envp[]);  //// CORE OF LEXING CALLS ALL OF THE FUNCTIONS TO CHECK TOKEN TYPE/////
 
-int					ft_is_not_quote(char c); 					///// returns 1 if not a quote returns 0 if it is////
-int					token_counter(char *rl, int i); ///jsplu c le bordel///
-int					token_separator(char *rl, int i); ///jsplu c le bordel///
+
+
+
 
 int					skip_string_in_quotes(char *rl, int i);				
 int					skip_string_in_single_quotes(char *rl, int i);
@@ -111,6 +122,15 @@ int					skip_string_in_single_quotes(char *rl, int i);
 void				token_traductor(t_token *token, char *envp[]); 	/////applies trucnate quotes////
 char				*truncate_quotes(const char *str);				////makes ""ls"" become ls////
 
+
+///////// TOKEN COUNTER////////
+int					token_counter(char *rl);
+int					process_quotes(char *str, int i, int *in_token);
+int					ft_isspace(char c);
+int					ft_isquote(char c);
+int					ft_isdelim(char c);
+int					skip_spaces(char *str, int i);
+int					handle_double_delim(char *str, int i);
 ///////// LEXING CHECKERS ///////////
 
 int					check_if_command_before(t_token	*token);

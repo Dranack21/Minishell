@@ -21,6 +21,7 @@ void	token_traductor(t_token *token, char *envp[])
 			break;
 	}
 }
+
 char* truncate_quotes(const char *str) 
 {
     char *result;
