@@ -22,7 +22,7 @@ int	ft_echo(t_token *tokens, t_shell *shell, char **env)
 	first = 1;
 	while (current && current->type == ARG)
 	{
-		if (!first && current->has_trailing_spaces == 1)
+		if (!first)
 			printf(" ");
 		if (shell->export && position_dollar(current->str) != -1 && current->quote_type != 1)
 		{
@@ -79,22 +79,19 @@ int	position_dollar(char *str)
 int	is_n_arg(char *arg)
 {
 	int	i;
-	int flag;
 
 	i = 1;
-	flag = 0;
 	if (arg[0] == '-')
 	{
 		while (arg[i] == 'n')
 		{
-			flag = 1;
 			i++;
 		}
-		if (arg[i] != '\0' && flag == 1)
-			return (0);
+		if (arg[i] != '\0')
+			return (1);
+		if (arg[i] == '\0')
+			return (0);	
 	}
-	else 
-		return (1);
 	return (1);
 }
 char *strip_quote_plus_plus(const char *str, t_token *token)
