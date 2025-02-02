@@ -46,9 +46,8 @@ void	loop(t_shell *shell)
 			token = lexing(shell, rl);
 			if (token != NULL)
 			{
-				token_traductor(token, shell->env);
+				update_all_tokens_quotes(token);
 				token_manager(token, shell->env);
-				kill_all_quotes(token);
 				prepare_redir(token);
 				prepare_redir_input(token);
 				prepare_heredoc(token, shell->env);

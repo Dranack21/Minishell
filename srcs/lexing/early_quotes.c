@@ -1,44 +1,54 @@
 #include "minishell.h"
 
-void	token_traductor(t_token *token, char *envp[])
+
+void	update_all_tokens_quotes(t_token *token)
 {
-	t_token *current;
-	t_token	*temp;
+	t_token	*current;
 
 	current = token;
 	while (current)
 	{
-		temp = malloc(sizeof(t_token));
-		temp->str = truncate_quotes(current->str);
-		printf("before translation: %s\n after translation: %s\n", current->str, temp->str);
-		if (check_if_command(temp, envp) == EXIT_SUCCESS || check_if_builtin(temp) == 0)
-			current->str = ft_strdup(temp->str);
-		free(temp->str);
-		free(temp);
-		if (current->next)
-			current = current->next;
-		else
-			break;
+		update_token_quotes(current);
+		current = current->next;
 	}
 }
 
-char* truncate_quotes(const char *str) 
+int	get_clean_size(char *str)
 {
-    char *result;
-	int		i;
-	int		j;
+    int	i;
+    int	size;
 
-	i = 0;
-	j = 0;
-	result = (char*)malloc(strlen(str) + 1);
-    if (result == NULL)
-	{
-        fprintf(stderr, "Memory allocation failed\n");
-        exit(1);
-    }
+    i = 0;
+    size = 0;
     while (str[i])
-	{
-        if (str[i] != '"' && str[i] != '\'')
+    {
+        if (!ft_isquote(str[i]))
+            size++;
+        i++;
+    }
+    return (size);
+}
+
+char	*clean_quotes(char *str)
+{
+    char	*result;
+    int		i;
+    int		j;
+    char	quote_type;
+
+    result = malloc(sizeof(char) * (get_clean_size(str) + 1));
+    if (!result)
+        return (NULL);
+    i = 0;
+    j = 0;
+    quote_type = 0;
+    while (str[i])
+    {
+        if (ft_isquote(str[i]) && !quote_type)
+            quote_type = str[i];
+        else if (str[i] == quote_type)
+            quote_type = 0;
+        else
             result[j++] = str[i];
         i++;
     }
@@ -46,27 +56,16 @@ char* truncate_quotes(const char *str)
     return (result);
 }
 
-
-void	kill_all_quotes(t_token	*token)
+void	update_token_quotes(t_token *token)
 {
-	t_token	*current;
-	t_token	*temp;
+    char	*cleaned;
+    char	*old_str;
 
-	current = token;
-	while (current)
-	{
-		temp = malloc(sizeof(t_token));
-		temp->str = truncate_quotes(current->str);
-		printf("before translation: %s\n after translation: %s\n", current->str, temp->str);
-		if (current->type == ARG || (current->prev && is_redir(current->prev) == EXIT_SUCCESS))
-		{
-			current->str = ft_strdup(temp->str);
-		}		
-		free(temp->str);
-		free(temp);
-		if (current->next)
-			current = current->next;
-		else
-			break;
-	}
+    old_str = token->str;
+    cleaned = clean_quotes(token->str);
+    if (cleaned)
+    {
+        token->str = cleaned;
+        free(old_str);
+    }
 }

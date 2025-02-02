@@ -35,7 +35,7 @@ void	prepare_redir(t_token *token)
 				{
 					backward->file_redir = ft_strdup(file->str);
 					backward->int_redir = O_WRONLY | O_CREAT | O_TRUNC;
-					fd = open(backward->file_redir, O_CREAT , 0644);
+					fd = open(backward->file_redir, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 					if (fd < 0)
 						perror (backward->file_redir);
 					else
@@ -65,7 +65,7 @@ void	prepare_redir(t_token *token)
 					{
 						backward->file_redir = ft_strdup(file->str);
 						backward->int_redir = O_WRONLY | O_CREAT | O_TRUNC;
-						fd = open(backward->file_redir, O_CREAT , 0644);
+						fd = open(backward->file_redir,  O_WRONLY | O_CREAT | O_TRUNC, 0644);
 						if (fd < 0)
 							perror (backward->file_redir);
 						else

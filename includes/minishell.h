@@ -72,28 +72,9 @@ typedef	struct s_shell
 }			t_shell;
 
 
-
-
-
-
-
-
-
-void	kill_all_quotes(t_token	*token);
-
-
 /////// EARLY PARSING //////////////
 
 int					parse_for_quotes(char *rl); ///check if quotes are even or not///
-
-
-
-////////// BIG ASS PARSING ////////////////
-
-void				verify_all(t_shell *shell, t_token *token);
-void				verify_for_pipes(t_token *token);
-void				verify_for_no_pipes(t_token	*token);
-int					pipeline_destroyer(t_token	*token);
 
 
 ////////// SYNTHAX CHECKER ////////////
@@ -101,26 +82,28 @@ int					synthax_parser(t_token *token);
 int					check_pipes_parser(t_token *token);
 int					check_for_redirs_parser(t_token *token);
 int					is_redir(t_token *current);
+////////// BIG ASS PARSING ////////////////
+void				verify_all(t_shell *shell, t_token *token);
+void				verify_for_pipes(t_token *token);
+void				verify_for_no_pipes(t_token	*token);
+int					pipeline_destroyer(t_token	*token);
 ///////// LEXING  ///////
-
-t_token				*lexing(t_shell *shell, char *rl);			////create t_token list and calls token manager strmaker////
+t_token				*lexing(t_shell *shell, char *rl);			
 char				*extract_token(char *str, int start, int end);
 int					get_token_end(char *str, int i);
 int					handle_delim_token(char *str, int i, t_token *current);
-void	token_add_list(char *rl , t_shell *shell, t_token **head);
+void				token_add_list(char *rl , t_shell *shell, t_token **head);
+/////// REMOVE QUOTES //////////////
+void				update_all_tokens_quotes(t_token *token);
+void				update_token_quotes(t_token *token);
+int					get_clean_size(char *str);
+char				*clean_quotes(char *str);
 
+///////// TOKEN TYPE ///////////
 void				token_manager(t_token *token, char *envp[]);	//// calls get token type on all t_tokens and prints the list of token ///
 void				get_token_type(t_token *token, char *envp[]);  //// CORE OF LEXING CALLS ALL OF THE FUNCTIONS TO CHECK TOKEN TYPE/////
-
-
-
-
-
 int					skip_string_in_quotes(char *rl, int i);				
 int					skip_string_in_single_quotes(char *rl, int i);
-
-void				token_traductor(t_token *token, char *envp[]); 	/////applies trucnate quotes////
-char				*truncate_quotes(const char *str);				////makes ""ls"" become ls////
 
 
 ///////// TOKEN COUNTER////////
