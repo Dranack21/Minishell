@@ -55,14 +55,12 @@ int	token_counter(char *rl, int i)
 			break ;
 		if (rl[i] && rl[i] == '"')
 		{
-			tokens++;
-			i = skip_string_in_quotes(rl, i);
+			i++;
 			continue ;
 		}
 		if (rl[i] && rl[i] == '\'')
 		{
-			tokens++;
-			i = skip_string_in_single_quotes(rl, i);
+			i++;
 			continue ;
 		}
 		if (rl[i] && (rl[i] == '|' || rl[i] == '>' || rl[i] == '<'))
@@ -89,18 +87,13 @@ int	token_separator(char *rl, int i)
 {
 	while (ft_is_space(rl[i]) == 0)
 		i++;
-	if (rl[i] == '"')
-		return (skip_string_in_quotes(rl, i) - 1);
-	if (rl[i] == '\'')
-		return (skip_string_in_single_quotes(rl, i) - 1);
 	if (rl[i] == '|' || rl[i] == '>' || rl[i] == '<')
 	{
 		if ((rl[i] == '>' || rl[i] == '<') && rl[i + 1] == rl[i])
 			return (i + 1);
 		return (i);
 	}
-	while (rl[i] && ft_is_space(rl[i]) != 0 && rl[i] != '"' && rl[i] != '\''
-		&& rl[i] != '|' && rl[i] != '>' && rl[i] != '<')
+	while (rl[i] && ft_is_space(rl[i]) != 0 && rl[i] != '|' && rl[i] != '>' && rl[i] != '<')
 		i++;
 	return (i - 1);
 }

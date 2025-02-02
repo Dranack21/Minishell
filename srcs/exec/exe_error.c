@@ -26,6 +26,7 @@ void	handle_err_execve(t_token *token)
 	}
 	else
 		printf("%s: %s: No such file or directory\n",str, token->str);
+	free(str);
 	dup2(tmp_fd, STDOUT_FILENO);
 }
 

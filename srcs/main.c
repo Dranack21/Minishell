@@ -45,6 +45,7 @@ void	loop(t_shell *shell)
 		token = lexing(shell, rl);
 		if (token != NULL)
 		{
+			token_traductor(token, shell->env);
 			token_manager(token, shell->env);
 			prepare_redir(token);
 			prepare_redir_input(token);
@@ -74,6 +75,9 @@ void	token_manager(t_token *token, char *envp[])
 	while (current != NULL)
 	{
 		get_token_type(current, envp);
-		current = current->next;
+		if (current->next)
+			current = current->next;
+		else
+			break;
 	}
 }

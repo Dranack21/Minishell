@@ -20,7 +20,7 @@ int	ft_echo(t_token *tokens, t_shell *shell, char **env)
 		current = current->next;
 	}
 	first = 1;
-	while (current && current->type != ARG)
+	while (current && current->type == ARG)
 	{
 		if (!first && current->has_trailing_spaces == 1)
 			printf(" ");
@@ -110,10 +110,14 @@ char *strip_quote_plus_plus(const char *str, t_token *token)
 	i = 0;
 	j = 0;
     if (!str)
+	{
         return (NULL);
+	}
     len = ft_strlen(str);
     if (len < 2)
+	{
         return (ft_strdup(str));
+	}
     if (str[0] != '"' && str[0] != '\'')
         return (ft_strdup(str));
     quote_char = str[0];

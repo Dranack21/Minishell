@@ -71,7 +71,6 @@ typedef	struct s_shell
 	char	**env;
 }			t_shell;
 
-
 /////// EARLY PARSING //////////////
 
 int					parse_for_quotes(char *rl); ///check if quotes are even or not///
@@ -104,6 +103,9 @@ int					token_separator(char *rl, int i); ///jsplu c le bordel///
 
 int					skip_string_in_quotes(char *rl, int i);				
 int					skip_string_in_single_quotes(char *rl, int i);
+
+void				token_traductor(t_token *token, char *envp[]); 	/////applies trucnate quotes////
+char				*truncate_quotes(const char *str);				////makes ""ls"" become ls////
 
 ///////// LEXING CHECKERS ///////////
 
