@@ -11,7 +11,7 @@ t_token	*lexing(t_shell *shell, char *rl)
 
 	i = 0;
 	head = NULL;
-	token_count = token_counter(rl, 0);
+	token_count = token_counter(rl, shell->token_count);
 	shell->token_count = token_count;
 	printf("nombre de tokens: %d\n", token_count);
 	if (token_count == 0)
@@ -41,6 +41,49 @@ t_token	*lexing(t_shell *shell, char *rl)
 	}
 	return (head);
 }
+int	token_counter(char *rl, int token_count)
+{
+	int	i;
+	char	quote_type;
+
+	i = 0;
+	while(rl[i])
+	{
+		while (rl[i] && ft_is_space(rl[i]) == EXIT_SUCCESS)
+			i++;
+		if (rl[i] && (rl[i] == '|' || rl[i] == '>' || rl[i] == '<'))
+
+	}
+}
+
+int	token_counter_utils(char *rl, int token_count)
+{
+	while (rl[i] &&)
+}
+
+int	is_meta_char(char *rl, int i)
+{
+	while (rl[i])
+	{
+		if (rl[i] && rl[i] == '|')
+			return (0);
+		if (rl[i] && rl[i] == '>')
+		{
+			
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
 
 int	token_counter(char *rl, int i)
 {
