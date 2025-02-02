@@ -44,3 +44,28 @@ char* truncate_quotes(const char *str)
     result[j] = '\0';
     return (result);
 }
+
+
+void	kill_all_quotes(t_token	*token)
+{
+	t_token	*current;
+	t_token	*temp;
+
+	current = token;
+	while (current)
+	{
+		temp = malloc(sizeof(t_token));
+		temp->str = truncate_quotes(current->str);
+		printf("before translation: %s\n after translation: %s\n", current->str, temp->str);
+		if (current->type == ARG || (current->prev && is_redir(current->prev) == EXIT_SUCCESS))
+		{
+			current->str = ft_strdup(temp->str);
+		}		
+		free(temp->str);
+		free(temp);
+		if (current->next)
+			current = current->next;
+		else
+			break;
+	}
+}
