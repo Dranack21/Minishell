@@ -202,9 +202,12 @@ void				quote(t_token *token);
 int					position_dollar(char *str);
 void				ft_exit(t_token *tokens);
 void   				 update_pwd_vars(char **env);
-int 				ft_export(char **args, char ***env, t_shell *data);
+int					ft_export(t_token *token, char ***env, t_shell *data);
+void				update_env_var(char ***env, char *var);
 char 				*get_home_dir(char **envp);
+char				*get_var_name(char *str);
 char 				*get_env_value(char *var_name, char **env);
+int					is_valid_identifier(char *str);
 
 
 void				identify_builtin(t_token *token, t_shell *shell);

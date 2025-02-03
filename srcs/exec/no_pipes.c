@@ -46,7 +46,7 @@ void	identify_builtin(t_token *token, t_shell *shell)
 	if (ft_strcmp("cd", token->str) == 0)
 		cd_builtin(token, shell->env);
 	if (ft_strcmp("export", token->str) == 0)
-		printf("EXPORT DEEZ NUTS\n");
+		ft_export(token, &shell->env, shell);
 	if (ft_strcmp("unset", token->str) == 0)
 		ft_unset(token, shell->env);
 	if (ft_strcmp("env", token->str) == 0)

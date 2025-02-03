@@ -5,15 +5,15 @@ int	is_valid_identifier(char *str)
 	int	i;
 
 	if (!str || !*str || ft_isdigit(*str))
-		return (EXIT_SUCCESS);
+		return (1);
 	i = 0;
 	while (str[i])
 	{
 		if (!ft_isalnum(str[i]) && str[i] != '_')
-			return (0);
+			return (1);
 		i++;
 	}
-	return (EXIT_FAILURE);
+	return (0);
 }
 
 char	*get_var_name(char *str)
@@ -35,6 +35,8 @@ void	update_env_var(char ***env, char *var)
 	char	**new_env;
 
 	name = get_var_name(var);
+	if (!name)
+		return;
 	i = 0;
 	while ((*env)[i])
 	{
@@ -45,7 +47,7 @@ void	update_env_var(char ***env, char *var)
 			free((*env)[i]);
 			(*env)[i] = ft_strdup(var);
 			free(name);
-			return ;
+			return;
 		}
 		i++;
 	}
@@ -53,7 +55,7 @@ void	update_env_var(char ***env, char *var)
 	if (!new_env)
 	{
 		free(name);
-		return ;
+		return;
 	}
 	i = 0;
 	while ((*env)[i])
@@ -63,36 +65,37 @@ void	update_env_var(char ***env, char *var)
 	}
 	new_env[i] = ft_strdup(var);
 	new_env[i + 1] = NULL;
+
 	ft_free_array(*env);
 	*env = new_env;
 	free(name);
 }
 
-int	ft_export(char **args, char ***env, t_shell *data)
+
+int	ft_export(t_token *token, char ***env, t_shell *data)
 {
-	int		i;
 	char	*name;
 
-	if (!args[1])
+	if (!token || !token->next)
 		return (0);
-	i = 1;
-	while (args[i])
+	token = token->next;
+	while (token)
 	{
-		if (ft_strchr(args[i], '='))
+		if (ft_strchr(token->str, '='))
 		{
-			name = get_var_name(args[i]);
+			name = get_var_name(token->str);
 			if (is_valid_identifier(name))
 			{
-				update_env_var(env, args[i]);
+				update_env_var(env, token->str); 
 				data->export = 1;
 			}
 			else
 			{
-				printf("no, write better %s\n", args[i]);
+				printf("no, write better %s\n", token->str);
 			}
 			free(name);
 		}
-		i++;
+		token = token->next; 
 	}
 	return (EXIT_SUCCESS);
 }
