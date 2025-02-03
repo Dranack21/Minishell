@@ -37,6 +37,7 @@ int process_heredoc(t_token *token, char **env)
     char *line;
 	char *expanded_line;
 
+    ft_setup_heredoc_signals();
 	token->heredoc_file = generate_random_filename();
     fprintf(stderr, "heredoc file name : %s \n", token->heredoc_file);
 	if (!token->heredoc_file)
@@ -58,6 +59,7 @@ int process_heredoc(t_token *token, char **env)
 		free(expanded_line); 
     }
     close(fd);
+    ft_restore_signals();
     return 0;
 }
 

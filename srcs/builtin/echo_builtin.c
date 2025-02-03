@@ -13,7 +13,6 @@ int	ft_echo(t_token *tokens, t_shell *shell, char **env)
 	print_newline = 1;
 	current = tokens->next;
 	i = 0;
-	quote(current);
 	if (current && is_n_arg(current->str) == 0)
 	{
 		print_newline = 0;
@@ -24,7 +23,7 @@ int	ft_echo(t_token *tokens, t_shell *shell, char **env)
 	{
 		if (!first)
 			printf(" ");
-		if (shell->export && position_dollar(current->str) != -1 && current->quote_type != 1)
+		if (shell->export && position_dollar(current->str) != -1)
 		{
 			i = position_dollar(current->str) + 1;
 			if (current->quote_type != 2)
@@ -37,7 +36,7 @@ int	ft_echo(t_token *tokens, t_shell *shell, char **env)
 			value = get_env_value(current->str + i, env);
 			if (value)
 				printf("%s", value);
-			if (!value && current->quote_type != 2)
+			if (!value)
 				printf("%s",current->str);
 		}
 		else

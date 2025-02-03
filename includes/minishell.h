@@ -177,8 +177,11 @@ char				*ft_strncpy(char *dst, const char *src, size_t len);
 //////////////////SIGNAUX///////////////
 
 void				ft_signal_handler();
-void				ft_handle_sigint();
-void				ft_handle_sigsegv();
+void    			ft_handle_sigint(int sig);
+void    			ft_handle_sigquit(int sig);
+void   				ft_setup_heredoc_signals();
+void    			ft_restore_signals();
+void    			ft_handle_sigsegv();
 
 void				loop(t_shell *shell);
 

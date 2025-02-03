@@ -28,12 +28,12 @@ void	loop(t_shell *shell)
 	{
 		rl = readline("Minishell>");
 		add_history(rl);
-		if (parse_for_quotes(rl) != 0)
-		{
-			printf("uneven single quote go die please\n");
-			free(rl);
-		}
-		else if (ft_strncmp(rl, "exit", 4) == 0)
+		// if (parse_for_quotes(rl) != 0)
+		// {
+		// 	printf("uneven single quote go die please\n");
+		// 	free(rl);
+		// }
+		if (ft_strncmp(rl, "exit", 4) == 0)
 		{
 			free(rl);
 			ft_free_array(shell->env);
