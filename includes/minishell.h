@@ -105,8 +105,6 @@ void				token_manager(t_token *token, char *envp[]);	//// calls get token type o
 void				get_token_type(t_token *token, char *envp[]);  //// CORE OF LEXING CALLS ALL OF THE FUNCTIONS TO CHECK TOKEN TYPE/////
 int					skip_string_in_quotes(char *rl, int i);				
 int					skip_string_in_single_quotes(char *rl, int i);
-
-
 ///////// TOKEN COUNTER////////
 int					token_counter(char *rl);
 int					process_quotes(char *str, int i, int *in_token);
@@ -124,23 +122,16 @@ int					check_if_export(t_token *token, char **env);
 int					check_if_special_char(t_token *token);
 int					check_if_path(t_token *token);
 int					get_path(char *envp[]);			////gets path////
-
 char				*find_cmd_path(char **paths, char *cmd); ////checks if yo have a path returns null if not////
 
 //////// TOKEN TAB MAKER //////////
-
 void				print_list(t_token *head);				//// prints linked list of t token////
 void				free_token_tab(t_token *head);			///free tabs//////
-
-char				*str_maker(char *rl, int debut, int fin);		//jsplu//
 void				close_fds_and_wait_for_childs(t_pipe *head);			//// read the function name////
-
 ///////////////////////// EXECUTE //////////////////////
 void				execute_main(t_shell *shell, t_token *token);				/// redirect you from pipes to no pipes////
 void				redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe); /// redirects first intermediates and last commands////
 void				execute_cmd(t_token *token, t_shell *shell, t_pipe *pipe); ////execute the command and free full_p/////
-
-
 ////////////// EXECUTE COMMANDS WHEN NO PIPES /////////////
 void				no_pipes(t_token *token, t_shell *shell);
 void				cmd_wo_pipes(t_token *token, t_shell *shell);
@@ -181,13 +172,17 @@ void				ft_signal_handler();
 void				ft_handle_sigint();
 void				ft_handle_sigsegv();
 
-void				loop(t_shell *shell);
-
 ///// ERRORS///////////////////////////
-void	handle_err_execve(t_token *token);
-char	*get_prompt_name(t_token *token);
+void				handle_err_execve(t_token *token);
+char				*get_prompt_name(t_token *token);
 
 /////////// BUILTIN ////////////
+
+void				identify_builtin(t_token *token, t_shell *shell);
+void				builtin_wo_pipes(t_token *token, t_shell *shell);
+void				quote(t_token *token);
+void				ft_exit(t_token *tokens);
+void   				 update_pwd_vars(char **env);
 
 int 				ft_pwd(void);
 int 				ft_envp(char **envp);
@@ -196,15 +191,11 @@ int					is_n_arg(char *arg);
 int 				cd_builtin(t_token *token, char **env);
 int 				ft_setenv(char **envp, char *name, char *value);
 int					ft_unset(t_token *tokens, char **env);
-void				quote(t_token *token);
 int					position_dollar(char *str);
-void				ft_exit(t_token *tokens);
-void   				 update_pwd_vars(char **env);
 int 				ft_export(char **args, char ***env, t_shell *data);
+
 char 				*get_home_dir(char **envp);
 char 				*get_env_value(char *var_name, char **env);
 
 
-void				identify_builtin(t_token *token, t_shell *shell);
-void				builtin_wo_pipes(t_token *token, t_shell *shell);
 #endif

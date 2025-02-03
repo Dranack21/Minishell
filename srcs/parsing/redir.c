@@ -91,18 +91,30 @@ void	prepare_redir_input(t_token *token)
 		{
 			if (current->next)
 				file = current->next;
-		}
-		backward = current;
-		while (backward && backward->type != CMD && backward->type != BUILTIN
-			&& backward->type != -1)
-			backward = backward->prev;
-		if (backward && (backward->type == CMD || backward->type == BUILTIN
-				|| backward->type == -1))
-		{
-			if (current->type == INPUT)
+			backward = current;
+			while (backward && backward->type != CMD && backward->type != BUILTIN)
+				backward = backward->prev;
+			if (backward && (backward->type == CMD || backward->type == BUILTIN))
 			{
-				backward->file_redir = ft_strdup(file->str);
-				backward->int_redir = INPUT;
+				if (current->type == INPUT)
+				{
+					backward->file_redir = ft_strdup(file->str);
+					backward->int_redir = INPUT;
+				}
+			}
+			else if (!backward)
+			{
+				backward = current;
+				while (backward && backward->type != CMD && backward->type != BUILTIN)
+					backward = backward->next;
+				if (backward && (backward->type == CMD || backward->type == BUILTIN))
+				{
+					if (current->type == INPUT)
+					{
+						backward->file_redir = ft_strdup(file->str);
+						backward->int_redir = INPUT;
+					}
+				}
 			}
 		}
 		current = current->next;

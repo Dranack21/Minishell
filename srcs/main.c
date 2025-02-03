@@ -48,9 +48,6 @@ void	loop(t_shell *shell)
 			{
 				update_all_tokens_quotes(token);
 				token_manager(token, shell->env);
-				prepare_redir(token);
-				prepare_redir_input(token);
-				prepare_heredoc(token, shell->env);
 				if (synthax_parser(token) == EXIT_FAILURE)
 				{
 					printf("synthax error test \n ");
@@ -58,10 +55,13 @@ void	loop(t_shell *shell)
 				}
 				else
 				{
-					verify_all(shell, token);
-					print_list(token);
-					execute_main(shell, token);
-					free_token_tab(token);
+				prepare_redir(token);
+				prepare_redir_input(token);
+				prepare_heredoc(token, shell->env);
+				verify_all(shell, token);
+				print_list(token);
+				execute_main(shell, token);
+				free_token_tab(token);
 				}
 			}	
 		}
