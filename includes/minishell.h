@@ -193,7 +193,9 @@ char	*get_prompt_name(t_token *token);
 
 int 				ft_pwd(void);
 int 				ft_envp(char **envp);
-int 				ft_echo(t_token *tokens, t_shell *shell, char **env);
+int 				ft_echo(t_token *tokens, char **env);
+void 				process_dollar_string(char *str, char **env, int quote_type);
+char 				*extract_var_name(char *str, int dollar_pos, int str_len);
 int					is_n_arg(char *arg);
 int 				cd_builtin(t_token *token, char **env);
 int 				ft_setenv(char **envp, char *name, char *value);

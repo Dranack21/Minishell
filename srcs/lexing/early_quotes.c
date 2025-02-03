@@ -56,11 +56,24 @@ char	*clean_quotes(char *str)
     return (result);
 }
 
-void	update_token_quotes(t_token *token)
+void update_token_quotes(t_token *token)
 {
-    char	*cleaned;
-    char	*old_str;
+    char    *cleaned;
+    char    *old_str;
+    int     i;
 
+    if (!token || !token->str)
+        return;
+    token->quote_type = 0;
+    i = 0;
+    while (token->str[i])
+    {
+        if (token->str[i] == '"' && token->quote_type == 0)
+            token->quote_type = 2;
+        else if (token->str[i] == '\'' && token->quote_type == 0)
+            token->quote_type = 1;
+        i++;
+    }
     old_str = token->str;
     cleaned = clean_quotes(token->str);
     if (cleaned)

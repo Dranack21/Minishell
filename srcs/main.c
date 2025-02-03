@@ -27,6 +27,8 @@ void	loop(t_shell *shell)
 	while (1)
 	{
 		rl = readline("Minishell>");
+		if (!rl)  // Handle ctrl-D
+        	break;
 		add_history(rl);
 		// if (parse_for_quotes(rl) != 0)
 		// {
@@ -65,6 +67,7 @@ void	loop(t_shell *shell)
 				}
 			}	
 		}
+		free(rl);  
 	}
 	rl_clear_history();
 }

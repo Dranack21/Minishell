@@ -68,5 +68,6 @@ void	*create_node_shell(void)
 	new_node->has_trailing_spaces = 0;
 	new_node->is_valid = IS_VALID;
 	new_node->int_redir = 0;
+	new_node->quote_type = 0;
 	return (new_node);
 }

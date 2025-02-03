@@ -40,7 +40,7 @@ void	builtin_wo_pipes(t_token *token, t_shell *shell)
 void	identify_builtin(t_token *token, t_shell *shell)
 {
 	if (ft_strcmp("echo", token->str) == 0)
-		ft_echo(token, shell, shell->env);
+		ft_echo(token, shell->env);
 	if (ft_strcmp("pwd", token->str) == 0)
 		ft_pwd();
 	if (ft_strcmp("cd", token->str) == 0)
