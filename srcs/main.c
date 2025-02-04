@@ -27,15 +27,14 @@ void	loop(t_shell *shell)
 	while (1)
 	{
 		rl = readline("Minishell>");
-		if (!rl)  // Handle ctrl-D
+		if (!rl)
         	break;
 		add_history(rl);
-		// if (parse_for_quotes(rl) != 0)
-		// {
-		// 	printf("uneven single quote go die please\n");
-		// 	free(rl);
-		// }
-		if (ft_strncmp(rl, "exit", 4) == 0)
+		if (parse_for_quotes(rl) == EXIT_FAILURE)
+		{
+			printf("uneven single quote go die please\n");
+		}
+		else if (ft_strncmp(rl, "exit", 4) == 0)
 		{
 			free(rl);
 			ft_free_array(shell->env);
@@ -57,13 +56,13 @@ void	loop(t_shell *shell)
 				}
 				else
 				{
-				prepare_redir(token);
-				prepare_redir_input(token);
-				prepare_heredoc(token, shell->env);
-				verify_all(shell, token);
-				print_list(token);
-				execute_main(shell, token);
-				free_token_tab(token);
+					prepare_redir(token);
+					prepare_redir_input(token);
+					prepare_heredoc(token, shell->env);
+					verify_all(shell, token);
+					print_list(token);
+					execute_main(shell, token);
+					free_token_tab(token);
 				}
 			}	
 		}
