@@ -71,7 +71,7 @@ typedef	struct s_shell
 	char	**env;
 }			t_shell;
 
-
+void    loop(t_shell *shell);
 /////// EARLY PARSING //////////////
 
 int					parse_for_quotes(char *rl); ///check if quotes are even or not///
