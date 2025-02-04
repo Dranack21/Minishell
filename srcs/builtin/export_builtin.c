@@ -9,7 +9,7 @@ int	is_valid_identifier(char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (!ft_isalnum(str[i]) && str[i] != '_')
+		if (!ft_isalnum(str[i]) && str[i] != '_' )
 			return (1);
 		i++;
 	}
@@ -24,7 +24,10 @@ char	*get_var_name(char *str)
 	i = 0;
 	while (str[i] && str[i] != '=')
 		i++;
-	name = ft_strndup(str, i);
+	if (str[i] == '=' && str[i - 1])
+		name = ft_strndup(str, i);
+	else
+		return (NULL);
 	return (name);
 }
 
@@ -79,23 +82,25 @@ int	ft_export(t_token *token, char ***env, t_shell *data)
 	if (!token || !token->next)
 		return (0);
 	token = token->next;
+	name = get_var_name(token->str);
+	if (name == NULL)
+	{
+		if (token->next)
+			token = token->next;
+		printf("export: `%s': not a valid identifier \n", token->str);
+		return (EXIT_FAILURE);
+	}
 	while (token)
 	{
-		if (ft_strchr(token->str, '='))
+		if (is_valid_identifier(name))
 		{
-			name = get_var_name(token->str);
-			if (is_valid_identifier(name))
-			{
-				update_env_var(env, token->str); 
-				data->export = 1;
-			}
-			else
-			{
-				printf("no, write better %s\n", token->str);
-			}
-			free(name);
+			update_env_var(env, token->str); 
+			data->export = 1;
 		}
+		else
+			printf("no, write better %s\n", token->str);
 		token = token->next; 
 	}
+	free(name);
 	return (EXIT_SUCCESS);
 }
