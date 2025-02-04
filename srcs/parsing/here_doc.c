@@ -16,16 +16,27 @@ void prepare_heredoc(t_token *token, char **env)
 			file = current->next;
 			backward = current;
 			while (backward && backward->type != CMD
-				&& backward->type != BUILTIN && backward->type != -1)
+				&& backward->type != BUILTIN)
 				backward = backward->prev;
-			if (backward && (backward->type == CMD || backward->type == BUILTIN 
-				|| backward->type == -1))
+			if (backward && (backward->type == CMD || backward->type == BUILTIN))
 			{
 				backward->file_redir = ft_strdup(file->str);
 				backward->int_redir = HERE_DOC;
 				if (process_heredoc(backward, env) != 0)
 					printf("dedge heredoc\n");
 			}
+            else if (!backward)
+            {
+                while (backward && backward->type != CMD && backward->type != BUILTIN)
+				backward = backward->next;
+                if (backward && (backward->type == CMD || backward->type == BUILTIN))
+			    {
+				backward->file_redir = ft_strdup(file->str);
+				backward->int_redir = HERE_DOC;
+				if (process_heredoc(backward, env) != 0)
+					printf("dedge heredoc\n");
+			    }
+            }
 		}
 		current = current->next;
 	}
