@@ -41,7 +41,7 @@ void	update_env_var(char ***env, char *var)
 
 	name = get_var_name(var);
 	if (!name)
-		return;
+		return ;
 	i = 0;
 	while ((*env)[i])
 	{
@@ -52,7 +52,7 @@ void	update_env_var(char ***env, char *var)
 			free((*env)[i]);
 			(*env)[i] = ft_strdup(var);
 			free(name);
-			return;
+			return ;
 		}
 		i++;
 	}
@@ -60,7 +60,7 @@ void	update_env_var(char ***env, char *var)
 	if (!new_env)
 	{
 		free(name);
-		return;
+		return ;
 	}
 	i = 0;
 	while ((*env)[i])
@@ -70,12 +70,10 @@ void	update_env_var(char ***env, char *var)
 	}
 	new_env[i] = ft_strdup(var);
 	new_env[i + 1] = NULL;
-
 	ft_free_array(*env);
 	*env = new_env;
 	free(name);
 }
-
 
 int	ft_export(t_token *token, char ***env, t_shell *data)
 {
@@ -95,13 +93,13 @@ int	ft_export(t_token *token, char ***env, t_shell *data)
 	while (token)
 	{
 		if (is_valid_identifier(name) == 0)
-			update_env_var(env, token->str); 
+			update_env_var(env, token->str);
 		else
 		{
 			printf("no, write better %s\n", token->str);
 			data->exit_code = 1;
 		}
-		token = token->next; 
+		token = token->next;
 	}
 	return (free(name), EXIT_SUCCESS);
 }

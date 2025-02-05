@@ -8,7 +8,7 @@ void	no_pipes(t_token *token, t_shell *shell)
 	if (current->is_valid == IS_NOT_VALID)
 	{
 		printf("%s : command not found\n", token->str);
-		while(current)
+		while (current)
 		{
 			current->is_valid = IS_NOT_VALID;
 			shell->exit_code = 127;
@@ -79,9 +79,9 @@ void	cmd_wo_pipes(t_token *token, t_shell *shell)
 		exit(0);
 	}
 	waitpid(pid, &status, 0);
-	if (WIFEXITED(status)) 
-    	shell->exit_code = WEXITSTATUS(status);
-	 else 
-    	shell->exit_code = status;
+	if (WIFEXITED(status))
+		shell->exit_code = WEXITSTATUS(status);
+	else
+		shell->exit_code = status;
 	ft_free_array(token->full_cmd);
 }

@@ -18,9 +18,9 @@ int	is_numeric(const char *str)
 
 void	ft_exit(t_shell *shell, t_token *tokens)
 {
-	t_token		*arg;
-	int			exit_code;
-	int			temp;
+	t_token	*arg;
+	int		exit_code;
+	int		temp;
 
 	printf("exit\n");
 	arg = tokens->next;

@@ -45,7 +45,7 @@ void	redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe)
 		if (cmd_token->next)
 			cmd_token = cmd_token->next;
 		else
-			break;
+			break ;
 	}
 	close_unused_pipes(pipe);
 	if (cmd_token->type == CMD)
