@@ -106,6 +106,13 @@ void				token_manager(t_token *token, char *envp[]);	//// calls get token type o
 void				get_token_type(t_token *token, char *envp[]);  //// CORE OF LEXING CALLS ALL OF THE FUNCTIONS TO CHECK TOKEN TYPE/////
 int					skip_string_in_quotes(char *rl, int i);				
 int					skip_string_in_single_quotes(char *rl, int i);
+
+
+//////////////UTILS///////////////
+char* 				my_strcpy(char* dest, const char* src) ;
+void				export_traductor(t_token *token, char *envp[]);
+char 				*process_dollar_string(char *str, char **env, int quote_type);
+int 				calculate_expanded_length(char *str, char **env);
 ///////// TOKEN COUNTER////////
 int					token_counter(char *rl);
 int					process_quotes(char *str, int i, int *in_token);
@@ -145,7 +152,6 @@ char				**create_cmd_tab(t_token *token);         /// create the **cmd array////
 int					count_pipes(t_token *token);				//// count of all our pipes////
 int					count_for_cmd_tab(t_token *token);			//// count for the size of the malloc for our **cmd array/////
 char				*strip_quotes(const char *str);				//// STRIPS QUOTES FOR PASSED ARGS ///
-char				*strip_quote_plus_plus(const char *str, t_token *token);
 ///// LINKED LIST OF PIPES ///////
 void				ft_lstadd_end_pipes(t_pipe **head); 					///create t_pipes node/////
 void				ft_add_in_list_pipes(t_pipe **head);			///create t_pipes node/////
@@ -187,13 +193,9 @@ char				*get_prompt_name(t_token *token);
 
 void				identify_builtin(t_token *token, t_shell *shell);
 void				builtin_wo_pipes(t_token *token, t_shell *shell);
-void				quote(t_token *token);
-void   				 update_pwd_vars(char **env);
-
 int					ft_pwd(t_shell *shell);
 int 				ft_envp(char **envp);
 int 				ft_echo(t_token *tokens, char **env);
-void 				process_dollar_string(char *str, char **env, int quote_type);
 char 				*extract_var_name(char *str, int dollar_pos, int str_len);
 int					is_n_arg(char *arg);
 int					cd_builtin(t_shell *shell, t_token *token, char **env);
@@ -209,6 +211,7 @@ char 				*get_home_dir(char **envp);
 char				*get_var_name(char *str);
 char 				*get_env_value(char *var_name, char **env);
 int					is_valid_identifier(char *str);
+void				process_echo_string(char *str, char **env, int quote_type);
 
 
 #endif
