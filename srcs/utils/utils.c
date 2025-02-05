@@ -40,16 +40,21 @@ void export_traductor(t_token *token, char *envp[])
     current = token;
     while (current)
     {
+		if (current->prev && (!ft_strcmp("export", current->prev->str) || !ft_strcmp("unset", current->prev->str)))
+		{
+				current = current->next;
+				continue;
+		}
         if (position_dollar(current->str) != -1)
         {
             processed_str = process_dollar_string(current->str, envp, current->quote_type);
             if (processed_str)
             {
-                free(current->str);
-                current->str = processed_str;
+            free(current->str);
+            current->str = processed_str;
             }
         }
-        current = current->next;
+		current = current->next;
     }
 }
 
@@ -126,7 +131,6 @@ char *process_dollar_string(char *str, char **env, int quote_type)
         ft_strncpy(result + i, str, ft_strlen(str));
         i += ft_strlen(str);
     }
-    
     result[i] = '\0';
     return (result);
 }

@@ -7,7 +7,6 @@ void	create_pipes(t_shell *shell, t_token *token)
 	int		temp;
 
 	temp = shell->pipe_count;
-	printf("pipe count %d\n", temp);
 	head = NULL;
 	setup_pipes(&head, temp);
 	current = head;
@@ -26,7 +25,7 @@ void	create_pipes(t_shell *shell, t_token *token)
 		}
 		current = current->next;
 	}
-	close_fds_and_wait_for_childs(head);
+	close_fds_and_wait_for_childs(shell, head);
 	free_pipes(head);
 }
 
@@ -55,14 +54,14 @@ void	setup_pipes(t_pipe **head, int temp)
 	while (current != NULL)
 	{
 		current->id = i++;
-		printf("created pipe ID : %d\n", current->id);
 		current = current->next;
 	}
 }
 
-void	close_fds_and_wait_for_childs(t_pipe *head)
+void	close_fds_and_wait_for_childs(t_shell *shell, t_pipe *head)
 {
 	t_pipe	*current;
+	int		status;
 
 	current = head;
 	while (current->next != NULL)
@@ -74,7 +73,13 @@ void	close_fds_and_wait_for_childs(t_pipe *head)
 	current = head;
 	while (current != NULL)
 	{
-		waitpid(current->pid, NULL, 0);
+		waitpid(current->pid, &status, 0);
+		if (WIFEXITED(status))
+			shell->exit_code = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+			shell->exit_code = 128 + WTERMSIG(status);
+		else
+			shell->exit_code = status;
 		current = current->next;
 	}
 }

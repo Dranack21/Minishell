@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	ft_pwd(void)
+int	ft_pwd(t_shell *shell)
 {
 	char	*cwd;
 
@@ -8,6 +8,7 @@ int	ft_pwd(void)
 	if (cwd == NULL)
 	{
 		perror("getcwd");
+		shell->exit_code = 0;
 		return (EXIT_FAILURE);
 	}
 	printf("%s\n", cwd);

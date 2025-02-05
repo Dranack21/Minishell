@@ -65,6 +65,7 @@ typedef struct s_pipe
 
 typedef	struct s_shell
 {
+	int		exit_code;
 	int		pipe_count;
 	int		token_count;
 	int		export;
@@ -134,7 +135,7 @@ char				*find_cmd_path(char **paths, char *cmd); ////checks if yo have a path re
 //////// TOKEN TAB MAKER //////////
 void				print_list(t_token *head);				//// prints linked list of t token////
 void				free_token_tab(t_token *head);			///free tabs//////
-void				close_fds_and_wait_for_childs(t_pipe *head);			//// read the function name////
+void				close_fds_and_wait_for_childs(t_shell *shell, t_pipe *head);	//// read the function name////
 ///////////////////////// EXECUTE //////////////////////
 void				execute_main(t_shell *shell, t_token *token);				/// redirect you from pipes to no pipes////
 void				redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe); /// redirects first intermediates and last commands////
@@ -176,7 +177,7 @@ char				*ft_strncpy(char *dst, const char *src, size_t len);
 
 void				ft_signal_handler();
 void    			ft_handle_sigint(int sig);
-void    			ft_handle_sigquit(int sig);
+void   				 ft_handle_sigquit(int sig);
 void   				ft_setup_heredoc_signals();
 void    			ft_restore_signals();
 void    			ft_handle_sigsegv();
@@ -189,21 +190,19 @@ char				*get_prompt_name(t_token *token);
 
 void				identify_builtin(t_token *token, t_shell *shell);
 void				builtin_wo_pipes(t_token *token, t_shell *shell);
-void				ft_exit(t_token *tokens);
-void   				 update_pwd_vars(char **env);
-
-int 				ft_pwd(void);
+int					ft_pwd(t_shell *shell);
 int 				ft_envp(char **envp);
 int 				ft_echo(t_token *tokens, char **env);
 char 				*extract_var_name(char *str, int dollar_pos, int str_len);
 int					is_n_arg(char *arg);
-int 				cd_builtin(t_token *token, char **env);
+int					cd_builtin(t_shell *shell, t_token *token, char **env);
 int 				ft_setenv(char **envp, char *name, char *value);
 int					ft_unset(t_token *tokens, char **env);
 int					position_dollar(char *str);
-void				ft_exit(t_token *tokens);
+void				ft_exit(t_shell *shell, t_token *tokens);
 void   				 update_pwd_vars(char **env);
 int					ft_export(t_token *token, char ***env, t_shell *data);
+void				handle_export_issue(t_token *token, char ***env, t_shell *data);
 void				update_env_var(char ***env, char *var);
 char 				*get_home_dir(char **envp);
 char				*get_var_name(char *str);

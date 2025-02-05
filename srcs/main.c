@@ -9,6 +9,7 @@ int	main(int argc, char *argv[], char *envp[])
 		return (0);
 	shell->env = NULL;
 	shell->env = copy_env(envp);
+	shell->exit_code = 0;
 	if (!shell->env)
 		return (0);
 	(void)argc;
@@ -59,7 +60,8 @@ void	loop(t_shell *shell)
 				}
 			}	
 		}
-		free(rl);  
+		free(rl); 
+		printf("EXIT CODEE : %d\n", shell->exit_code);
 	}
 	rl_clear_history();
 }

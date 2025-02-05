@@ -8,9 +8,10 @@ void	no_pipes(t_token *token, t_shell *shell)
 	if (current->is_valid == IS_NOT_VALID)
 	{
 		printf("%s : command not found\n", token->str);
-		while(current)
+		while (current)
 		{
 			current->is_valid = IS_NOT_VALID;
+			shell->exit_code = 127;
 			current = current->next;
 		}
 	}
@@ -42,22 +43,26 @@ void	identify_builtin(t_token *token, t_shell *shell)
 	if (ft_strcmp("echo", token->str) == 0)
 		ft_echo(token, shell->env);
 	if (ft_strcmp("pwd", token->str) == 0)
-		ft_pwd();
+		ft_pwd(shell);
 	if (ft_strcmp("cd", token->str) == 0)
-		cd_builtin(token, shell->env);
+		cd_builtin(shell, token, shell->env);
 	if (ft_strcmp("export", token->str) == 0)
 		ft_export(token, &shell->env, shell);
 	if (ft_strcmp("unset", token->str) == 0)
+	{
 		ft_unset(token, shell->env);
+		shell->exit_code = 0;
+	}
 	if (ft_strcmp("env", token->str) == 0)
 		ft_envp(shell->env);
 	if (ft_strcmp("exit", token->str) == 0)
-		ft_exit(token);
+		ft_exit(shell, token);
 }
 
 void	cmd_wo_pipes(t_token *token, t_shell *shell)
 {
 	pid_t	pid;
+	int		status;
 
 	token->full_cmd = create_cmd_tab(token);
 	if (!token->full_cmd && !token->full_path)
@@ -73,6 +78,10 @@ void	cmd_wo_pipes(t_token *token, t_shell *shell)
 				handle_err_execve(token);
 		exit(0);
 	}
-	waitpid(pid, NULL, 0);
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		shell->exit_code = WEXITSTATUS(status);
+	else
+		shell->exit_code = status;
 	ft_free_array(token->full_cmd);
 }

@@ -1,91 +1,5 @@
 #include "minishell.h"
 
-char	*get_home_dir(char **envp)
-{
-	int	i;
-
-	i = 0;
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], "HOME=", 5) == 0)
-			return (envp[i] + 5);
-		i++;
-	}
-	return (NULL);
-}
-
-static char	*create_env_string(const char *name, const char *value)
-{
-	int		i;
-	int		len;
-	char	*new_var;
-
-	i = 0;
-	len = 0;
-	new_var = malloc(ft_strlen(name) + ft_strlen(value) + 2);
-	if (!new_var)
-		return (NULL);
-	while (name[i])
-		new_var[len++] = name[i++];
-	new_var[len++] = '=';
-	i = 0;
-	while (value[i])
-		new_var[len++] = value[i++];
-	new_var[len] = '\0';
-	return (new_var);
-}
-
-static int	update_existing_env(char **envp, const char *name, char *new_var)
-{
-	int	i;
-	int	name_len;
-
-	i = 0;
-	name_len = ft_strlen(name);
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], name, name_len) == 0
-			&& envp[i][name_len] == '=')
-		{
-			free(envp[i]);
-			envp[i] = new_var;
-			return (1);
-		}
-		i++;
-	}
-	return (0);
-}
-
-int	ft_setenv(char **envp, char *name, char *value)
-{
-	char	*new_var;
-	int		i;
-
-	i = 0;
-	new_var = create_env_string(name, value);
-	if (!new_var)
-		return (-1);
-	if (update_existing_env(envp, name, new_var))
-		return (0);
-	while (envp[i])
-		i++;
-	envp[i] = new_var;
-	envp[i + 1] = NULL;
-	return (0);
-}
-
-void	update_pwd_vars(char **env)
-{
-	char	*oldpwd;
-	char	current_dir[1024];
-
-	oldpwd = getenv("PWD");
-	if (oldpwd)
-		ft_setenv(env, "OLDPWD", oldpwd);
-	if (getcwd(current_dir, sizeof(current_dir)))
-		ft_setenv(env, "PWD", current_dir);
-}
-
 static int	handle_home_path(char **env, char **path)
 {
 	*path = get_home_dir(env);
@@ -122,17 +36,30 @@ static int	get_cd_path(t_token *token, char **env, char **path)
 	return (EXIT_SUCCESS);
 }
 
-int	cd_builtin(t_token *token, char **env)
+int	cd_builtin(t_shell *shell, t_token *token, char **env)
 {
-	char *path;
+	char	*path;
+	t_token	*temp;
 
+	if (token)
+	{
+		temp = NULL;
+		if (token->next)
+			temp = token->next;
+		if (temp && temp->next && temp->next->type == ARG)
+		{
+			printf("cd : too many arguments ^^\n");
+			return (shell->exit_code = 1, EXIT_FAILURE);
+		}
+	}
 	if (get_cd_path(token, env, &path) != EXIT_SUCCESS)
 		return (EXIT_FAILURE);
 	if (chdir(path) != 0)
 	{
 		perror("cd");
+		shell->exit_code = 1;
 		return (EXIT_FAILURE);
 	}
 	update_pwd_vars(env);
-	return (EXIT_SUCCESS);
+	return (shell->exit_code = 0, EXIT_SUCCESS);
 }

@@ -1,37 +1,37 @@
 #include "minishell.h"
 
-char *extract_var_name(char *str, int dollar_pos, int str_len)
+char	*extract_var_name(char *str, int dollar_pos, int str_len)
 {
-    int var_end;
-    char *var_name;
+	int		var_end;
+	char	*var_name;
 
-    var_end = dollar_pos + 1;
-    while (var_end < str_len && (isalnum(str[var_end]) || str[var_end] == '_'))
-        var_end++;
-    var_name = malloc(var_end - dollar_pos);
-    if (!var_name)
-        return NULL;
-    strncpy(var_name, str + dollar_pos + 1, var_end - dollar_pos - 1);
-    var_name[var_end - dollar_pos - 1] = '\0';
-    return var_name;
+	var_end = dollar_pos + 1;
+	while (var_end < str_len && (isalnum(str[var_end]) || str[var_end] == '_'))
+		var_end++;
+	var_name = malloc(var_end - dollar_pos);
+	if (!var_name)
+		return (NULL);
+	strncpy(var_name, str + dollar_pos + 1, var_end - dollar_pos - 1);
+	var_name[var_end - dollar_pos - 1] = '\0';
+	return (var_name);
 }
 
 void process_echo_string(char *str, char **env, int quote_type)
 {
-    int str_len;
-    int start;
-    int dollar_pos;
-    char *before_dollar;
-    char *var_name;
-    char *value;
-    char *remaining;
+	int		str_len;
+	int		start;
+	int		dollar_pos;
+	char	*before_dollar;
+	char	*var_name;
+	char	*value;
+	char	*remaining;
 
     if (quote_type == 1)
     {
         printf("%s", str);
         return;
     }
-    str_len = ft_strlen(str);
+    str_len = strlen(str);
     start = 0;
     dollar_pos = position_dollar(str);
     while (dollar_pos != -1)
@@ -41,7 +41,7 @@ void process_echo_string(char *str, char **env, int quote_type)
             before_dollar = malloc(dollar_pos - start + 1);
             if (before_dollar)
             {
-                ft_strncpy(before_dollar, str + start, dollar_pos - start);
+                strncpy(before_dollar, str + start, dollar_pos - start);
                 before_dollar[dollar_pos - start] = '\0';
                 printf("%s", before_dollar);
                 free(before_dollar);
@@ -53,7 +53,7 @@ void process_echo_string(char *str, char **env, int quote_type)
             value = get_env_value(var_name, env);
             if (value)
                 printf("%s", value);
-            start = dollar_pos + ft_strlen(var_name) + 1;
+            start = dollar_pos + strlen(var_name) + 1;
             free(var_name);
         }
         else
@@ -70,7 +70,7 @@ void process_echo_string(char *str, char **env, int quote_type)
         remaining = malloc(str_len - start + 1);
         if (remaining)
         {
-            ft_strncpy(remaining, str + start, str_len - start);
+            strncpy(remaining, str + start, str_len - start);
             remaining[str_len - start] = '\0';
             printf("%s", remaining);
             free(remaining);
@@ -78,11 +78,11 @@ void process_echo_string(char *str, char **env, int quote_type)
     }
 }
 
-int ft_echo(t_token *tokens, char **env)
+int	ft_echo(t_token *tokens, char **env)
 {
-    int print_newline;
-    t_token *current;
-    int first;
+	int		print_newline;
+	t_token	*current;
+	int		first;
 
     print_newline = 1;
     current = tokens->next;
@@ -96,6 +96,7 @@ int ft_echo(t_token *tokens, char **env)
     {
         if (!first)
             printf(" ");
+
         if (!current->str)
         {
             current = current->next;
@@ -138,7 +139,7 @@ int	is_n_arg(char *arg)
 		if (arg[i] != '\0')
 			return (1);
 		if (arg[i] == '\0')
-			return (0);	
+			return (0);
 	}
 	return (1);
 }
