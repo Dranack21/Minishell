@@ -7,7 +7,9 @@ int	is_special_token(char *str)
 
 	if (!str)
 		return (0);
-	i = (str[0] == '"' || str[0] == '\'') ? 1 : 0;
+	i = 0;
+	if (str[0] == '"' || str[0] == '\'')
+		i = 1;
 	len = 0;
 	while (str[i + len] && str[i + len] != str[0])
 		len++;

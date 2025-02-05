@@ -14,7 +14,7 @@ int	check_for_redirs_parser(t_token *token)
 	t_token	*current;
 
 	current = token;
-	while(current)
+	while (current)
 	{
 		if (is_redir(current) == EXIT_SUCCESS && current->next)
 		{
@@ -31,42 +31,39 @@ int	check_for_redirs_parser(t_token *token)
 	return (EXIT_SUCCESS);
 }
 
-int is_redir(t_token *current)
+int	is_redir(t_token *current)
 {
-    if (current && 
-        (current->type == HERE_DOC || 
-         current->type == OUPUT || 
-         current->type == INPUT || 
-         current->type == APPEND_REDIR))
-        return (EXIT_SUCCESS);
-    return (EXIT_FAILURE);
+	if (current && (current->type == HERE_DOC || current->type == OUPUT
+			|| current->type == INPUT || current->type == APPEND_REDIR))
+		return (EXIT_SUCCESS);
+	return (EXIT_FAILURE);
 }
 
 int	check_pipes_parser(t_token *token)
 {
-	t_token	*current;
+	t_token	*currt;
 
-	current = token;
-	if (current && current->type == PIPE)
+	currt = token;
+	if (currt && currt->type == PIPE)
 		return (EXIT_FAILURE);
-	while (current)
+	while (currt)
 	{
-		if (current->type == PIPE && current->next)
+		if (currt->type == PIPE && currt->next)
 		{
-			if (current->next && current->next->type == PIPE)
+			if (currt->next && currt->next->type == PIPE)
 				return (EXIT_FAILURE);
 		}
-		if (is_redir(current) == EXIT_SUCCESS)
+		if (is_redir(currt) == EXIT_SUCCESS)
 		{
-			if (!current->next || (current->next && current->next->type == PIPE))
+			if (!currt->next || (currt->next && currt->next->type == PIPE))
 				return (EXIT_FAILURE);
 		}
-		current = current->next;
+		currt = currt->next;
 	}
-	current = token;
-	while (current->next)
-		current = current->next;
-	if (current && current->type == PIPE)
+	currt = token;
+	while (currt->next)
+		currt = currt->next;
+	if (currt && currt->type == PIPE)
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }

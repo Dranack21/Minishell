@@ -23,19 +23,3 @@ char	*strip_quotes(const char *str)
 	}
 	return (ft_strdup(str));
 }
-
-
-// char	*strip_quote_plus_plus(const char *str)
-// {
-// 	char	*new_str;
-// 	int	len;
-// 	int	i;
-// 	int	j;
-
-// 	len = ft_strlen(str);
-// 	if (len >= 2 && ((str[0] == '"' && str[len - 1] == '"') || (str[0] == '\''
-// 				&& str[len - 1] == '\'')))
-// 	{
-		
-// 	}
-// }

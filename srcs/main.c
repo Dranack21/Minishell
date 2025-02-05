@@ -50,7 +50,7 @@ void	loop(t_shell *shell)
 				}
 				else
 				{
-					prepare_redir(token);
+					prepare_redir_output(token);
 					prepare_redir_input(token);
 					prepare_heredoc(token, shell->env);
 					verify_all(shell, token);

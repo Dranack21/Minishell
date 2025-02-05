@@ -53,6 +53,5 @@ int	count_for_cmd_tab(t_token *token)
 		}
 		current = current->next;
 	}
-	// fprintf(stderr, "count for command tab %d\n", count);
 	return (count);
 }

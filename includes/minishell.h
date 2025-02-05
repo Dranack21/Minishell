@@ -166,14 +166,26 @@ void				ft_add_in_list_shell(t_token **head);		///create t_shell node/////
 void				*create_node_shell();						///create t_shell node/////
 char				**copy_env(char **envp);					//// copies env /////
 /////////// REDIRECTIONS ////////////////
+t_token 			*find_cmd_token_redir(t_token *current, int direction);
 void				handle_file_redirection(t_token *cmd_token); //// MAIN PART OF REDIRECTIONS /////
-void				prepare_redir(t_token *token);
+void				handle_input_redirection(t_token *cmd_token, int fd);
+void				handle_ouput_redirection(t_token *cmd_token, int fd);
+void				handle_heredoc_redirection(t_token *cmd_token, int fd);
+
+void 				prepare_redir_output(t_token *token);
+void 				apply_output_redirection(t_token *back, t_token *file, t_token *current);
+
 void   				prepare_redir_input(t_token *token);
+void				apply_input_redirection(t_token *back, t_token *file);
+
 void				prepare_heredoc(t_token *token, char **env);
+void				process_backward_heredoc(t_token *backward, t_token *file, char **env);
 int					process_heredoc(t_token *token, char **env);
+
 char 				*search_if_env(char *line, char **env);
 char				*generate_random_filename();
 int					ft_rand_char(void);
+
 char 				*ft_strcat(char *dst, const char *src);
 char				*ft_strncpy(char *dst, const char *src, size_t len);
 //////////////////SIGNAUX///////////////
