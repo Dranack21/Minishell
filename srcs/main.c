@@ -40,6 +40,7 @@ void	loop(t_shell *shell)
 			if (token != NULL)
 			{
 				update_all_tokens_quotes(token);
+				export_traductor(token, shell->env);
 				token_manager(token, shell->env);
 				if (synthax_parser(token) == EXIT_FAILURE)
 				{
