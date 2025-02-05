@@ -53,7 +53,10 @@ void	redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe)
 	else if (cmd_token->type == BUILTIN)
 		builtin_wo_pipes(token, shell);
 	else
+	{
 		fprintf(stderr, "%s : command not found gros bouffon\n", temp->str);
+		exit(127);
+	}
 }
 
 void	execute_cmd(t_token *token, t_shell *shell, t_pipe *pipe)
@@ -69,17 +72,18 @@ void	execute_cmd(t_token *token, t_shell *shell, t_pipe *pipe)
 	}
 	if (token->is_valid == IS_NOT_VALID)
 	{
-		fprintf(stderr, "%s : command not found gros bouffon", token->str);
-		return ;
+		fprintf(stderr, "%s : command not found", token->str);
+		exit(127);
 	}
 	token->full_cmd = create_cmd_tab(token);
 	if (token->full_cmd && token->full_path)
 	{
-		// Print to stderr before execve
 		for (int j = 0; token->full_cmd[j]; j++)
 			fprintf(stderr, "arg[%d]: '%s'\n", j, token->full_cmd[j]);
 		if (execve(token->full_path, token->full_cmd, shell->env) == -1)
 			handle_err_execve(token);
+		else
+			shell->exit_code = 0;
 		ft_free_array(token->full_cmd);
 	}
 }

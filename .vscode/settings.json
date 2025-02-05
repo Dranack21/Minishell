@@ -6,7 +6,8 @@
 		"limits.h": "c",
 		"cctype": "cpp",
 		"wait.h": "c",
-		"*.tcc": "c"
+		"*.tcc": "c",
+		"cstdlib": "c"
 	},
 	"C_Cpp.errorSquiggles": "enabled",
 	"makefile.configureOnOpen": false

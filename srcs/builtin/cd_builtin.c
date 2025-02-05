@@ -122,17 +122,30 @@ static int	get_cd_path(t_token *token, char **env, char **path)
 	return (EXIT_SUCCESS);
 }
 
-int	cd_builtin(t_token *token, char **env)
+int	cd_builtin(t_shell *shell, t_token *token, char **env)
 {
-	char *path;
+	char 	*path;
+	t_token	*temp;
 
+	if (token)
+	{
+		temp = NULL;
+		if (token->next)
+			temp = token->next;
+		if (temp && temp->next && temp->next->type == ARG)
+		{
+			printf("cd : too many arguments ^^\n");
+			return (shell->exit_code = 1, EXIT_FAILURE);
+		}
+	}
 	if (get_cd_path(token, env, &path) != EXIT_SUCCESS)
 		return (EXIT_FAILURE);
 	if (chdir(path) != 0)
 	{
 		perror("cd");
+		shell->exit_code = 1; 
 		return (EXIT_FAILURE);
 	}
 	update_pwd_vars(env);
-	return (EXIT_SUCCESS);
+	return (shell->exit_code = 0, EXIT_SUCCESS);
 }
