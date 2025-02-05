@@ -109,8 +109,8 @@ int					skip_string_in_single_quotes(char *rl, int i);
 
 
 //////////////UTILS///////////////
-char* 				my_strcpy(char* dest, const char* src) ;
-void				export_traductor(t_token *token, char *envp[]);
+int				handle_exit_code(t_token *token, t_shell *shell);
+void				export_traductor(t_token *token, char *envp[], t_shell *shell);
 char 				*process_dollar_string(char *str, char **env, int quote_type);
 int 				calculate_expanded_length(char *str, char **env);
 ///////// TOKEN COUNTER////////

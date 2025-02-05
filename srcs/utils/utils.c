@@ -1,4 +1,6 @@
 #include "minishell.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 int	get_path(char *envp[])
 {
@@ -32,30 +34,51 @@ int	skip_string_in_single_quotes(char *rl, int i)
 	return (i);
 }
 
-void export_traductor(t_token *token, char *envp[])
+void export_traductor(t_token *token, char *envp[], t_shell *shell)
 {
     t_token *current;
-    char *processed_str;
+    char    *processed_str;
 
     current = token;
     while (current)
     {
-		if (current->prev && (!ft_strcmp("export", current->prev->str) || !ft_strcmp("unset", current->prev->str)))
-		{
-				current = current->next;
-				continue;
-		}
-        if (position_dollar(current->str) != -1)
+		if (current->prev && !ft_strcmp("unset", current->prev->str))
+			current = current->next;
+        else 
+            break;
+        if (handle_exit_code(current, shell) == 0)
+            current = current->next;
+        else
+            break;
+        if (position_dollar(current->str) != -1 && handle_exit_code(token, shell) == 1)
         {
             processed_str = process_dollar_string(current->str, envp, current->quote_type);
             if (processed_str)
-            {
-            free(current->str);
-            current->str = processed_str;
+            { 
+                free(current->str);
+                current->str = processed_str;
             }
         }
 		current = current->next;
     }
+}
+
+int handle_exit_code(t_token *token, t_shell *shell)
+{
+    char *exit_str;
+
+    if (ft_strcmp("$?", token->str) == 0)
+    {
+        exit_str = ft_itoa(shell->exit_code);
+
+        if (exit_str)
+        {
+            free(token->str);
+            token->str = exit_str;
+            return (0);
+        }
+    }
+    return (1);
 }
 
 int calculate_expanded_length(char *str, char **env)
@@ -112,7 +135,6 @@ char *process_dollar_string(char *str, char **env, int quote_type)
             value = get_env_value(var_name, env);
             if (value)
             {
-				printf("%s", value);
                 ft_strncpy(result + i, value, ft_strlen(value));
                 i += ft_strlen(value);
             }
@@ -133,19 +155,4 @@ char *process_dollar_string(char *str, char **env, int quote_type)
     }
     result[i] = '\0';
     return (result);
-}
-
-char* my_strcpy(char* dest, const char* src) 
-{
-    char* original_dest; 
-
-	original_dest = dest; 
-    while (*src != '\0') 
-	{
-        *dest = *src;
-        dest++;
-        src++;
-    }
-    *dest = '\0'; 
-    return original_dest;
 }
