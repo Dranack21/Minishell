@@ -31,7 +31,7 @@ void	process_echo_string(char *str, char **env, int quote_type)
 		printf("%s", str);
 		return ;
 	}
-	str_len = strlen(str);
+	str_len = ft_strlen(str);
 	start = 0;
 	dollar_pos = position_dollar(str);
 	while (dollar_pos != -1)
@@ -41,7 +41,7 @@ void	process_echo_string(char *str, char **env, int quote_type)
 			before_dollar = malloc(dollar_pos - start + 1);
 			if (before_dollar)
 			{
-				strncpy(before_dollar, str + start, dollar_pos - start);
+				ft_strncpy(before_dollar, str + start, dollar_pos - start);
 				before_dollar[dollar_pos - start] = '\0';
 				printf("%s", before_dollar);
 				free(before_dollar);
@@ -53,7 +53,7 @@ void	process_echo_string(char *str, char **env, int quote_type)
 			value = get_env_value(var_name, env);
 			if (value)
 				printf("%s", value);
-			start = dollar_pos + strlen(var_name) + 1;
+			start = dollar_pos + ft_strlen(var_name) + 1;
 			free(var_name);
 		}
 		else
@@ -70,7 +70,7 @@ void	process_echo_string(char *str, char **env, int quote_type)
 		remaining = malloc(str_len - start + 1);
 		if (remaining)
 		{
-			strncpy(remaining, str + start, str_len - start);
+			ft_strncpy(remaining, str + start, str_len - start);
 			remaining[str_len - start] = '\0';
 			printf("%s", remaining);
 			free(remaining);
