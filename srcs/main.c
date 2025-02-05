@@ -29,41 +29,48 @@ void	loop(t_shell *shell)
 		ft_signal_handler();
 		rl = readline("Minishell>");
 		if (!rl)
-        	break;
+			break ;
 		add_history(rl);
 		if (parse_for_quotes(rl) == EXIT_FAILURE)
 		{
 			printf("uneven single quote go die please\n");
 		}
-		else 
+		else
 		{
-			token = lexing(shell, rl);
-			if (token != NULL)
-			{
-				update_all_tokens_quotes(token);
-				export_traductor(token, shell->env);
-				token_manager(token, shell->env);
-				if (synthax_parser(token) == EXIT_FAILURE)
-				{
-					printf("synthax error test \n ");
-					free_token_tab(token);
-				}
-				else
-				{
-					prepare_redir_output(token);
-					prepare_redir_input(token);
-					prepare_heredoc(token, shell->env);
-					verify_all(shell, token);
-					print_list(token);
-					execute_main(shell, token);
-					free_token_tab(token);
-				}
-			}	
+			main_2(shell, rl);
 		}
-		free(rl); 
+		free(rl);
 		printf("EXIT CODEE : %d\n", shell->exit_code);
 	}
 	rl_clear_history();
+}
+
+void	main_2(t_shell *shell, char *rl)
+{
+	t_token	*token;
+
+	token = lexing(shell, rl);
+	if (token != NULL)
+	{
+		update_all_tokens_quotes(token);
+		export_traductor(token, shell->env);
+		token_manager(token, shell->env);
+		if (synthax_parser(token) == EXIT_FAILURE)
+		{
+			printf("synthax error test \n ");
+			free_token_tab(token);
+		}
+		else
+		{
+			prepare_redir_output(token);
+			prepare_redir_input(token);
+			prepare_heredoc(token, shell->env);
+			verify_all(shell, token);
+			print_list(token);
+			execute_main(shell, token);
+			free_token_tab(token);
+		}
+	}
 }
 
 void	token_manager(t_token *token, char *envp[])
@@ -77,6 +84,6 @@ void	token_manager(t_token *token, char *envp[])
 		if (current->next)
 			current = current->next;
 		else
-			break;
+			break ;
 	}
 }
