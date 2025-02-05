@@ -132,6 +132,9 @@ void				close_fds_and_wait_for_childs(t_shell *shell, t_pipe *head);	//// read t
 ///////////////////////// EXECUTE //////////////////////
 void				execute_main(t_shell *shell, t_token *token);				/// redirect you from pipes to no pipes////
 void				redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe); /// redirects first intermediates and last commands////
+void				apply_pipe_redirection(t_shell *shell, t_pipe *pipe);
+void				apply_file_redir_and_go_to_cmd_token(t_token *cmd_token, t_token *temp);
+void				skip_to_good_pipe(t_token *cmd_token, t_pipe *pipe);
 void				execute_cmd(t_token *token, t_shell *shell, t_pipe *pipe); ////execute the command and free full_p/////
 ////////////// EXECUTE COMMANDS WHEN NO PIPES /////////////
 void				no_pipes(t_token *token, t_shell *shell);

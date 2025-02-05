@@ -83,3 +83,16 @@ void	close_fds_and_wait_for_childs(t_shell *shell, t_pipe *head)
 		current = current->next;
 	}
 }
+
+void	skip_to_good_pipe(t_token *cmd_token, t_pipe *pipe)
+{
+	int	i;
+
+	i = 0;
+	while (i != pipe->id)
+	{
+		if (cmd_token->type == PIPE)
+			i++;
+		cmd_token = cmd_token->next;
+	}
+}

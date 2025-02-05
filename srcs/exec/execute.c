@@ -13,40 +13,12 @@ void	redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe)
 {
 	t_token	*cmd_token;
 	t_token	*temp;
-	int		i;
 
-	i = 0;
 	cmd_token = token;
-	if (pipe->id == 0)
-		dup2(pipe->fd[1], STDOUT_FILENO);
-	else if (pipe->id == shell->pipe_count)
-		dup2(pipe->prev->fd[0], STDIN_FILENO);
-	else
-	{
-		dup2(pipe->prev->fd[0], STDIN_FILENO);
-		dup2(pipe->fd[1], STDOUT_FILENO);
-	}
-	while (i != pipe->id)
-	{
-		if (cmd_token->type == PIPE)
-			i++;
-		cmd_token = cmd_token->next;
-	}
+	apply_pipe_redirection(shell, pipe);
+	skip_to_good_pipe(cmd_token, pipe);
 	temp = cmd_token;
-	while (temp && temp->type != PIPE)
-	{
-		if (temp->int_redir != 0 && cmd_token->file_redir != NULL)
-			handle_file_redirection(temp);
-		temp = temp->next;
-	}
-	temp = cmd_token;
-	while (cmd_token && cmd_token->type != CMD && cmd_token->type != BUILTIN)
-	{
-		if (cmd_token->next)
-			cmd_token = cmd_token->next;
-		else
-			break ;
-	}
+	apply_file_redir_and_go_to_cmd_token(cmd_token, temp);
 	close_unused_pipes(pipe);
 	if (cmd_token->type == CMD)
 		execute_cmd(token, shell, pipe);
@@ -56,6 +28,36 @@ void	redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe)
 	{
 		fprintf(stderr, "%s : command not found gros bouffon\n", temp->str);
 		exit(127);
+	}
+}
+
+void	apply_pipe_redirection(t_shell *shell, t_pipe *pipe)
+{
+	if (pipe->id == 0)
+		dup2(pipe->fd[1], STDOUT_FILENO);
+	else if (pipe->id == shell->pipe_count)
+		dup2(pipe->prev->fd[0], STDIN_FILENO);
+	else
+	{
+		dup2(pipe->prev->fd[0], STDIN_FILENO);
+		dup2(pipe->fd[1], STDOUT_FILENO);
+	}
+}
+
+void	apply_file_redir_and_go_to_cmd_token(t_token *cmd_token, t_token *temp)
+{
+	while (temp && temp->type != PIPE)
+	{
+		if (temp->int_redir != 0 && cmd_token->file_redir != NULL)
+			handle_file_redirection(temp);
+		temp = temp->next;
+	}
+	while (cmd_token && cmd_token->type != CMD && cmd_token->type != BUILTIN)
+	{
+		if (cmd_token->next)
+			cmd_token = cmd_token->next;
+		else
+			break ;
 	}
 }
 

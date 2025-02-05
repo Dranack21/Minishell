@@ -43,10 +43,7 @@ int	check_if_command(t_token *token, char *envp[])
 	char	*cmd_str;
 	int		path;
 
-	if (token->str[0] == '"' && token->str[ft_strlen(token->str) - 1] == '"')
-		cmd_str = ft_strndup(token->str + 1, ft_strlen(token->str) - 2);
-	else
-		cmd_str = ft_strdup(token->str);
+	cmd_str = ft_strdup(token->str);
 	if (access(cmd_str, X_OK) == 0)
 	{
 		token->full_path = ft_strdup(token->str);
@@ -60,9 +57,7 @@ int	check_if_command(t_token *token, char *envp[])
 	if (full_p)
 	{
 		token->full_path = full_p;
-		ft_free_array(paths);
-		free(cmd_str);
-		return (EXIT_SUCCESS);
+		return (ft_free_array(paths), free(cmd_str), EXIT_SUCCESS);
 	}
 	ft_free_array(paths);
 	free(full_p);
