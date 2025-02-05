@@ -106,10 +106,10 @@ int					skip_string_in_quotes(char *rl, int i);
 int					skip_string_in_single_quotes(char *rl, int i);
 
 //////////////UTILS///////////////
-void				export_traductor(t_token *token, char *envp[]);
-char				*process_dollar_string(char *str, char **env,
-						int quote_type);
-int					calculate_expanded_length(char *str, char **env);
+int 				handle_exit_code(t_token *token, t_shell *shell);
+char 				*process_dollar_string(char *str, char **env, int quote_type);
+int 				calculate_expanded_length(char *str, char **env);
+void				export_traductor(t_token *token, char *envp[], t_shell *shell);
 ///////// TOKEN COUNTER////////
 int					token_counter(char *rl);
 int					process_quotes(char *str, int i, int *in_token);

@@ -53,7 +53,7 @@ void	main_2(t_shell *shell, char *rl)
 	if (token != NULL)
 	{
 		update_all_tokens_quotes(token);
-		export_traductor(token, shell->env);
+		export_traductor(token, shell->env, shell);
 		token_manager(token, shell->env);
 		if (synthax_parser(token) == EXIT_FAILURE)
 		{
