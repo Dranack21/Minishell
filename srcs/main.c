@@ -23,9 +23,9 @@ void	loop(t_shell *shell)
 	char	*rl;
 	t_token	*token;
 
-	ft_signal_handler();
 	while (1)
 	{
+		ft_signal_handler();
 		rl = readline("Minishell>");
 		if (!rl)
         	break;
@@ -33,14 +33,6 @@ void	loop(t_shell *shell)
 		if (parse_for_quotes(rl) == EXIT_FAILURE)
 		{
 			printf("uneven single quote go die please\n");
-		}
-		else if (ft_strncmp(rl, "exit", 4) == 0)
-		{
-			free(rl);
-			ft_free_array(shell->env);
-			free(shell);
-			rl_clear_history();
-			exit(0);
 		}
 		else 
 		{

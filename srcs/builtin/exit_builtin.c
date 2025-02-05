@@ -19,22 +19,24 @@ int	is_numeric(const char *str)
 void	ft_exit(t_token *tokens)
 {
 	t_token		*arg;
-	long long	exit_code;
+	int			exit_code;
+	int			temp;
 
 	printf("exit\n");
 	arg = tokens->next;
 	if (!arg)
-		exit(0);
+		exit(5);
 	if (!is_numeric(arg->str))
 	{
 		printf("exit: %s: numeric argument required\n", arg->str);
 		exit(255);
 	}
-	exit_code = ft_atol(arg->str);
+	exit_code = atoi(arg->str);
+	temp = exit_code % 256;
 	if (arg->next)
 	{
 		printf("exit: too many arguments\n");
 		return ;
 	}
-	exit((unsigned char)exit_code);
+	exit(temp);
 }
