@@ -161,7 +161,7 @@ void				create_pipes(t_shell *shell, t_token *token);
 void				setup_pipes(t_pipe **head, int temp);
 void				close_unused_pipes(t_pipe *pipe);
 void				free_pipes(t_pipe *pipe);
-
+int					count_pipes(t_token *token);
 ///// LINKED LIST SHELL ////////////
 void				ft_lstadd_end_shell(t_token **head);
 void				ft_add_in_list_shell(t_token **head);
@@ -200,7 +200,7 @@ void				ft_handle_sigint(int sig);
 void				ft_handle_sigquit(int sig);
 void				ft_setup_heredoc_signals(void);
 void				ft_restore_signals(void);
-void				ft_handle_sigsegv(void);
+void				ft_handle_sigsegv(int sig);
 
 ///// ERRORS///////////////////////////
 void				handle_err_execve(t_token *token);

@@ -29,27 +29,28 @@ void	ft_handle_sigquit(int sig)
 	}
 }
 
-void	ft_handle_sigsegv()
+void	ft_handle_sigsegv(int sig)
 {
+	(void)sig;
 	write(1, "segmentation fault", 19);
 	exit(139);
 }
 
-void	ft_setup_heredoc_signals()
+void	ft_setup_heredoc_signals(void)
 {
 	g_in_heredoc = 1;
 	signal(SIGINT, ft_handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void	ft_restore_signals()
+void	ft_restore_signals(void)
 {
 	g_in_heredoc = 0;
 	signal(SIGINT, ft_handle_sigint);
 	signal(SIGQUIT, ft_handle_sigquit);
 }
 
-void	ft_signal_handler()
+void	ft_signal_handler(void)
 {
 	signal(SIGSEGV, ft_handle_sigsegv);
 	signal(SIGINT, ft_handle_sigint);

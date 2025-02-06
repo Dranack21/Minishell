@@ -22,7 +22,6 @@ int	main(int argc, char *argv[], char *envp[])
 void	loop(t_shell *shell)
 {
 	char	*rl;
-	t_token	*token;
 
 	while (1)
 	{
