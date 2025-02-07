@@ -184,9 +184,10 @@ void				apply_output_redirection(t_token *back, t_token *file,
 void				prepare_redir_input(t_token *token);
 void				apply_input_redirection(t_token *back, t_token *file);
 
-void				prepare_heredoc(t_token *token, char **env);
-void				process_backward_heredoc(t_token *backward, t_token *file,
-						char **env);
+int		prepare_heredoc(t_token *token, char **env);
+int	process_backward_heredoc(t_token *backward, t_token *file, char **env, t_token *current);
+
+
 int					process_heredoc(t_token *token, char **env);
 
 char				*search_if_env(char *line, char **env);

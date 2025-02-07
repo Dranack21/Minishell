@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void		prepare_heredoc(t_token *token, char **env)
+int		prepare_heredoc(t_token *token, char **env)
 {
 	t_token	*current;
 	t_token	*file;
@@ -9,36 +9,62 @@ void		prepare_heredoc(t_token *token, char **env)
 	current = token;
 	while (current)
 	{
-		if (current->type == HERE_DOC)
+		if (current->type == HERE_DOC || current->type == INPUT)
 		{
 			if (!current->next)
-				return ;
+				return (EXIT_FAILURE);
 			file = current->next;
 			back = current;
 			while (back && back->type != CMD && back->type != BUILTIN)
 				back = back->prev;
-			process_backward_heredoc(back, file, env);
+			if (process_backward_heredoc(back, file, env, current) == EXIT_FAILURE)
+					return (EXIT_FAILURE);
 			if (!back)
 			{
 				back = current;
 				while (back && back->type != CMD && back->type != BUILTIN)
 					back = back->next;
-				process_backward_heredoc(back, file, env);
+				if (process_backward_heredoc(back, file, env, current) == EXIT_FAILURE)
+					return (EXIT_FAILURE);
 			}
 		}
 		current = current->next;
 	}
-}
+	return (EXIT_SUCCESS);
+}	
 
-void	process_backward_heredoc(t_token *backward, t_token *file, char **env)
+int	process_backward_heredoc(t_token *backward, t_token *file, char **env, t_token *current)
 {
-	if (backward && (backward->type == CMD || backward->type == BUILTIN))
+	int fd;
+
+	printf("CURRENT TYPE IS %d\n", current->type);
+	if (current->type == HERE_DOC)
 	{
-		backward->file_redir = ft_strdup(file->str);
-		backward->int_redir = HERE_DOC;
-		if (process_heredoc(backward, env) != 0)
-			printf("dedge heredoc\n");
+		if (backward && (backward->type == CMD || backward->type == BUILTIN))
+		{
+			backward->file_redir = ft_strdup(file->str);
+			backward->int_redir = HERE_DOC;
+			if (process_heredoc(backward, env) != 0)
+				return (EXIT_FAILURE);
+		}
 	}
+	if (current->type == INPUT)
+	{
+		fd = open(file->str, O_RDONLY);
+		if (fd < 0)
+		{
+			perror("open");
+			return (EXIT_FAILURE);
+		}
+		close(fd);
+		if (backward)
+		{
+			backward->file_redir = ft_strdup(file->str);
+			backward->int_redir = INPUT;
+			backward->heredoc_file = NULL;
+		}
+	}
+	return (EXIT_SUCCESS);
 }
 
 int	process_heredoc(t_token *token, char **env)

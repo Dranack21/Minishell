@@ -13,6 +13,7 @@ void	print_list(t_token *head)
 		printf(" type :%d |", temp->type);
 		printf(" valid ?: %d |", temp->is_valid);
 		printf(" File input redir %d |", temp->int_redir);
+		printf(" heredoc file %s |", temp->heredoc_file);
 		printf(" File output %s |", temp->file_redir_out);
 		printf(" File intput %s |", temp->file_redir);
 		printf(" path %s\n", temp->full_path);

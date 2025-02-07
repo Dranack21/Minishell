@@ -64,8 +64,12 @@ void	main_2(t_shell *shell, char *rl)
 		else
 		{
 			prepare_redir_output(token);
-			prepare_heredoc(token, shell->env);
-			prepare_redir_input(token);
+			if (prepare_heredoc(token, shell->env) == EXIT_FAILURE)
+			{
+				print_list(token);
+				free_token_tab(token);
+				return ;
+			}
 			verify_all(shell, token);
 			print_list(token);
 			execute_main(shell, token);

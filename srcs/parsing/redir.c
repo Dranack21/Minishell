@@ -14,7 +14,7 @@ void	handle_file_redirection(t_token *cmd_token)
 	{
 		handle_heredoc_redirection(cmd_token, fd);
 	}
-	else if (cmd_token->int_redir != 0 && cmd_token->file_redir != NULL)
+	if (cmd_token->int_redir != 0 && cmd_token->file_redir != NULL && cmd_token->heredoc_file == NULL)
 		handle_input_redirection(cmd_token, fd);
 }
 
