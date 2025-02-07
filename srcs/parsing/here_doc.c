@@ -1,60 +1,96 @@
 #include "minishell.h"
 
-void	prepare_heredoc(t_token *token, char **env)
+int		prepare_heredoc(t_token *token, char **env)
 {
 	t_token	*current;
 	t_token	*file;
 	t_token	*back;
+	int	i;
 
+	i = 0;
 	current = token;
 	while (current)
 	{
-		if (current->type == HERE_DOC)
+		if (current->type == HERE_DOC || current->type == INPUT)
 		{
-			if (!current->next)
-				return ;
 			file = current->next;
 			back = current;
 			while (back && back->type != CMD && back->type != BUILTIN)
 				back = back->prev;
-			process_backward_heredoc(back, file, env);
 			if (!back)
 			{
+				back = current;
 				while (back && back->type != CMD && back->type != BUILTIN)
 					back = back->next;
-				process_backward_heredoc(back, file, env);
 			}
+			i = process_backward_heredoc(back, file, env, current);
 		}
 		current = current->next;
 	}
+	return (i);
+}	
+
+int	process_backward_heredoc(t_token *backward, t_token *file, char **env, t_token *current)
+{
+	int fd;
+
+	printf("CURRENT TYPE IS %d\n", current->type);
+	if (current->type == HERE_DOC)
+	{
+		if (process_heredoc(backward, env, file) != 0)
+			return (EXIT_FAILURE);
+		if (!backward)
+			return (EXIT_FAILURE);
+		backward->file_redir = ft_strdup(file->str);
+		backward->int_redir = HERE_DOC;
+	}
+	if (current->type == INPUT)
+	{
+		fd = open(file->str, O_RDONLY);
+		if (fd < 0)
+		{
+			perror("open");
+			return (EXIT_FAILURE);
+		}
+		close(fd);
+		if (!backward)
+			return (EXIT_FAILURE);
+		backward->file_redir = ft_strdup(file->str);
+		backward->int_redir = INPUT;
+		backward->heredoc_file = NULL;
+	}
+	return (EXIT_SUCCESS);
 }
 
-int	process_heredoc(t_token *token, char **env)
+int	process_heredoc(t_token *token, char **env, t_token *file)
 {
 	int		fd;
 	char	*line;
+	char	*heredoc_file;
 	char	*expanded_line;
 
 	ft_setup_heredoc_signals();
-	token->heredoc_file = generate_random_filename();
-	fprintf(stderr, "heredoc file name : %s \n", token->heredoc_file);
-	if (!token->heredoc_file)
-		return (-1);
-	fd = open(token->heredoc_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	heredoc_file = generate_random_filename();
+	fprintf(stderr, "heredoc file name : %s \n", heredoc_file);
+	if (!heredoc_file)
+		return (EXIT_FAILURE);
+	fd = open(heredoc_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
-		return (-1);
+		return (EXIT_FAILURE);
 	while (1)
 	{
 		line = readline("heredoc> ");
-		if (line == NULL || ft_strcmp(line, token->file_redir) == 0)
+		if (line == NULL || ft_strcmp(line, file->str) == 0)
 		{
 			free(line);
 			break ;
 		}
 		expanded_line = search_if_env(line, env);
 		write(fd, expanded_line, ft_strlen(expanded_line));
-		write(fd, "\n", 1);
+		write(fd, "\n", 1);	
 		free(expanded_line);
+		if (token)
+			token->heredoc_file = heredoc_file;
 	}
 	return (close(fd), ft_restore_signals(), 0);
 }

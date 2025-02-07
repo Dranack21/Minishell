@@ -41,7 +41,9 @@ typedef struct s_token
 	char			**full_cmd;
 	int				type;
 	int				int_redir;
+	int				int_redir_out;
 	char			*file_redir;
+	char			*file_redir_out;
 	int				quote_type;
 	int				is_valid;
 	int				has_trailing_spaces;
@@ -178,21 +180,22 @@ void				handle_input_redirection(t_token *cmd_token, int fd);
 void				handle_ouput_redirection(t_token *cmd_token, int fd);
 void				handle_heredoc_redirection(t_token *cmd_token, int fd);
 
-void				prepare_redir_output(t_token *token);
-void				apply_output_redirection(t_token *back, t_token *file,
-						t_token *current);
+int	prepare_redir_output(t_token *token);
+int	apply_output_redirection(t_token *back, t_token *file, t_token *current);
 
 void				prepare_redir_input(t_token *token);
 void				apply_input_redirection(t_token *back, t_token *file);
 
-void				prepare_heredoc(t_token *token, char **env);
-void				process_backward_heredoc(t_token *backward, t_token *file,
-						char **env);
-int					process_heredoc(t_token *token, char **env);
+
+int				prepare_heredoc(t_token *token, char **env);
 char 				*replace_env_var(char *line, int i, char *var_name, char **env);
 char				*extract_var_and_value(char *line, int i, char **env, char **value);
 char				*search_if_env(char *line, char **env);
 char				*replace_var_in_line(char *line, int i, char *value, int var_len);
+
+int	process_backward_heredoc(t_token *backward, t_token *file, char **env, t_token *current);
+int	process_heredoc(t_token *token, char **env, t_token *file);
+
 
 char				*search_if_env(char *line, char **env);
 char				*generate_random_filename(void);
@@ -220,7 +223,7 @@ void				builtin_wo_pipes(t_token *token, t_shell *shell);
 int					ft_pwd(t_shell *shell);
 int					ft_envp(char **envp);
 int					ft_echo(t_token *tokens, char **env);
-char				*extract_var_name(char *str, int dollar_pos, int str_len);
+char				*extract_var_name(char *str, int dollar_pos, int str_len);	
 int					is_n_arg(char *arg);
 int					cd_builtin(t_shell *shell, t_token *token, char **env);
 int					ft_setenv(char **envp, char *name, char *value);
