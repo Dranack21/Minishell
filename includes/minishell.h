@@ -110,6 +110,9 @@ int 				handle_exit_code(t_token *token, t_shell *shell);
 char 				*process_dollar_string(char *str, char **env, int quote_type);
 int 				calculate_expanded_length(char *str, char **env);
 void				export_traductor(t_token *token, char *envp[], t_shell *shell);
+void				special_cases_export_traductor(t_token *current, t_shell *shell);
+char				*mini_process_dollar(char *str, char *result, char **env);
+char				*mini_mini_process_dollar(char *str, char **env, char *result, int *i);
 ///////// TOKEN COUNTER////////
 int					token_counter(char *rl);
 int					process_quotes(char *str, int i, int *in_token);

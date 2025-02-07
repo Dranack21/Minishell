@@ -29,14 +29,7 @@ void	export_traductor(t_token *token, char *envp[], t_shell *shell)
 	current = token;
 	while (current)
 	{
-		if (current->prev && !ft_strcmp("unset", current->prev->str))
-			current = current->next;
-		else
-			break ;
-		if (handle_exit_code(current, shell) == 0)
-			current = current->next;
-		else
-			break ;
+		special_cases_export_traductor(current, shell);
 		if (position_dollar(current->str) != -1 && handle_exit_code(token,
 				shell) == 1)
 		{
@@ -48,6 +41,18 @@ void	export_traductor(t_token *token, char *envp[], t_shell *shell)
 				current->str = processed_str;
 			}
 		}
+		current = current->next;
+	}
+}
+
+void	special_cases_export_traductor(t_token *current, t_shell *shell)
+{
+	if (current->prev && !ft_strcmp("unset", current->prev->str))
+	{
+		current = current->next;
+	}
+	if (handle_exit_code(current, shell) == 0)
+	{
 		current = current->next;
 	}
 }
@@ -99,40 +104,28 @@ int	calculate_expanded_length(char *str, char **env)
 
 char	*process_dollar_string(char *str, char **env, int quote_type)
 {
-	int		i;
-	int		pos;
 	char	*result;
-	char	*var_name;
-	char	*value;
 
 	if (quote_type == 1)
 		return (ft_strdup(str));
 	result = malloc(calculate_expanded_length(str, env) + 1);
 	if (!result)
 		return (NULL);
+	result = mini_process_dollar(str, result, env);
+	return (result);
+}
+
+char	*mini_process_dollar(char *str, char *result, char **env)
+{
+	int		i;
+	int		pos;
+
 	i = 0;
 	while ((pos = position_dollar(str)) != -1)
 	{
 		ft_strncpy(result + i, str, pos);
 		i += pos;
-		var_name = extract_var_name(str, pos, ft_strlen(str));
-		if (var_name)
-		{
-			value = get_env_value(var_name, env);
-			if (value)
-			{
-				ft_strncpy(result + i, value, ft_strlen(value));
-				i += ft_strlen(value);
-			}
-			str = str + pos + ft_strlen(var_name) + 1;
-			printf("%s", str);
-			free(var_name);
-		}
-		else
-		{
-			result[i++] = '$';
-			str += pos + 1;
-		}
+		str = mini_mini_process_dollar(str, env, result, &i);
 	}
 	if (*str)
 	{
@@ -141,4 +134,29 @@ char	*process_dollar_string(char *str, char **env, int quote_type)
 	}
 	result[i] = '\0';
 	return (result);
+}
+
+char	*mini_mini_process_dollar(char *str, char **env, char *result, int *i)
+{
+	char *var_name;
+	char *value;
+
+    var_name = extract_var_name(str, 0, ft_strlen(str));
+    if (var_name)
+    {
+        value = get_env_value(var_name, env);
+        if (value)
+        {
+            ft_strncpy(result + *i, value, ft_strlen(value));
+            *i += ft_strlen(value);
+        }
+        str += ft_strlen(var_name) + 1;
+        free(var_name);
+    }
+    else
+    {
+        result[(*i)++] = '$';
+        str++;
+    }
+    return str;
 }
