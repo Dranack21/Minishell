@@ -29,17 +29,6 @@ void	prepare_heredoc(t_token *token, char **env)
 	}
 }
 
-void	process_backward_heredoc(t_token *backward, t_token *file, char **env)
-{
-	if (backward && (backward->type == CMD || backward->type == BUILTIN))
-	{
-		backward->file_redir = ft_strdup(file->str);
-		backward->int_redir = HERE_DOC;
-		if (process_heredoc(backward, env) != 0)
-			printf("dedge heredoc\n");
-	}
-}
-
 int	process_heredoc(t_token *token, char **env)
 {
 	int		fd;
@@ -70,49 +59,71 @@ int	process_heredoc(t_token *token, char **env)
 	return (close(fd), ft_restore_signals(), 0);
 }
 
+char	*extract_var_and_value(char *line, int i, char **env, char **value)
+{
+	int		j;
+	int		var_len;
+	char	*var_name;
+
+	j = i + 1;
+	var_len = 0;
+	while (line[j] && ((line[j] >= 'A' && line[j] <= 'Z') || (line[j] >= 'a'
+				&& line[j] <= 'z') || (line[j] >= '0' && line[j] <= '9')
+			|| line[j] == '_'))
+	{
+		var_len++;
+		j++;
+	}
+	var_name = ft_substr(line, i + 1, var_len);
+	if (!var_name)
+		return (NULL);
+	*value = get_env_value(var_name, env);
+	free(var_name);
+	if (!*value)
+		return (NULL);
+	return (line);
+}
+
 char	*search_if_env(char *line, char **env)
 {
 	int		i;
-	char	*var_name;
-	char	*value;
 	int		j;
+	char	*value;
 	int		var_len;
-	char	*result;
 
-	printf("Input line: %s\n", line);
-	while ((i = position_dollar(line)) != -1)
+	i = position_dollar(line);
+	while (i != -1)
 	{
-		printf("Dollar position: %d\n", i);
 		j = i + 1;
 		var_len = 0;
 		while (line[j] && ((line[j] >= 'A' && line[j] <= 'Z') || (line[j] >= 'a'
 					&& line[j] <= 'z') || (line[j] >= '0' && line[j] <= '9')
-				|| line[j] == '_')) // for now
+				|| line[j] == '_'))
 		{
 			var_len++;
 			j++;
 		}
-		printf("Variable length: %d\n", var_len);
-		var_name = ft_substr(line, i + 1, var_len);
-		if (!var_name)
+		if (!extract_var_and_value(line, i, env, &value))
 			return (line);
-		printf("Variable name: %s\n", var_name);
-		value = get_env_value(var_name, env);
-		printf("Value found: %s\n", value ? value : "NULL");
-		free(var_name);
-		if (!value)
-			return (line);
-		result = malloc(i + strlen(value) + strlen(line + i + var_len + 1) + 1);
-		if (!result)
-			return (line);
-		ft_strncpy(result, line, i);
-		result[i] = '\0';
-		ft_strcat(result, value);
-		ft_strcat(result, line + i + var_len + 1);
-		printf("Intermediate result: %s\n", result);
-		free(line);
-		line = result;
+		line = replace_var_in_line(line, i, value, var_len);
+		if (!line)
+			return (NULL);
+		i = position_dollar(line);
 	}
-	printf("Final result: %s\n", line);
 	return (line);
+}
+
+char	*replace_var_in_line(char *line, int i, char *value, int var_len)
+{
+	char	*result;
+
+	result = malloc(i + strlen(value) + strlen(line + i + var_len + 1) + 1);
+	if (!result)
+		return (line);
+	ft_strncpy(result, line, i);
+	result[i] = '\0';
+	ft_strcat(result, value);
+	ft_strcat(result, line + i + var_len + 1);
+	free(line);
+	return (result);
 }

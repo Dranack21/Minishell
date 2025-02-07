@@ -80,3 +80,14 @@ char	*ft_strncpy(char *dst, const char *src, size_t len)
 	}
 	return (dst);
 }
+
+void	process_backward_heredoc(t_token *backward, t_token *file, char **env)
+{
+	if (backward && (backward->type == CMD || backward->type == BUILTIN))
+	{
+		backward->file_redir = ft_strdup(file->str);
+		backward->int_redir = HERE_DOC;
+		if (process_heredoc(backward, env) != 0)
+			printf("dedge heredoc\n");
+	}
+}
