@@ -19,12 +19,8 @@ char	*extract_var_name(char *str, int dollar_pos, int str_len)
 void	process_echo_string(char *str, char **env, int quote_type)
 {
 	int		str_len;
-	int		start;
-	int		dollar_pos;
-	char	*before_dollar;
-	char	*var_name;
-	char	*value;
 	char	*remaining;
+	int		start;
 
 	if (quote_type == 1)
 	{
@@ -32,6 +28,25 @@ void	process_echo_string(char *str, char **env, int quote_type)
 		return ;
 	}
 	str_len = ft_strlen(str);
+	start = process_echo_helper(str, env);
+	if (start < str_len)
+	{
+		remaining = malloc(str_len - start + 1);
+		if (remaining)
+		{
+			ft_strncpy(remaining, str + start, str_len - start);
+			remaining[str_len - start] = '\0';
+			printf("%s", remaining);
+			free(remaining);
+		}
+	}
+}
+int	process_echo_helper(char *str, char **env)
+{
+	int		start;
+	int		dollar_pos;
+	char	*before_dollar;
+
 	start = 0;
 	dollar_pos = position_dollar(str);
 	while (dollar_pos != -1)
@@ -47,35 +62,36 @@ void	process_echo_string(char *str, char **env, int quote_type)
 				free(before_dollar);
 			}
 		}
-		var_name = extract_var_name(str, dollar_pos, str_len);
-		if (var_name)
-		{
-			value = get_env_value(var_name, env);
-			if (value)
-				printf("%s", value);
-			start = dollar_pos + ft_strlen(var_name) + 1;
-			free(var_name);
-		}
-		else
-		{
-			printf("$");
-			start = dollar_pos + 1;
-		}
+		start = process_echo_var(str, env, start, dollar_pos);
 		dollar_pos = position_dollar(str + start);
 		if (dollar_pos != -1)
 			dollar_pos += start;
 	}
-	if (start < str_len)
+	return (start);
+}
+
+int	process_echo_var(char *str, char **env, int start, int dollar_pos)
+{
+	int		str_len;
+	char	*var_name;
+	char	*value;
+
+	str_len = ft_strlen(str);
+	var_name = extract_var_name(str, dollar_pos, str_len);
+	if (var_name)
 	{
-		remaining = malloc(str_len - start + 1);
-		if (remaining)
-		{
-			ft_strncpy(remaining, str + start, str_len - start);
-			remaining[str_len - start] = '\0';
-			printf("%s", remaining);
-			free(remaining);
-		}
+		value = get_env_value(var_name, env);
+		if (value)
+			printf("%s", value);
+		start = dollar_pos + ft_strlen(var_name) + 1;
+		free(var_name);
 	}
+	else
+	{
+		printf("$");
+		start = dollar_pos + 1;
+	}
+	return (start);
 }
 
 int	ft_echo(t_token *tokens, char **env)
@@ -110,59 +126,3 @@ int	ft_echo(t_token *tokens, char **env)
 	return (0);
 }
 
-int	position_dollar(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '$')
-			return (i);
-		i++;
-	}
-	return (-1);
-}
-
-int	is_n_arg(char *arg)
-{
-	int	i;
-
-	i = 1;
-	if (arg[0] == '-')
-	{
-		while (arg[i] == 'n')
-		{
-			i++;
-		}
-		if (arg[i] != '\0')
-			return (1);
-		if (arg[i] == '\0')
-			return (0);
-	}
-	return (1);
-}
-
-char	*get_env_value(char *var_name, char **env)
-{
-	char	*env_var;
-	int		i;
-	int		len;
-
-	if (!var_name || var_name[0] == '\0')
-		return (NULL);
-	len = 0;
-	while (var_name[len] && var_name[len] != '=')
-		len++;
-	i = 0;
-	while (env[i])
-	{
-		if (ft_strncmp(env[i], var_name, len) == 0 && env[i][len] == '=')
-		{
-			env_var = env[i] + len + 1;
-			return (env_var);
-		}
-		i++;
-	}
-	return (NULL);
-}

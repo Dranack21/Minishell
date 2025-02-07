@@ -230,5 +230,6 @@ char				*get_var_name(char *str);
 char				*get_env_value(char *var_name, char **env);
 int					is_valid_identifier(char *str);
 void				process_echo_string(char *str, char **env, int quote_type);
-
+int					process_echo_helper(char *str, char **env);
+int					process_echo_var(char *str, char **env, int start, int dollar_pos);
 #endif
