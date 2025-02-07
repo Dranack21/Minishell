@@ -5,32 +5,29 @@ int		prepare_heredoc(t_token *token, char **env)
 	t_token	*current;
 	t_token	*file;
 	t_token	*back;
+	int	i;
 
+	i = 0;
 	current = token;
 	while (current)
 	{
 		if (current->type == HERE_DOC || current->type == INPUT)
 		{
-			if (!current->next)
-				return (EXIT_FAILURE);
 			file = current->next;
 			back = current;
 			while (back && back->type != CMD && back->type != BUILTIN)
 				back = back->prev;
-			if (process_backward_heredoc(back, file, env, current) == EXIT_FAILURE)
-					return (EXIT_FAILURE);
 			if (!back)
 			{
 				back = current;
 				while (back && back->type != CMD && back->type != BUILTIN)
 					back = back->next;
-				if (process_backward_heredoc(back, file, env, current) == EXIT_FAILURE)
-					return (EXIT_FAILURE);
 			}
+			i = process_backward_heredoc(back, file, env, current);
 		}
 		current = current->next;
 	}
-	return (EXIT_SUCCESS);
+	return (i);
 }	
 
 int	process_backward_heredoc(t_token *backward, t_token *file, char **env, t_token *current)

@@ -1,11 +1,13 @@
 #include "minishell.h"
 
-void	prepare_redir_output(t_token *token)
+int	prepare_redir_output(t_token *token)
 {
 	t_token	*current;
 	t_token	*file;
 	t_token	*back;
+	int		i;
 
+	i = 0;
 	current = token;
 	while (current)
 	{
@@ -16,11 +18,11 @@ void	prepare_redir_output(t_token *token)
 			back = find_cmd_token_redir(current, -1);
 			if (!back)
 				back = find_cmd_token_redir(current, 1);
-			if (back && (back->type == CMD || back->type == BUILTIN))
-				apply_output_redirection(back, file, current);
+			i = apply_output_redirection(back, file, current);
 		}
 		current = current->next;
 	}
+	return (i);
 }
 
 t_token	*find_cmd_token_redir(t_token *current, int direction)
@@ -38,28 +40,33 @@ t_token	*find_cmd_token_redir(t_token *current, int direction)
 	return (back);
 }
 
-void	apply_output_redirection(t_token *back, t_token *file, t_token *current)
+int	apply_output_redirection(t_token *back, t_token *file, t_token *current)
 {
 	int	fd;
 
 	if (current->type == APPEND_REDIR)
 	{
-		back->file_redir_out = ft_strdup(file->str);
-		back->int_redir_out = O_APPEND;
-		fd = open(back->file_redir_out, O_CREAT, 0644);
+		fd = open(file->str, O_CREAT, 0644);
 		if (fd < 0)
-			perror(back->file_redir_out);
+			perror(file->str);
 		else
 			close(fd);
+		if (!back)
+			return (EXIT_FAILURE);
+		back->file_redir_out = ft_strdup(file->str);
+		back->int_redir_out = O_APPEND;
 	}
 	else if (current->type == OUPUT)
 	{
-		back->file_redir_out = ft_strdup(file->str);
-		back->int_redir_out = O_WRONLY | O_CREAT | O_TRUNC;
-		fd = open(back->file_redir_out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		fd = open(file->str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd < 0)
-			perror(back->file_redir_out);
+			perror(file->str);
 		else
 			close(fd);
+		if (!back)
+			return (EXIT_FAILURE);
+		back->file_redir_out = ft_strdup(file->str);
+		back->int_redir_out = O_WRONLY | O_CREAT | O_TRUNC;
 	}
+	return (EXIT_SUCCESS);
 }

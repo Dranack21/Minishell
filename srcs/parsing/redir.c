@@ -21,7 +21,10 @@ void	handle_file_redirection(t_token *cmd_token)
 void	handle_ouput_redirection(t_token *cmd_token, int fd)
 {
 	if (cmd_token->int_redir_out == O_APPEND)
+	{
 		fd = open(cmd_token->file_redir_out, O_WRONLY | O_APPEND | O_CREAT, 0644);
+		fprintf(stderr, "messire suis-je rentrer ici\n");
+	}
 	else if (cmd_token->int_redir_out == 577)
 	{
 		fd = open(cmd_token->file_redir_out, O_WRONLY | O_CREAT | O_TRUNC, 0644);

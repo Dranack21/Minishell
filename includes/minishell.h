@@ -177,9 +177,8 @@ void				handle_input_redirection(t_token *cmd_token, int fd);
 void				handle_ouput_redirection(t_token *cmd_token, int fd);
 void				handle_heredoc_redirection(t_token *cmd_token, int fd);
 
-void				prepare_redir_output(t_token *token);
-void				apply_output_redirection(t_token *back, t_token *file,
-						t_token *current);
+int	prepare_redir_output(t_token *token);
+int	apply_output_redirection(t_token *back, t_token *file, t_token *current);
 
 void				prepare_redir_input(t_token *token);
 void				apply_input_redirection(t_token *back, t_token *file);
