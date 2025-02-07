@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	prepare_heredoc(t_token *token, char **env)
+void		prepare_heredoc(t_token *token, char **env)
 {
 	t_token	*current;
 	t_token	*file;
@@ -20,6 +20,7 @@ void	prepare_heredoc(t_token *token, char **env)
 			process_backward_heredoc(back, file, env);
 			if (!back)
 			{
+				back = current;
 				while (back && back->type != CMD && back->type != BUILTIN)
 					back = back->next;
 				process_backward_heredoc(back, file, env);

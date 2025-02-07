@@ -41,7 +41,9 @@ typedef struct s_token
 	char			**full_cmd;
 	int				type;
 	int				int_redir;
+	int				int_redir_out;
 	char			*file_redir;
+	char			*file_redir_out;
 	int				quote_type;
 	int				is_valid;
 	int				has_trailing_spaces;
@@ -213,7 +215,7 @@ void				builtin_wo_pipes(t_token *token, t_shell *shell);
 int					ft_pwd(t_shell *shell);
 int					ft_envp(char **envp);
 int					ft_echo(t_token *tokens, char **env);
-char				*extract_var_name(char *str, int dollar_pos, int str_len);
+char				*extract_var_name(char *str, int dollar_pos, int str_len);	
 int					is_n_arg(char *arg);
 int					cd_builtin(t_shell *shell, t_token *token, char **env);
 int					ft_setenv(char **envp, char *name, char *value);

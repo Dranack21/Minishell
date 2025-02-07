@@ -33,6 +33,7 @@ void	loop(t_shell *shell)
 		if (parse_for_quotes(rl) == EXIT_FAILURE)
 		{
 			printf("uneven single quote go die please\n");
+			shell->exit_code = 2;
 		}
 		else
 		{
@@ -57,13 +58,14 @@ void	main_2(t_shell *shell, char *rl)
 		if (synthax_parser(token) == EXIT_FAILURE)
 		{
 			printf("synthax error test \n ");
+			shell->exit_code = 2;
 			free_token_tab(token);
 		}
 		else
 		{
 			prepare_redir_output(token);
-			prepare_redir_input(token);
 			prepare_heredoc(token, shell->env);
+			prepare_redir_input(token);
 			verify_all(shell, token);
 			print_list(token);
 			execute_main(shell, token);

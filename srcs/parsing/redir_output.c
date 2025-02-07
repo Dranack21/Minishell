@@ -44,21 +44,21 @@ void	apply_output_redirection(t_token *back, t_token *file, t_token *current)
 
 	if (current->type == APPEND_REDIR)
 	{
-		back->file_redir = ft_strdup(file->str);
-		back->int_redir = O_APPEND;
-		fd = open(back->file_redir, O_CREAT, 0644);
+		back->file_redir_out = ft_strdup(file->str);
+		back->int_redir_out = O_APPEND;
+		fd = open(back->file_redir_out, O_CREAT, 0644);
 		if (fd < 0)
-			perror(back->file_redir);
+			perror(back->file_redir_out);
 		else
 			close(fd);
 	}
 	else if (current->type == OUPUT)
 	{
-		back->file_redir = ft_strdup(file->str);
-		back->int_redir = O_WRONLY | O_CREAT | O_TRUNC;
-		fd = open(back->file_redir, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		back->file_redir_out = ft_strdup(file->str);
+		back->int_redir_out = O_WRONLY | O_CREAT | O_TRUNC;
+		fd = open(back->file_redir_out, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd < 0)
-			perror(back->file_redir);
+			perror(back->file_redir_out);
 		else
 			close(fd);
 	}

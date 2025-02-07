@@ -25,6 +25,20 @@ void	prepare_redir_input(t_token *token)
 
 void	apply_input_redirection(t_token *back, t_token *file)
 {
+	int fd;
+
 	back->file_redir = ft_strdup(file->str);
 	back->int_redir = INPUT;
+	fd = open(back->file_redir, O_RDONLY);
+	if (fd < 0)
+	{
+		perror("open");
+		return ;
+	}
+	if (dup2(fd, STDIN_FILENO) < 0)
+	{
+		perror("dup2");
+		return ;
+	}
+	close(fd);
 }

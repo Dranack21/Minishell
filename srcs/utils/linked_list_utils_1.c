@@ -9,13 +9,13 @@ void	print_list(t_token *head)
 	temp = head;
 	while (temp != NULL)
 	{
-		printf("str value :%s", temp->str);
-		printf("   type value :%d", temp->type);
-		printf("    valid ? : %d  ", temp->is_valid);
-		printf("     File redir if it exists %d", temp->int_redir);
-		printf("     Do you have spaces %d", temp->has_trailing_spaces);
-		printf("   File name if it exists %s", temp->file_redir);
-		printf("   path if there's one :%s\n", temp->full_path);
+		printf("str :%s |", temp->str);
+		printf(" type :%d |", temp->type);
+		printf(" valid ?: %d |", temp->is_valid);
+		printf(" File input redir %d |", temp->int_redir);
+		printf(" File output %s |", temp->file_redir_out);
+		printf(" File intput %s |", temp->file_redir);
+		printf(" path %s\n", temp->full_path);
 		temp = temp->next;
 	}
 }
@@ -64,10 +64,12 @@ void	*create_node_shell(void)
 	new_node->full_cmd = NULL;
 	new_node->heredoc_file = NULL;
 	new_node->file_redir = NULL;
+	new_node->file_redir_out = NULL;
 	new_node->type = -2;
 	new_node->has_trailing_spaces = 0;
 	new_node->is_valid = IS_VALID;
 	new_node->int_redir = 0;
+	new_node->int_redir_out = 0;
 	new_node->quote_type = 0;
 	return (new_node);
 }
