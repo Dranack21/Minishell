@@ -188,7 +188,7 @@ int		prepare_heredoc(t_token *token, char **env);
 int	process_backward_heredoc(t_token *backward, t_token *file, char **env, t_token *current);
 
 
-int					process_heredoc(t_token *token, char **env);
+int	process_heredoc(t_token *token, char **env, t_token *file);
 
 char				*search_if_env(char *line, char **env);
 char				*generate_random_filename(void);
