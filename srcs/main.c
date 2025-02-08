@@ -52,10 +52,8 @@ void	main_2(t_shell *shell, char *rl)
 	token = lexing(shell, rl);
 	if (token != NULL)
 	{
-		update_all_tokens_quotes(token);
-		printf("alive1\n");
 		export_traductor(token, shell->env, shell);
-		printf("alive2\n");
+		update_all_tokens_quotes(token);
 		token_manager(token, shell->env);
 		if (synthax_parser(token) == EXIT_FAILURE)
 		{

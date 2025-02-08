@@ -50,14 +50,8 @@ void	export_traductor(t_token *token, char *envp[], t_shell *shell)
 
 void	special_cases_export_traductor(t_token *current, t_shell *shell)
 {
-	if (current->prev && !ft_strcmp("unset", current->prev->str))
-	{
-		current = current->next;
-	}
 	if (handle_exit_code(current, shell) == 0)
-	{
 		current = current->next;
-	}
 }
 
 int	handle_exit_code(t_token *token, t_shell *shell)

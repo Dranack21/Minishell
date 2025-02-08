@@ -14,9 +14,7 @@ void	handle_err_execve(t_token *token)
 	if (errno == ENOENT && !strchr(token->str, '/'))
 		printf("%s: %s: command not found\n", str, token->str);
 	else if (errno == ENOENT)
-	{
 		printf("%s: %s: No such file or directory\n", str, token->str);
-	}
 	else if (stat(token->str, &stats) != -1)
 	{
 		if (S_ISDIR(stats.st_mode) == 1)

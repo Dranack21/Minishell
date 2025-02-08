@@ -83,7 +83,6 @@ void	token_add_list(char *rl, t_shell *shell, t_token **head)
 	int	temp;
 
 	shell->token_count = token_counter(rl);
-	printf("nombre de tokens: %d\n", shell->token_count);
 	temp = shell->token_count;
 	while (temp > 0)
 	{
