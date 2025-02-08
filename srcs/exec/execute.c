@@ -24,7 +24,7 @@ void	redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe)
 		execute_cmd(token, shell, pipe);
 	else if (cmd_token->type == BUILTIN)
 		builtin_wo_pipes(token, shell);
-	else
+	else if (is_redir(cmd_token) == EXIT_FAILURE)
 	{
 		fprintf(stderr, "%s : command not found gros bouffon\n", temp->str);
 		exit(127);
@@ -48,8 +48,18 @@ void	apply_file_redir_and_go_to_cmd_token(t_token *cmd_token, t_token *temp)
 {
 	while (temp && temp->type != PIPE)
 	{
-		if (temp->int_redir != 0 && cmd_token->file_redir != NULL)
+		if (temp->int_redir_out != 0 && cmd_token->file_redir_out != NULL)
 			handle_file_redirection(temp);
+		if (temp->int_redir != 0 && temp->file_redir != NULL
+			&& temp->heredoc_file != NULL)
+		{
+			handle_file_redirection(temp);
+		}
+		if (cmd_token->int_redir != 0 && cmd_token->file_redir != NULL
+			&& cmd_token->heredoc_file == NULL)
+		{
+			handle_file_redirection(temp);
+		}
 		temp = temp->next;
 	}
 	while (cmd_token && cmd_token->type != CMD && cmd_token->type != BUILTIN)

@@ -74,3 +74,23 @@ void	handle_heredoc_redirection(t_token *cmd_token, int fd)
 		close(fd);
 	}
 }
+
+t_token	*find_cmd_token_redir(t_token *current, int direction)
+{
+	t_token	*back;
+
+	back = current;
+	while (back && back->type != CMD && back->type != BUILTIN && back->type != PIPE)
+	{
+		if (direction == 1)
+			back = back->next;
+		else
+			back = back->prev;
+	}
+	if (back && back->type == PIPE)
+	{
+		while (back)
+			back = back->next;
+	}
+	return (back);
+}

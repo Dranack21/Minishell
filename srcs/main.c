@@ -63,13 +63,8 @@ void	main_2(t_shell *shell, char *rl)
 		}
 		else
 		{
-			if (prepare_redir_output(token) == EXIT_FAILURE|| prepare_heredoc(token, shell->env) == EXIT_FAILURE)
-			{
-				shell->exit_code = 2;
-				print_list(token);
-				free_token_tab(token);
-				return ;
-			}
+			prepare_redir_output(token);
+			prepare_redir_input(token, shell->env);
 			verify_all(shell, token);
 			print_list(token);
 			execute_main(shell, token);

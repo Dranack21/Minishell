@@ -25,21 +25,6 @@ int	prepare_redir_output(t_token *token)
 	return (i);
 }
 
-t_token	*find_cmd_token_redir(t_token *current, int direction)
-{
-	t_token	*back;
-
-	back = current;
-	while (back && back->type != CMD && back->type != BUILTIN)
-	{
-		if (direction == 1)
-			back = back->next;
-		else
-			back = back->prev;
-	}
-	return (back);
-}
-
 int	apply_output_redirection(t_token *back, t_token *file, t_token *current)
 {
 	int	fd;
