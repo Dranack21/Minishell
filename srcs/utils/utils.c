@@ -35,8 +35,7 @@ void	export_traductor(t_token *token, char *envp[], t_shell *shell)
 				shell) == 1)
 		{
 			printf("current str %s\n", current->str);
-			processed_str = process_dollar_string(current->str, envp,
-					current->quote_type);
+			processed_str = expanded_var(current->str , envp);
 			printf("processed str %s\n", processed_str);
 			if (processed_str)
 			{

@@ -11,7 +11,7 @@ char	*extract_var_name(char *str, int dollar_pos, int str_len)
 	var_name = malloc(var_end - dollar_pos);
 	if (!var_name)
 		return (NULL);
-	strncpy(var_name, str + dollar_pos + 1, var_end - dollar_pos - 1);
+	ft_strncpy(var_name, str + dollar_pos + 1, var_end - dollar_pos - 1);
 	var_name[var_end - dollar_pos - 1] = '\0';
 	return (var_name);
 }

@@ -111,7 +111,9 @@ int					skip_string_in_single_quotes(char *rl, int i);
 //////////////UTILS///////////////
 int 				handle_exit_code(t_token *token, t_shell *shell);
 char 				*process_dollar_string(char *str, char **env, int quote_type);
-int 				calculate_expanded_length(char *str, char **env);
+char    *expanded_var(char *str,  char **env);
+int     calculate_expanded_length(char *str,char  **env);
+char	*is_var_name(char *str, int *i);
 void				export_traductor(t_token *token, char *envp[], t_shell *shell);
 void				special_cases_export_traductor(t_token *current, t_shell *shell);
 char				*mini_process_dollar(char *str, char *result, char **env);

@@ -1,92 +1,197 @@
 #include "minishell.h"
 
-int    calculate_expanded_length(char *str, char **env)
-{
-    int        pos;
-    int        len;
-    char    *var;
-    char    *val;
+// char	*process_dollar_string(char *str, char **env, int quote_type)
+// {
+// 	char	*result;
 
+// 	if (quote_type == 1)
+// 		return (ft_strdup(str));
+// 	result = malloc(calculate_expanded_length(str, env) + 1);
+// 	if (!result)
+// 		return (NULL);
+// 	result = mini_process_dollar(str, result, env);
+// 	return (result);
+// }
+
+int calculate_expanded_length(char *str, char **env) 
+{
+    char *name;
+    char *val;
+    int len;
+    int i;
+    int in_single_quote;
+    
     len = 0;
-    pos = position_dollar(str + len);
-    while (pos != -1)
+    in_single_quote = 0;
+    i = 0;
+    while (str[i]) 
     {
-        var = extract_var_name(str + len, pos, ft_strlen(str));
-        if (var)
-        {
-            val = get_env_value(var, env);
-            len += pos;
-            if (val)
+        if (str[i] == '\'')
+            in_single_quote = !in_single_quote;
+        if (str[i] == '$' && !in_single_quote) 
+        { 
+            name = is_var_name(str, &i);
+            if (name) 
             {
-                len += ft_strlen(val);
+                val = get_env_value(name, env);
+                if (val)
+                    len += ft_strlen(val);
+                free(name);
             }
-            len += ft_strlen(var) + 1;
-            free(var);
         }
         else
-            len += pos + 1;
-        pos = position_dollar(str + len);
+            len++;
+        i++;
     }
-    return (len + ft_strlen(str + len));
+    return (len);
 }
 
-char	*process_dollar_string(char *str, char **env, int quote_type)
+char *expanded_var(char *str, char **env) 
 {
-	char	*result;
-
-	if (quote_type == 1)
-		return (ft_strdup(str));
-	result = malloc(calculate_expanded_length(str, env) + 1);
-	if (!result)
-		return (NULL);
-	result = mini_process_dollar(str, result, env);
-	return (result);
-}
-
-char    *mini_process_dollar(char *str, char *result, char **env)
-{
-    int        i;
-    int        pos;
-
+    int i;
+    int j;
+    int in_single_quote;
+    char *expanded;
+    char *name;
+    char *val;
+    
     i = 0;
-    pos = position_dollar(str);
-    while (pos != -1)
+    j = 0;
+    in_single_quote = 0;
+    expanded = malloc(calculate_expanded_length(str, env) + 1);
+    if (!expanded)
+        return (NULL);
+    expanded[0] = '\0';
+    
+    while (str[i]) 
     {
-        ft_strncpy(result + i, str, pos);
-        i += pos;
-        str = mini_mini_process_dollar(str, env, result, &i);
-        pos = position_dollar(str);
+        if (str[i] == '\'')
+            in_single_quote = !in_single_quote; 
+        if (str[i] == '$' && !in_single_quote) 
+        { 
+            name = is_var_name(str, &i);
+            if (name) 
+            {
+                val = get_env_value(name, env);
+                if (val) 
+                {
+                    ft_strlcat(expanded, val, calculate_expanded_length(str, env) + 1);
+                    j += ft_strlen(val);
+                }
+                free(name);
+            }
+        }
+        else 
+        {
+            expanded[j] = str[i];
+            expanded[j + 1] = '\0';  
+            j++;
+        }
+        i++;
     }
-    if (*str)
-    {
-        ft_strncpy(result + i, str, ft_strlen(str));
-        i += ft_strlen(str);
-    }
-    result[i] = '\0';
-    return (result);
+    expanded[j] = '\0';
+    return (expanded);
 }
 
-char	*mini_mini_process_dollar(char *str, char **env, char *result, int *i)
+char	*is_var_name(char *str, int *i)
 {
-	char *var_name;
-	char *value;
+	int		start;
+	int		len;
+	char	*name;
 
-	var_name = extract_var_name(str, 0, ft_strlen(str));
-	if (var_name)
-	{
-		value = get_env_value(var_name, env);
-		if (value)
-		{
-			ft_strncpy(result + *i, value, ft_strlen(value));
-			*i += ft_strlen(value);
-		}
-		str += ft_strlen(var_name) + 1;
-		free(var_name);
-	}
-	else
-	{
-		result[(*i)++] = '$';
-		str++;
-	}
-	return (str);
+	start = *i + 1;
+	len = 0;
+	if (str[start] == '\0' || !(str[start] == '_' || (str[start] >= 'a' && str[start] <= 'z')
+			|| (str[start] >= 'A' && str[start] <= 'Z')))
+		return (NULL);
+	while (str[start + len] == '_' || (str[start + len] >= 'a' && str[start + len] <= 'z')
+			|| (str[start + len] >= 'A' && str[start + len] <= 'Z')
+			|| (str[start + len] >= '0' && str[start + len] <= '9'))
+		len++;
+	name = malloc(len + 1);
+	if (!name)
+		return (NULL);
+	strncpy(name, &str[start], len);
+	name[len] = '\0';
+	*i += len;
+	return (name);
 }
+// int    calculate_expanded_length(char *str, char **env)
+// {
+//     int        pos;
+//     int        len;
+//     char    *var;
+//     char    *val;
+
+//     len = 0;
+//     pos = position_dollar(str + len);
+//     while (pos != -1)
+//     {
+//         var = extract_var_name(str + len, pos, ft_strlen(str));
+//         if (var)
+//         {
+//             val = get_env_value(var, env);
+//             len += pos;
+//             if (val)
+//             {
+//                 len += ft_strlen(val);
+//             }
+//             len += ft_strlen(var) + 1;
+//             free(var);
+//         }
+//         else
+//             len += pos + 1;
+//         pos = position_dollar(str + len);
+//     }
+//     return (len + ft_strlen(str + len));
+// }
+
+
+
+// char    *mini_process_dollar(char *str, char *result, char **env)
+// {
+//     int        i;
+//     int        pos;
+
+//     i = 0;
+//     pos = position_dollar(str);
+//     while (pos != -1)
+//     {
+//         ft_strncpy(result + i, str, pos);
+//         i += pos;
+//         str = mini_mini_process_dollar(str, env, result, &i);
+//         pos = position_dollar(str);
+//     }
+//     if (*str)
+//     {
+//         ft_strncpy(result + i, str, ft_strlen(str));
+//         i += ft_strlen(str);
+//     }
+//     result[i] = '\0';
+//     return (result);
+// }
+
+// char	*mini_mini_process_dollar(char *str, char **env, char *result, int *i)
+// {
+// 	char *var_name;
+// 	char *value;
+
+// 	var_name = extract_var_name(str, 0, ft_strlen(str));
+// 	if (var_name)
+// 	{
+// 		value = get_env_value(var_name, env);
+// 		if (value)
+// 		{
+// 			ft_strncpy(result + *i, value, ft_strlen(value));
+// 			*i += ft_strlen(value);
+// 		}
+// 		str += ft_strlen(var_name) + 1;
+// 		free(var_name);
+// 	}
+// 	else
+// 	{
+// 		result[(*i)++] = '$';
+// 		str++;
+// 	}
+// 	return (str);
+// }
