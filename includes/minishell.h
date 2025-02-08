@@ -86,6 +86,7 @@ void				verify_all(t_shell *shell, t_token *token);
 void				verify_for_pipes(t_token *token);
 void				verify_for_no_pipes(t_token *token);
 int					pipeline_destroyer(t_token *token);
+void				verify_for_args(t_token *token);
 ///////// LEXING  ///////
 t_token				*lexing(t_shell *shell, char *rl);
 char				*extract_token(char *str, int start, int end);
@@ -147,8 +148,9 @@ void				redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe);
 void				apply_pipe_redirection(t_shell *shell, t_pipe *pipe);
 void				apply_file_redir_and_go_to_cmd_token(t_token *cmd_token,
 						t_token *temp);
-void				skip_to_good_pipe(t_token *cmd_token, t_pipe *pipe);
+void				skip_to_good_pipe(t_token **cmd_token, t_pipe *pipe);
 void				execute_cmd(t_token *token, t_shell *shell, t_pipe *pipe);
+t_token				*check_pipe_line(t_token *token);
 
 ////////////// EXECUTE COMMANDS WHEN NO PIPES /////////////
 void				no_pipes(t_token *token, t_shell *shell);

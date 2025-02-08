@@ -67,3 +67,26 @@ int	check_pipes_parser(t_token *token)
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
+
+t_token *check_pipe_line(t_token *token)
+{
+	t_token	*current;
+	int		cmd;
+
+	cmd = 0;
+	current = token;
+	if (!current)
+		return (NULL);
+	while (current && current->type != PIPE)
+	{
+		if (current->type == CMD || current->type == BUILTIN)
+			cmd = 1;
+		if (current->type == ARG)
+		{
+			if (cmd == 0)
+				return (current);
+		}
+		current = current->next;
+	}
+	return (current);
+}

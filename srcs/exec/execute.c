@@ -13,13 +13,22 @@ void	redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe)
 {
 	t_token	*cmd_token;
 	t_token	*temp;
+	temp = NULL;
 
 	cmd_token = token;
 	apply_pipe_redirection(shell, pipe);
-	skip_to_good_pipe(cmd_token, pipe);
+	skip_to_good_pipe(&cmd_token, pipe);
+	close_unused_pipes(pipe);
+	temp = check_pipe_line(cmd_token);
+	if (!temp)
+		temp = cmd_token;
+	else if (temp && temp->type == ARG)
+	{
+		fprintf(stderr, "%s : command not found gros bouffon\n", temp->str);
+		exit(127);
+	}
 	temp = cmd_token;
 	apply_file_redir_and_go_to_cmd_token(cmd_token, temp);
-	close_unused_pipes(pipe);
 	if (cmd_token->type == CMD)
 		execute_cmd(token, shell, pipe);
 	else if (cmd_token->type == BUILTIN)

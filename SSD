@@ -1,0 +1,11 @@
+total 152
+-rw-r--r-- 1 hugo hugo   2592 Feb  8 04:01 Makefile
+-rw-r--r-- 1 hugo hugo      0 Feb  8 18:33 SSD
+drwxr-xr-x 2 hugo hugo   4096 Feb  8 04:01 includes
+drwxr-xr-x 2 hugo hugo   4096 Feb  8 18:33 libft
+-rwxr-xr-x 1 hugo hugo 121616 Feb  8 18:33 minishell
+drwxr-xr-x 9 hugo hugo   4096 Feb  8 18:33 objs
+-rw-r--r-- 1 hugo hugo    516 Feb  8 18:01 prout
+-rw-r--r-- 1 hugo hugo    157 Feb  8 04:01 readline.supp
+-rwxr-xr-x 1 hugo hugo    337 Feb  8 04:01 run.sh
+drwxr-xr-x 9 hugo hugo   4096 Feb  8 04:01 srcs

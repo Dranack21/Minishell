@@ -5,15 +5,16 @@ void	no_pipes(t_token *token, t_shell *shell)
 	t_token	*current;
 
 	current = token;
-	if (current->is_valid == IS_NOT_VALID)
+	while (current)
 	{
-		printf("%s : command not found\n", token->str);
-		while (current)
+		if (current->is_valid == IS_NOT_VALID)
 		{
+			printf("%s : command not found\n", current->str);
 			current->is_valid = IS_NOT_VALID;
 			shell->exit_code = 127;
-			current = current->next;
+			return ;
 		}
+		current = current->next;
 	}
 	current = token;
 	while (current->type != CMD && current->type != BUILTIN && current->next)
