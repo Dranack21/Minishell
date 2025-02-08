@@ -59,8 +59,9 @@ int	process_heredoc(t_token *token, char **env, t_token *file)
 	char	*line;
 	char	*heredoc_file;
 	char	*expanded_line;
+	int		status;
+	pid_t	pid1;
 
-	ft_setup_heredoc_signals();
 	heredoc_file = generate_random_filename();
 	fprintf(stderr, "heredoc file name : %s \n", heredoc_file);
 	if (!heredoc_file)
@@ -68,23 +69,36 @@ int	process_heredoc(t_token *token, char **env, t_token *file)
 	fd = open(heredoc_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
 		return (EXIT_FAILURE);
-	while (1)
+	pid1 = fork();
+	if (pid1 == 0)
 	{
-		line = readline("heredoc> ");
-		if (line == NULL || ft_strcmp(line, file->str) == 0)
+		ft_setup_heredoc_signals();
+		while (1)
 		{
-			free(line);
-			break ;
+			line = readline("heredoc> ");
+			if (line == NULL || ft_strcmp(line, file->str) == 0)
+			{
+				free(line);
+				break ;
+			}
+			expanded_line = search_if_env(line, env);
+			write(fd, expanded_line, ft_strlen(expanded_line));
+			write(fd, "\n", 1);	
+			free(expanded_line);
 		}
-		expanded_line = search_if_env(line, env);
-		write(fd, expanded_line, ft_strlen(expanded_line));
-		write(fd, "\n", 1);	
-		free(expanded_line);
-	}
+		exit(0);
+	}	
+	else
+		waitpid(pid1, &status, 0);
+	if (WIFEXITED(status))
+		status = WEXITSTATUS(status);
+	printf("status %d\n", status);
+	if (status == 130)
+		open(heredoc_file, O_TRUNC);
 	if (token)
 		token->heredoc_file = heredoc_file;
 	return (close(fd), ft_restore_signals(), 0);
-}
+	}
 
 char	*extract_var_and_value(char *line, int i, char **env, char **value)
 {
