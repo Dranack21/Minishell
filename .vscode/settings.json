@@ -7,7 +7,8 @@
 		"cctype": "cpp",
 		"wait.h": "c",
 		"*.tcc": "c",
-		"cstdlib": "c"
+		"cstdlib": "c",
+		"type_traits": "c"
 	},
 	"C_Cpp.errorSquiggles": "enabled",
 	"makefile.configureOnOpen": false

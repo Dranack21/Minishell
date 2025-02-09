@@ -30,6 +30,11 @@ void	loop(t_shell *shell)
 		if (!rl)
 			break ;
 		add_history(rl);
+		if (g_state.signal_code != 0)
+        {
+            shell->exit_code = g_state.signal_code;
+            g_state.signal_code = 0;
+        }
 		if (parse_for_quotes(rl) == EXIT_FAILURE)
 		{
 			printf("uneven single quote go die please\n");

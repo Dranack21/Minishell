@@ -4,6 +4,7 @@ void	ft_handle_sigsegv(int sig)
 {
 	(void)sig;
 	write(1, "segmentation fault", 19);
+	g_state.signal_code = 139;
 	exit(139);
 }
 

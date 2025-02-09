@@ -94,14 +94,25 @@ int	process_heredoc(t_token *token, t_shell *shell, t_token *file)
 	else
 		waitpid(pid1, &status, 0);
 	if (WIFEXITED(status))
-		status = WEXITSTATUS(status);
+	{
+    	status = WEXITSTATUS(status);
+    	shell->exit_code = status; 
+	}
 	printf("status %d\n", status);
 	if (status == 130)
 		open(heredoc_file, O_TRUNC);
+	else if (WIFSIGNALED(status))
+    {
+        int sig = WTERMSIG(status);
+        if (sig == SIGINT)
+            shell->exit_code = 130;
+        else if (sig == SIGQUIT)
+            shell->exit_code = 131;
+    }
 	if (token)
 		token->heredoc_file = heredoc_file;
 	return (close(fd), ft_restore_signals(), 0);
-	}
+}
 
 char	*extract_var_and_value(char *line, int i, char **env, char **value)
 {

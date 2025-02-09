@@ -39,6 +39,7 @@ int	handle_exit_code(t_token *token, t_shell *shell)
 
 	if (ft_strcmp("$?", token->str) == 0)
 	{
+		printf("processed str %d\n", shell->exit_code);
 		exit_str = ft_itoa(shell->exit_code);
 		if (exit_str)
 		{

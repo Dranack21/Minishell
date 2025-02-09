@@ -70,6 +70,14 @@ typedef struct s_shell
 	char			**env;
 }					t_shell;
 
+typedef struct s_global
+{
+    int heredoc_mode;
+    int signal_code;
+} t_global;
+
+extern t_global g_state;
+
 void				loop(t_shell *shell);
 void				main_2(t_shell *shell, char *rl);
 /////// EARLY PARSING //////////////
