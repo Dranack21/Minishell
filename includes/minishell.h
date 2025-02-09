@@ -157,6 +157,7 @@ void				apply_file_redir_and_go_to_cmd_token(t_token **cmd_token);
 void				skip_to_good_pipe(t_token **cmd_token, t_pipe *pipe);
 void				execute_cmd(t_token *token, t_shell *shell);
 t_token				*check_pipe_line(t_token *token);
+void	mini_x(t_token *token, t_shell *shell, t_pipe *pipe, t_token *temp);
 
 ////////////// EXECUTE COMMANDS WHEN NO PIPES /////////////
 void				no_pipes(t_token *token, t_shell *shell);

@@ -41,9 +41,7 @@ void	loop(t_shell *shell)
 			shell->exit_code = 2;
 		}
 		else
-		{
 			main_2(shell, rl);
-		}
 		free(rl);
 	}
 	rl_clear_history();
@@ -96,7 +94,6 @@ void	token_manager_2(t_token *token)
 			break ;
 	}
 }
-
 
 void	token_manager(t_token *token, char *envp[])
 {

@@ -13,33 +13,28 @@ void	redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe)
 {
 	t_token	*cmd_token;
 	t_token	*temp;
-	temp = NULL;
 
+	temp = NULL;
 	cmd_token = token;
 	apply_pipe_redirection(shell, pipe);
 	skip_to_good_pipe(&cmd_token, pipe);
 	close_unused_pipes(pipe);
 	temp = check_pipe_line(cmd_token);
-	if (!temp)
-		temp = cmd_token;
-	else if (temp && temp->type == ARG)
+	if (temp && temp->type == ARG)
 	{
-		fprintf(stderr, "%s : command not found gros bouffon\n", temp->str);
+		write(STDERR_FILENO, temp->str, strlen(temp->str));
+		write(STDERR_FILENO, " : command not found gros bouffon\n", 34);
 		free_child(token, shell, pipe);
 		exit(127);
 	}
 	temp = cmd_token;
 	apply_file_redir_and_go_to_cmd_token(&cmd_token);
-	if (cmd_token->type == CMD)
+	if (cmd_token && cmd_token->type == CMD)
 		execute_cmd(cmd_token, shell);
-	else if (cmd_token->type == BUILTIN)
+	else if (cmd_token && cmd_token->type == BUILTIN)
 		builtin_with_pipes(cmd_token, shell, pipe);
 	else if (is_redir(cmd_token) == EXIT_FAILURE)
-	{
-		fprintf(stderr, "%s : command not found gros bouffon\n", temp->str);
-		free_child(token, shell, pipe);
-		exit(127);
-	}
+		mini_x(token, shell, pipe, temp);
 }
 
 void	apply_pipe_redirection(t_shell *shell, t_pipe *pipe)
@@ -54,28 +49,32 @@ void	apply_pipe_redirection(t_shell *shell, t_pipe *pipe)
 		dup2(pipe->fd[1], STDOUT_FILENO);
 	}
 }
+
 void	apply_file_redir_and_go_to_cmd_token(t_token **cmd_token)
 {
-	while (*cmd_token && (*cmd_token)->type != CMD && (*cmd_token)->type != BUILTIN)
+	while (*cmd_token && (*cmd_token)->type != CMD
+		&& (*cmd_token)->type != BUILTIN)
 	{
 		*cmd_token = (*cmd_token)->next;
 	}
 	if (!(*cmd_token))
 		return ;
-	if ((*cmd_token)->int_redir_out != 0 && (*cmd_token)->file_redir_out != NULL)
+	if ((*cmd_token)->int_redir_out != 0
+		&& (*cmd_token)->file_redir_out != NULL)
 	{
 		handle_file_redirection(*cmd_token);
 	}
-	if ((*cmd_token)->int_redir != 0 && (*cmd_token)->file_redir != NULL && (*cmd_token)->heredoc_file != NULL)
+	if ((*cmd_token)->int_redir != 0 && (*cmd_token)->file_redir != NULL
+		&& (*cmd_token)->heredoc_file != NULL)
 	{
 		handle_file_redirection(*cmd_token);
 	}
-	if ((*cmd_token)->int_redir != 0 && (*cmd_token)->file_redir != NULL && (*cmd_token)->heredoc_file == NULL)
+	if ((*cmd_token)->int_redir != 0 && (*cmd_token)->file_redir != NULL
+		&& (*cmd_token)->heredoc_file == NULL)
 	{
 		handle_file_redirection(*cmd_token);
 	}
 }
-
 
 void	execute_cmd(t_token *token, t_shell *shell)
 {
@@ -87,8 +86,6 @@ void	execute_cmd(t_token *token, t_shell *shell)
 	token->full_cmd = create_cmd_tab(token);
 	if (token->full_cmd && token->full_path)
 	{
-		for (int j = 0; token->full_cmd[j]; j++)
-			fprintf(stderr, "arg[%d]: '%s'\n", j, token->full_cmd[j]);
 		if (execve(token->full_path, token->full_cmd, shell->env) == -1)
 			handle_err_execve(token);
 		else

@@ -48,7 +48,7 @@ void	builtin_wo_pipes(t_token *token, t_shell *shell)
 
 int	identify_builtin_no_pipes(t_token *token, t_shell *shell)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	if (ft_strcmp("echo", token->str) == 0)
@@ -57,10 +57,7 @@ int	identify_builtin_no_pipes(t_token *token, t_shell *shell)
 		shell->exit_code = 0;
 	}
 	if (ft_strcmp("pwd", token->str) == 0)
-	{
 		ft_pwd(shell);
-		shell->exit_code = 0;
-	}
 	if (ft_strcmp("cd", token->str) == 0)
 		cd_builtin(shell, token, shell->env);
 	if (ft_strcmp("export", token->str) == 0)
@@ -71,14 +68,9 @@ int	identify_builtin_no_pipes(t_token *token, t_shell *shell)
 		shell->exit_code = 0;
 	}
 	if (ft_strcmp("env", token->str) == 0)
-	{
 		ft_envp(shell->env, shell);
-		shell->exit_code = 0;
-	}
 	if (ft_strcmp("exit", token->str) == 0)
-	{
 		i = ft_exit(shell, token);
-	}
 	return (i);
 }
 
@@ -93,8 +85,6 @@ void	cmd_wo_pipes(t_token *token, t_shell *shell)
 	pid = fork();
 	if (pid == 0)
 	{
-		for (int j = 0; token->full_cmd[j]; j++)
-			fprintf(stderr, "arg[%d]: '%s'\n", j, token->full_cmd[j]);
 		handle_file_redirection(token);
 		if (token->is_valid == IS_VALID)
 			if (execve(token->full_path, token->full_cmd, shell->env) == -1)

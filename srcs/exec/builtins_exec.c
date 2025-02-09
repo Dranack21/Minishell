@@ -23,7 +23,7 @@ void	builtin_with_pipes(t_token *token, t_shell *shell, t_pipe *pipe)
 
 int	identify_builtin_pipes(t_token *token, t_shell *shell)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	if (ft_strcmp("echo", token->str) == 0)

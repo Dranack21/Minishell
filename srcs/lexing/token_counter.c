@@ -1,5 +1,22 @@
 #include "minishell.h"
 
+static int	process_non_delim_token(char *str, int i, int *in_token)
+{
+	if (!str[i])
+		return (i);
+	while (str[i] && !ft_isspace(str[i]) && !ft_isdelim(str[i]))
+	{
+		if (ft_isquote(str[i]))
+			i = process_quotes(str, i, in_token);
+		else
+		{
+			*in_token = 1;
+			i++;
+		}
+	}
+	return (i);
+}
+
 int	token_counter(char *str)
 {
 	int	i;
@@ -21,19 +38,8 @@ int	token_counter(char *str)
 			continue ;
 		}
 		if (str[i])
-		{
 			tokens++;
-			while (str[i] && !ft_isspace(str[i]) && !ft_isdelim(str[i]))
-			{
-				if (ft_isquote(str[i]))
-					i = process_quotes(str, i, &in_token);
-				else
-				{
-					in_token = 1;
-					i++;
-				}
-			}
-		}
+		i = process_non_delim_token(str, i, &in_token);
 	}
 	return (tokens);
 }
