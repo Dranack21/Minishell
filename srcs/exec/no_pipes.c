@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:05:01 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/09 23:05:57 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/10 00:46:06 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	no_pipes(t_token *token, t_shell *shell)
 		current = current->next;
 	}
 	current = token;
-	while (current->type != CMD && current->type != BUILTIN && current->next)
+	while (current && current->type != CMD && current->type != BUILTIN && current->next)
 		current = current->next;
 	if (current->type == CMD && current)
 		cmd_wo_pipes(current, shell);

@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:05:06 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/09 23:05:57 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/10 00:53:25 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,14 @@ void	free_token_tab(t_token *head)
 {
 	t_token	*temp;
 
+	fprintf(stderr, "do i enter here\n");
+	while (head)
+	{
+		if (head->prev)
+			head = head->prev;
+		else
+			break;
+	}
 	while (head != NULL)
 	{
 		temp = head->next;
@@ -25,7 +33,7 @@ void	free_token_tab(t_token *head)
 			free(head->full_path);
 		if (head->file_redir != NULL)
 			free(head->file_redir);
-		if (head->file_redir_out)
+		if (head->file_redir_out != NULL)
 			free(head->file_redir_out);
 		if (head->heredoc_file != NULL)
 			free(head->heredoc_file);
