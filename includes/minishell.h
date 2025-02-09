@@ -27,6 +27,7 @@
 # define PIPE 8
 # define END 9
 # define PATH 10
+# define FAILED_EXPAND 727
 
 # define IS_VALID 0
 # define IS_NOT_VALID 1
@@ -257,4 +258,10 @@ int					process_echo_var(char *str, char **env, int start,
 void				free_inside_heredoc(t_token *token, t_shell *shell);
 void				free_child(t_token *token, t_shell *shell, t_pipe *pipe);
 void				free_exit_main(t_token *token, t_shell *shell);
+
+
+
+
+
+void	token_manager_2(t_token *token);
 #endif

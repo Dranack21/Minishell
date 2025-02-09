@@ -57,9 +57,10 @@ void	main_2(t_shell *shell, char *rl)
 	if (token != NULL)
 	{
 		export_traductor(token, shell->env, shell);
-		clean_empty_tokens(&token);
+		token_manager_2(token);
 		update_all_tokens_quotes(token);
 		token_manager(token, shell->env);
+		clean_empty_tokens(&token);
 		if (synthax_parser(token) == EXIT_FAILURE)
 		{
 			printf("synthax error test \n ");
@@ -77,6 +78,25 @@ void	main_2(t_shell *shell, char *rl)
 		}
 	}
 }
+
+void	token_manager_2(t_token *token)
+{
+	t_token	*current;
+
+	if (token == NULL)
+		return;
+	current = token;
+	while (current != NULL)
+	{
+		if (current->str[0] == '\0')
+			current->type = 727;
+		if (current->next)
+			current = current->next;
+		else
+			break ;
+	}
+}
+
 
 void	token_manager(t_token *token, char *envp[])
 {

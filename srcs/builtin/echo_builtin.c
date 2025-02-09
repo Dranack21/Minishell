@@ -109,18 +109,29 @@ int	ft_echo(t_token *tokens, char **env)
 		print_newline = 0;
 		current = current->next;
 	}
-	while (current && current->type == ARG)
+	while (current && (current->type == ARG || current->type == 0 || current->type == 727))
 	{
-		if (!first)
-			printf(" ");
-		if (!current->str)
+		if (current->type == 0 || current->type == 727)
 		{
+			if (current->type == 0)
+				printf(" ");
 			current = current->next;
-			continue ;
 		}
-		process_echo_string(current->str, env, current->quote_type);
-		first = 0;
-		current = current->next;
+		else
+		{
+
+
+			if (!first)
+			printf(" ");
+			if (!current->str)
+			{
+				current = current->next;
+				continue ;
+			}
+			process_echo_string(current->str, env, current->quote_type);
+			first = 0;
+			current = current->next;
+		}
 	}
 	if (print_newline)
 		printf("\n");
