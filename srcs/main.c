@@ -45,7 +45,6 @@ void	loop(t_shell *shell)
 			main_2(shell, rl);
 		}
 		free(rl);
-		printf("EXIT CODEE : %d\n", shell->exit_code);
 	}
 	rl_clear_history();
 }

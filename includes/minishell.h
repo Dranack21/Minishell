@@ -72,11 +72,11 @@ typedef struct s_shell
 
 typedef struct s_global
 {
-    int heredoc_mode;
-    int signal_code;
-} t_global;
+	int				heredoc_mode;
+	int				signal_code;
+}					t_global;
 
-extern t_global g_state;
+extern t_global		g_state;
 
 void				loop(t_shell *shell);
 void				main_2(t_shell *shell, char *rl);
@@ -112,13 +112,16 @@ int					is_special_token(char *str);
 void				token_manager(t_token *token, char *envp[]);
 void				get_token_type(t_token *token, char *envp[]);
 //////////////UTILS///////////////
-int 				handle_exit_code(t_token *token, t_shell *shell);
-char 				*process_dollar_string(char *str, char **env, int quote_type);
-char    *expanded_var(char *str,  char **env);
-int     calculate_expanded_length(char *str,char  **env);
-char	*is_var_name(char *str, int *i);
-void				export_traductor(t_token *token, char *envp[], t_shell *shell);
-void				special_cases_export_traductor(t_token *current, t_shell *shell);
+int					handle_exit_code(t_token *token, t_shell *shell);
+char				*process_dollar_string(char *str, char **env,
+						int quote_type);
+char				*expanded_var(char *str, char **env);
+int					calculate_expanded_length(char *str, char **env);
+char				*is_var_name(char *str, int *i);
+void				export_traductor(t_token *token, char *envp[],
+						t_shell *shell);
+void				special_cases_export_traductor(t_token *current,
+						t_shell *shell);
 void				clean_empty_tokens(t_token **head);
 ///////// TOKEN COUNTER////////
 int					token_counter(char *rl);
@@ -149,9 +152,9 @@ void				close_fds_and_wait_for_childs(t_shell *shell, t_pipe *head);
 void				execute_main(t_shell *shell, t_token *token);
 void				redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe);
 void				apply_pipe_redirection(t_shell *shell, t_pipe *pipe);
-void	apply_file_redir_and_go_to_cmd_token(t_token **cmd_token);
+void				apply_file_redir_and_go_to_cmd_token(t_token **cmd_token);
 void				skip_to_good_pipe(t_token **cmd_token, t_pipe *pipe);
-void	execute_cmd(t_token *token, t_shell *shell);
+void				execute_cmd(t_token *token, t_shell *shell);
 t_token				*check_pipe_line(t_token *token);
 
 ////////////// EXECUTE COMMANDS WHEN NO PIPES /////////////
@@ -185,18 +188,20 @@ void				handle_ouput_redirection(t_token *cmd_token, int fd);
 void				handle_heredoc_redirection(t_token *cmd_token, int fd);
 
 int					prepare_redir_output(t_token *token);
-int					apply_output_redirection(t_token *back, t_token *file, t_token *current);
+int					apply_output_redirection(t_token *back, t_token *file,
+						t_token *current);
 
 int					prepare_redir_input(t_token *token, t_shell *shell);
-int					process_backward_heredoc(t_token *backward, t_token *file, t_shell *shell, t_token *current);
-int					process_heredoc(t_token *token, t_shell *shell, t_token *file);
+int					process_backward_heredoc(t_token *backward, t_token *file,
+						t_shell *shell, t_token *current);
+int					process_heredoc(t_token *token, t_shell *shell,
+						t_token *file);
 
-char				*extract_var_and_value(char *line, int i, char **env, char **value);
+char				*extract_var_and_value(char *line, int i, char **env,
+						char **value);
 char				*search_if_env(char *line, char **env);
-char				*replace_var_in_line(char *line, int i, char *value, int var_len);
-
-
-
+char				*replace_var_in_line(char *line, int i, char *value,
+						int var_len);
 
 char				*search_if_env(char *line, char **env);
 char				*generate_random_filename(void);
@@ -221,13 +226,14 @@ char				*get_prompt_name(t_token *token);
 void				builtin_wo_pipes(t_token *token, t_shell *shell);
 int					identify_builtin_no_pipes(t_token *token, t_shell *shell);
 
-void				builtin_with_pipes(t_token *token, t_shell *shell, t_pipe *pipe);
+void				builtin_with_pipes(t_token *token, t_shell *shell,
+						t_pipe *pipe);
 int					identify_builtin_pipes(t_token *token, t_shell *shell);
 
 int					ft_pwd(t_shell *shell);
 int					ft_envp(char **envp, t_shell *shell);
 int					ft_echo(t_token *tokens, char **env);
-char				*extract_var_name(char *str, int dollar_pos, int str_len);	
+char				*extract_var_name(char *str, int dollar_pos, int str_len);
 int					is_n_arg(char *arg);
 int					cd_builtin(t_shell *shell, t_token *token, char **env);
 int					ft_setenv(char **envp, char *name, char *value);
@@ -245,12 +251,10 @@ char				*get_env_value(char *var_name, char **env);
 int					is_valid_identifier(char *str);
 void				process_echo_string(char *str, char **env, int quote_type);
 int					process_echo_helper(char *str, char **env);
-int					process_echo_var(char *str, char **env, int start, int dollar_pos);
+int					process_echo_var(char *str, char **env, int start,
+						int dollar_pos);
 
-
-
-
-void				free_inside_heredoc(t_token *token , t_shell *shell);
-void				free_child(t_token *token , t_shell *shell, t_pipe *pipe);
-void				free_exit_main(t_token *token , t_shell *shell);
+void				free_inside_heredoc(t_token *token, t_shell *shell);
+void				free_child(t_token *token, t_shell *shell, t_pipe *pipe);
+void				free_exit_main(t_token *token, t_shell *shell);
 #endif
