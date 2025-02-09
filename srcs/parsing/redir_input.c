@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:05:29 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/09 23:05:57 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/09 23:53:35 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ static void	handle_heredoc_child(int fd, t_token *token, t_shell *shell,
 		write(fd, "\n", 1);
 		free(expanded_line);
 	}
-	free(token->heredoc_file);
 	free_inside_heredoc(token, shell);
 	close(fd);
 	exit(0);
@@ -75,33 +74,37 @@ int	prepare_redir_input(t_token *token, t_shell *shell)
 	return (i);
 }
 
-int	process_backward_heredoc(t_token *backward, t_token *file, t_shell *shell,
-		t_token *current)
+int    process_backward_heredoc(t_token *backward, t_token *file, t_shell *shell,
+	t_token *current)
 {
-	int	fd;
+int    fd;
 
-	if (current->type == HERE_DOC)
-	{
-		if (process_heredoc(backward, shell, file) != 0)
-			return (EXIT_FAILURE);
-		if (!backward)
-			return (EXIT_FAILURE);
-		backward->file_redir = ft_strdup(file->str);
-		backward->int_redir = HERE_DOC;
-	}
-	if (current->type == INPUT)
-	{
-		fd = open(file->str, O_RDONLY);
-		if (fd < 0)
-			return (perror("open"), EXIT_FAILURE);
-		close(fd);
-		if (!backward)
-			return (EXIT_FAILURE);
-		backward->file_redir = ft_strdup(file->str);
-		backward->int_redir = INPUT;
-		backward->heredoc_file = NULL;
-	}
-	return (EXIT_SUCCESS);
+if (current->type == HERE_DOC)
+{
+	if (process_heredoc(backward, shell, file) != 0)
+		return (EXIT_FAILURE);
+	if (!backward)
+		return (EXIT_FAILURE);
+	if (backward->file_redir)
+		free(backward->file_redir);
+	backward->file_redir = ft_strdup(file->str);
+	backward->int_redir = HERE_DOC;
+}
+if (current->type == INPUT)
+{
+	fd = open(file->str, O_RDONLY);
+	if (fd < 0)
+		return (perror("open"), EXIT_FAILURE);
+	close(fd);
+	if (!backward)
+		return (EXIT_FAILURE);
+	if (backward->file_redir)
+		free(backward->file_redir);
+	backward->file_redir = ft_strdup(file->str);
+	backward->int_redir = INPUT;
+	backward->heredoc_file = NULL;
+}
+return (EXIT_SUCCESS);
 }
 
 int	process_heredoc(t_token *token, t_shell *shell, t_token *file)
@@ -116,10 +119,18 @@ int	process_heredoc(t_token *token, t_shell *shell, t_token *file)
 		return (EXIT_FAILURE);
 	pid1 = fork();
 	if (pid1 == 0)
+	{
+		free(heredoc_file);	
 		handle_heredoc_child(fd, token, shell, file);
+	}
 	else
 		handle_heredoc_parent(pid1, shell, heredoc_file, status);
 	if (token)
-		token->heredoc_file = heredoc_file;
+	{
+		if (token->heredoc_file)
+            free(token->heredoc_file);
+        token->heredoc_file = ft_strdup(heredoc_file);
+	}
+	free(heredoc_file);
 	return (close(fd), ft_restore_signals(), 0);
 }
