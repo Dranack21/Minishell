@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int		prepare_redir_input(t_token *token, char **env)
+int		prepare_redir_input(t_token *token, t_shell *shell)
 {
 	t_token	*current;
 	t_token	*file;
@@ -17,21 +17,21 @@ int		prepare_redir_input(t_token *token, char **env)
 			back = find_cmd_token_redir(current, -1);
 			if (!back)
 				back = find_cmd_token_redir(current, 1);
-			i = process_backward_heredoc(back, file, env, current);
+			i = process_backward_heredoc(back, file, shell, current);
 		}
 		current = current->next;
 	}
 	return (i);
 }	
 
-int	process_backward_heredoc(t_token *backward, t_token *file, char **env, t_token *current)
+int	process_backward_heredoc(t_token *backward, t_token *file, t_shell *shell, t_token *current)
 {
 	int fd;
 
 	printf("CURRENT TYPE IS %d\n", current->type);
 	if (current->type == HERE_DOC)
 	{
-		if (process_heredoc(backward, env, file) != 0)
+		if (process_heredoc(backward, shell, file) != 0)
 			return (EXIT_FAILURE);
 		if (!backward)
 			return (EXIT_FAILURE);
@@ -53,7 +53,7 @@ int	process_backward_heredoc(t_token *backward, t_token *file, char **env, t_tok
 	return (EXIT_SUCCESS);
 }
 
-int	process_heredoc(t_token *token, char **env, t_token *file)
+int	process_heredoc(t_token *token, t_shell *shell, t_token *file)
 {
 	int		fd;
 	char	*line;
@@ -81,11 +81,14 @@ int	process_heredoc(t_token *token, char **env, t_token *file)
 				free(line);
 				break ;
 			}
-			expanded_line = search_if_env(line, env);
+			expanded_line = search_if_env(line, shell->env);
 			write(fd, expanded_line, ft_strlen(expanded_line));
 			write(fd, "\n", 1);	
 			free(expanded_line);
 		}
+		free(heredoc_file);
+		free_inside_heredoc(token, shell);
+		close(fd);
 		exit(0);
 	}	
 	else

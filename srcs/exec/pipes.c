@@ -21,6 +21,7 @@ void	create_pipes(t_shell *shell, t_token *token)
 		if (current->pid == 0)
 		{
 			redirect_exe(shell, token, current);
+			free_child(token, shell, head);
 			exit(0);
 		}
 		current = current->next;

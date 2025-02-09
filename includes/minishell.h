@@ -179,11 +179,10 @@ void				handle_heredoc_redirection(t_token *cmd_token, int fd);
 int					prepare_redir_output(t_token *token);
 int					apply_output_redirection(t_token *back, t_token *file, t_token *current);
 
-int					prepare_redir_input(t_token *token, char **env);
-int					process_backward_heredoc(t_token *backward, t_token *file, char **env, t_token *current);
-int					process_heredoc(t_token *token, char **env, t_token *file);
+int					prepare_redir_input(t_token *token, t_shell *shell);
+int					process_backward_heredoc(t_token *backward, t_token *file, t_shell *shell, t_token *current);
+int					process_heredoc(t_token *token, t_shell *shell, t_token *file);
 
-char 				*replace_env_var(char *line, int i, char *var_name, char **env);
 char				*extract_var_and_value(char *line, int i, char **env, char **value);
 char				*search_if_env(char *line, char **env);
 char				*replace_var_in_line(char *line, int i, char *value, int var_len);
@@ -236,4 +235,10 @@ int					is_valid_identifier(char *str);
 void				process_echo_string(char *str, char **env, int quote_type);
 int					process_echo_helper(char *str, char **env);
 int					process_echo_var(char *str, char **env, int start, int dollar_pos);
+
+
+
+
+void	free_inside_heredoc(t_token *token , t_shell *shell);
+void	free_child(t_token *token , t_shell *shell, t_pipe *pipe);
 #endif

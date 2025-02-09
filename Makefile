@@ -6,14 +6,14 @@
 #    By: habouda <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/28 01:37:02 by habouda           #+#    #+#              #
-#    Updated: 2025/02/09 05:56:19 by habouda          ###   ########.fr        #
+#    Updated: 2025/02/09 06:17:47 by habouda          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 ### COMPIL #####################################################################
 
 CC			= cc
-CFLAGS		= -Wall -Wextra -Werror -g
+CFLAGS = -Wall -Wextra -Werror -g -O0 -gdwarf-4
 NAME 		= minishell
 READLINE_FLAGS = -lreadline -ltermcap
 
@@ -62,7 +62,8 @@ $(NAME): $(OBJS) $(LIBFT)
 
 $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
 	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) $(INCLUDES_DIRS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(INCLUDES_DIRS) -g -c $< -o $@
+
 
 clean:
 	@rm -f $(OBJS)

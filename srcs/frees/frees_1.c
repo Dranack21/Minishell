@@ -25,6 +25,48 @@ void	free_token_tab(t_token *head)
 	}
 }
 
+void	free_child(t_token *token , t_shell *shell, t_pipe *pipe)
+{
+	if (shell->env)
+	{
+		ft_free_array(shell->env);
+	}
+	while (pipe)
+	{
+		if (pipe->prev)
+			pipe = pipe->prev;
+		else
+			break;
+	}
+	free_pipes(pipe);
+	while (token)
+	{
+		if (token->prev)
+			token = token->prev;
+		else
+			break;
+	}
+	free(shell);
+	free_token_tab(token);
+}
+
+void	free_inside_heredoc(t_token *token , t_shell *shell)
+{
+	if (shell->env)
+	{
+		ft_free_array(shell->env);
+	}
+	while (token)
+	{
+		if (token->prev)
+			token = token->prev;
+		else
+			break;
+	}
+	free(shell);
+	free_token_tab(token);
+}
+
 void	free_pipes(t_pipe *pipe)
 {
 	t_pipe	*temp;

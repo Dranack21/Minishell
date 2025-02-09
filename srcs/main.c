@@ -65,7 +65,7 @@ void	main_2(t_shell *shell, char *rl)
 		else
 		{
 			prepare_redir_output(token);
-			prepare_redir_input(token, shell->env);
+			prepare_redir_input(token, shell);
 			verify_all(shell, token);
 			print_list(token);
 			execute_main(shell, token);

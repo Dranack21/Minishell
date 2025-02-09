@@ -25,10 +25,10 @@ void	redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe)
 	else if (temp && temp->type == ARG)
 	{
 		fprintf(stderr, "%s : command not found gros bouffon\n", temp->str);
+		free_child(token, shell, pipe);
 		exit(127);
 	}
 	temp = cmd_token;
-	fprintf(stderr, "JUSTE AVAN DE RENTRER DSANS APPLY FILE REDIR LA COMMANDE EST : %s\n", cmd_token->str);
 	apply_file_redir_and_go_to_cmd_token(&cmd_token);
 	if (cmd_token->type == CMD)
 		execute_cmd(cmd_token, shell);
@@ -37,6 +37,7 @@ void	redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe)
 	else if (is_redir(cmd_token) == EXIT_FAILURE)
 	{
 		fprintf(stderr, "%s : command not found gros bouffon\n", temp->str);
+		free_child(token, shell, pipe);
 		exit(127);
 	}
 }
@@ -57,24 +58,20 @@ void	apply_file_redir_and_go_to_cmd_token(t_token **cmd_token)
 {
 	while (*cmd_token && (*cmd_token)->type != CMD && (*cmd_token)->type != BUILTIN)
 	{
-		fprintf(stderr, "cmd token dans FEUR %s\n", (*cmd_token)->str);
 		*cmd_token = (*cmd_token)->next;
 	}
 	if (!(*cmd_token))
 		return ;
 	if ((*cmd_token)->int_redir_out != 0 && (*cmd_token)->file_redir_out != NULL)
 	{
-		fprintf(stderr, "cmd token dans redir %s\n", (*cmd_token)->str);
 		handle_file_redirection(*cmd_token);
 	}
 	if ((*cmd_token)->int_redir != 0 && (*cmd_token)->file_redir != NULL && (*cmd_token)->heredoc_file != NULL)
 	{
-		fprintf(stderr, "cmd token dans redir %s\n", (*cmd_token)->str);
 		handle_file_redirection(*cmd_token);
 	}
 	if ((*cmd_token)->int_redir != 0 && (*cmd_token)->file_redir != NULL && (*cmd_token)->heredoc_file == NULL)
 	{
-		fprintf(stderr, "cmd token dans redir %s\n", (*cmd_token)->str);
 		handle_file_redirection(*cmd_token);
 	}
 }
