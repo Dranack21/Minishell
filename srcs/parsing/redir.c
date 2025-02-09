@@ -59,7 +59,6 @@ void	handle_heredoc_redirection(t_token *cmd_token, int fd)
 {
 	if (cmd_token->int_redir == HERE_DOC)
 	{
-		fprintf(stderr ,"heredoc file name %s\n",cmd_token->heredoc_file);
 		fd = open(cmd_token->heredoc_file, O_RDONLY);
 		if (fd < 0)
 		{
