@@ -56,3 +56,19 @@ char	*get_env_value(char *var_name, char **env)
 	}
 	return (NULL);
 }
+
+char	*extract_var_name(char *str, int dollar_pos, int str_len)
+{
+	int		var_end;
+	char	*var_name;
+
+	var_end = dollar_pos + 1;
+	while (var_end < str_len && (isalnum(str[var_end]) || str[var_end] == '_'))
+		var_end++;
+	var_name = malloc(var_end - dollar_pos);
+	if (!var_name)
+		return (NULL);
+	ft_strncpy(var_name, str + dollar_pos + 1, var_end - dollar_pos - 1);
+	var_name[var_end - dollar_pos - 1] = '\0';
+	return (var_name);
+}

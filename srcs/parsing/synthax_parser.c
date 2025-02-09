@@ -68,7 +68,7 @@ int	check_pipes_parser(t_token *token)
 	return (EXIT_SUCCESS);
 }
 
-t_token *check_pipe_line(t_token *token)
+t_token	*check_pipe_line(t_token *token)
 {
 	t_token	*current;
 	int		cmd;

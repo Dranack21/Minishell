@@ -71,13 +71,14 @@ typedef struct s_shell
 	char			**env;
 }					t_shell;
 
-typedef struct s_expand {
-	char	*str;
-	int		*i;
-	int		*j;
-	char	**env;
-	char	*expanded;
-}	t_expand;
+typedef struct s_expand
+{
+	char			*str;
+	int				*i;
+	int				*j;
+	char			**env;
+	char			*expanded;
+}					t_expand;
 
 typedef struct s_global
 {

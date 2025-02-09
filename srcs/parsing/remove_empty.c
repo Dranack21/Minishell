@@ -43,7 +43,8 @@ void	clean_empty_tokens(t_token **head)
 	while (current)
 	{
 		next = current->next;
-		if ((!current->str || current->str[0] == '\0') && current->type != EMPTY)
+		if ((!current->str || current->str[0] == '\0')
+			&& current->type != EMPTY)
 			remove_node(head, current);
 		current = next;
 	}
