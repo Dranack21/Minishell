@@ -1,5 +1,33 @@
 #include "minishell.h"
 
+static char	**mini_update_env(char ***env, char *var, char *name)
+{
+	int		i;
+	char	**new_env;
+
+	i = 0;
+	while ((*env)[i])
+	{
+		if (ft_strncmp((*env)[i], name, ft_strlen(name)) == 0
+			&& ((*env)[i][ft_strlen(name)] == '='
+				|| (*env)[i][ft_strlen(name)] == '\0'))
+		{
+			free((*env)[i]);
+			(*env)[i] = ft_strdup(var);
+			free(name);
+			return (NULL);
+		}
+		i++;
+	}
+	new_env = malloc(sizeof(char *) * (i + 2));
+	if (!new_env)
+	{
+		free(name);
+		return (NULL);
+	}
+	return (new_env);
+}
+
 int	is_valid_identifier(char *str)
 {
 	int	i;
@@ -42,26 +70,9 @@ void	update_env_var(char ***env, char *var)
 	name = get_var_name(var);
 	if (!name)
 		return ;
-	i = 0;
-	while ((*env)[i])
-	{
-		if (ft_strncmp((*env)[i], name, ft_strlen(name)) == 0
-			&& ((*env)[i][ft_strlen(name)] == '='
-				|| (*env)[i][ft_strlen(name)] == '\0'))
-		{
-			free((*env)[i]);
-			(*env)[i] = ft_strdup(var);
-			free(name);
-			return ;
-		}
-		i++;
-	}
-	new_env = malloc(sizeof(char *) * (i + 2));
+	new_env = mini_update_env(env, var, name);
 	if (!new_env)
-	{
-		free(name);
 		return ;
-	}
 	i = 0;
 	while ((*env)[i])
 	{
@@ -102,30 +113,4 @@ int	ft_export(t_token *token, char ***env, t_shell *data)
 		token = token->next;
 	}
 	return (free(name), EXIT_SUCCESS);
-}
-
-void	handle_export_issue(t_token *token, char ***env, t_shell *data)
-{
-	char	**env_copy;
-	int		i;
-
-	i = 0;
-	if (token && !token->next)
-	{
-		env_copy = copy_env(*env);
-		if (!env_copy)
-		{
-			data->exit_code = 1;
-			return ;
-		}
-		while (env_copy[i])
-		{
-			printf("export ");
-			printf("%s\n", env_copy[i]);
-			free(env_copy[i]);
-			i++;
-		}
-		free(env_copy);
-		data->exit_code = 0;
-	}
 }

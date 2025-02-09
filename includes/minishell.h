@@ -71,6 +71,14 @@ typedef struct s_shell
 	char			**env;
 }					t_shell;
 
+typedef struct s_expand {
+	char	*str;
+	int		*i;
+	int		*j;
+	char	**env;
+	char	*expanded;
+}	t_expand;
+
 typedef struct s_global
 {
 	int				heredoc_mode;
@@ -124,6 +132,7 @@ void				export_traductor(t_token *token, char *envp[],
 void				special_cases_export_traductor(t_token *current,
 						t_shell *shell);
 void				clean_empty_tokens(t_token **head);
+void				handle_dollar_sign(t_expand *exp);
 ///////// TOKEN COUNTER////////
 int					token_counter(char *rl);
 int					process_quotes(char *str, int i, int *in_token);

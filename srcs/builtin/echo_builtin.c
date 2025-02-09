@@ -1,19 +1,30 @@
 #include "minishell.h"
 
-char	*extract_var_name(char *str, int dollar_pos, int str_len)
+static void	mini_echo(t_token *current, char **env, int first)
 {
-	int		var_end;
-	char	*var_name;
-
-	var_end = dollar_pos + 1;
-	while (var_end < str_len && (isalnum(str[var_end]) || str[var_end] == '_'))
-		var_end++;
-	var_name = malloc(var_end - dollar_pos);
-	if (!var_name)
-		return (NULL);
-	ft_strncpy(var_name, str + dollar_pos + 1, var_end - dollar_pos - 1);
-	var_name[var_end - dollar_pos - 1] = '\0';
-	return (var_name);
+	while (current && (current->type == ARG || current->type == 0
+			|| current->type == 727))
+	{
+		if (current->type == 0 || current->type == 727)
+		{
+			if (current->type == 0)
+				printf(" ");
+			current = current->next;
+		}
+		else
+		{
+			if (!first)
+				printf(" ");
+			if (!current->str)
+			{
+				current = current->next;
+				continue ;
+			}
+			process_echo_string(current->str, env, current->quote_type);
+			first = 0;
+			current = current->next;
+		}
+	}
 }
 
 void	process_echo_string(char *str, char **env, int quote_type)
@@ -97,9 +108,9 @@ int	process_echo_var(char *str, char **env, int start, int dollar_pos)
 
 int	ft_echo(t_token *tokens, char **env)
 {
-	int		print_newline;
-	t_token	*current;
-	int		first;
+	int			print_newline;
+	t_token		*current;
+	int			first;
 
 	print_newline = 1;
 	current = tokens->next;
@@ -109,30 +120,7 @@ int	ft_echo(t_token *tokens, char **env)
 		print_newline = 0;
 		current = current->next;
 	}
-	while (current && (current->type == ARG || current->type == 0 || current->type == 727))
-	{
-		if (current->type == 0 || current->type == 727)
-		{
-			if (current->type == 0)
-				printf(" ");
-			current = current->next;
-		}
-		else
-		{
-
-
-			if (!first)
-			printf(" ");
-			if (!current->str)
-			{
-				current = current->next;
-				continue ;
-			}
-			process_echo_string(current->str, env, current->quote_type);
-			first = 0;
-			current = current->next;
-		}
-	}
+	mini_echo(current, env, first);
 	if (print_newline)
 		printf("\n");
 	return (0);
