@@ -8,7 +8,8 @@
 		"wait.h": "c",
 		"*.tcc": "c",
 		"cstdlib": "c",
-		"type_traits": "c"
+		"type_traits": "c",
+		"unistd.h": "c"
 	},
 	"C_Cpp.errorSquiggles": "enabled",
 	"makefile.configureOnOpen": false

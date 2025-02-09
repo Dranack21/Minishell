@@ -4,7 +4,7 @@ void	verify_all(t_shell *shell, t_token *token)
 {
 	shell->pipe_count = count_pipes(token);
 	if (shell->pipe_count == 0)
-	{		
+	{
 		verify_for_no_pipes(token);
 		verify_for_args(token);
 	}
