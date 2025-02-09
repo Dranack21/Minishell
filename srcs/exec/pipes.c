@@ -27,7 +27,6 @@ void	create_pipes(t_shell *shell, t_token *token)
 		current = current->next;
 	}
 	close_fds_and_wait_for_childs(shell, head);
-	free_pipes(head);
 }
 
 void	setup_pipes(t_pipe **head, int temp)
@@ -83,6 +82,7 @@ void	close_fds_and_wait_for_childs(t_shell *shell, t_pipe *head)
 			shell->exit_code = status;
 		current = current->next;
 	}
+	free_pipes(head);
 }
 
 void	skip_to_good_pipe(t_token **cmd_token, t_pipe *pipe)

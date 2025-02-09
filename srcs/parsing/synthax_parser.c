@@ -88,5 +88,7 @@ t_token *check_pipe_line(t_token *token)
 		}
 		current = current->next;
 	}
+	if (!current)
+		current = token;
 	return (current);
 }
