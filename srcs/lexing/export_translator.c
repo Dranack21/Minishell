@@ -93,9 +93,9 @@ char	*is_var_name(char *str, int *i)
 				&& str[start] <= 'Z')))
 		return (NULL);
 	while (str[start + len] == '_' || (str[start + len] >= 'a' && str[start
-			+ len] <= 'z') || (str[start + len] >= 'A' && str[start
-			+ len] <= 'Z') || (str[start + len] >= '0' && str[start
-			+ len] <= '9'))
+				+ len] <= 'z') || (str[start + len] >= 'A' && str[start
+				+ len] <= 'Z') || (str[start + len] >= '0' && str[start
+				+ len] <= '9'))
 		len++;
 	name = malloc(len + 1);
 	if (!name)

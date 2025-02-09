@@ -216,11 +216,14 @@ void				ft_handle_sigsegv(int sig);
 ///// ERRORS///////////////////////////
 void				handle_err_execve(t_token *token);
 char				*get_prompt_name(t_token *token);
-
 /////////// BUILTIN ////////////
 
-void				identify_builtin(t_token *token, t_shell *shell);
 void				builtin_wo_pipes(t_token *token, t_shell *shell);
+int					identify_builtin_no_pipes(t_token *token, t_shell *shell);
+
+void				builtin_with_pipes(t_token *token, t_shell *shell, t_pipe *pipe);
+int					identify_builtin_pipes(t_token *token, t_shell *shell);
+
 int					ft_pwd(t_shell *shell);
 int					ft_envp(char **envp, t_shell *shell);
 int					ft_echo(t_token *tokens, char **env);
@@ -230,7 +233,7 @@ int					cd_builtin(t_shell *shell, t_token *token, char **env);
 int					ft_setenv(char **envp, char *name, char *value);
 int					ft_unset(t_token *tokens, char **env);
 int					position_dollar(char *str);
-void				ft_exit(t_shell *shell, t_token *tokens);
+int					ft_exit(t_shell *shell, t_token *tokens);
 void				update_pwd_vars(char **env);
 int					ft_export(t_token *token, char ***env, t_shell *data);
 void				handle_export_issue(t_token *token, char ***env,
@@ -247,6 +250,7 @@ int					process_echo_var(char *str, char **env, int start, int dollar_pos);
 
 
 
-void	free_inside_heredoc(t_token *token , t_shell *shell);
-void	free_child(t_token *token , t_shell *shell, t_pipe *pipe);
+void				free_inside_heredoc(t_token *token , t_shell *shell);
+void				free_child(t_token *token , t_shell *shell, t_pipe *pipe);
+void				free_exit_main(t_token *token , t_shell *shell);
 #endif

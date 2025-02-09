@@ -1,8 +1,5 @@
 #include "minishell.h"
 
-//// FREE DU TABLEAU DE TOKEN LORS DE SA CREATION ET ASSIGNATION DE CHAQUE STR
-///////
-
 void	free_token_tab(t_token *head)
 {
 	t_token	*temp;
@@ -25,7 +22,21 @@ void	free_token_tab(t_token *head)
 	}
 }
 
-void	free_child(t_token *token , t_shell *shell, t_pipe *pipe)
+void	free_exit_main(t_token *token, t_shell *shell)
+{
+	ft_free_array(shell->env);
+	free(shell);
+	while (token)
+	{
+		if (token->prev)
+			token = token->prev;
+		else
+			break ;
+	}
+	free_token_tab(token);
+}
+
+void	free_child(t_token *token, t_shell *shell, t_pipe *pipe)
 {
 	if (shell->env)
 	{
@@ -36,7 +47,7 @@ void	free_child(t_token *token , t_shell *shell, t_pipe *pipe)
 		if (pipe->prev)
 			pipe = pipe->prev;
 		else
-			break;
+			break ;
 	}
 	free_pipes(pipe);
 	while (token)
@@ -44,13 +55,13 @@ void	free_child(t_token *token , t_shell *shell, t_pipe *pipe)
 		if (token->prev)
 			token = token->prev;
 		else
-			break;
+			break ;
 	}
 	free(shell);
 	free_token_tab(token);
 }
 
-void	free_inside_heredoc(t_token *token , t_shell *shell)
+void	free_inside_heredoc(t_token *token, t_shell *shell)
 {
 	if (shell->env)
 	{
@@ -61,7 +72,7 @@ void	free_inside_heredoc(t_token *token , t_shell *shell)
 		if (token->prev)
 			token = token->prev;
 		else
-			break;
+			break ;
 	}
 	free(shell);
 	free_token_tab(token);
