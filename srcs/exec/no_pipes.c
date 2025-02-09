@@ -87,8 +87,12 @@ void	cmd_wo_pipes(t_token *token, t_shell *shell)
 	{
 		handle_file_redirection(token);
 		if (token->is_valid == IS_VALID)
+		{
 			if (execve(token->full_path, token->full_cmd, shell->env) == -1)
 				handle_err_execve(token);
+		}
+		ft_free_array(token->full_cmd);
+		free_exit_main(token, shell);
 		exit(0);
 	}
 	waitpid(pid, &status, 0);

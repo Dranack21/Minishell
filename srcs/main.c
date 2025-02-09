@@ -31,10 +31,10 @@ void	loop(t_shell *shell)
 			break ;
 		add_history(rl);
 		if (g_state.signal_code != 0)
-        {
-            shell->exit_code = g_state.signal_code;
-            g_state.signal_code = 0;
-        }
+		{
+			shell->exit_code = g_state.signal_code;
+			g_state.signal_code = 0;
+		}
 		if (parse_for_quotes(rl) == EXIT_FAILURE)
 		{
 			printf("uneven single quote go die please\n");
@@ -70,7 +70,6 @@ void	main_2(t_shell *shell, char *rl)
 			prepare_redir_output(token);
 			prepare_redir_input(token, shell);
 			verify_all(shell, token);
-			print_list(token);
 			execute_main(shell, token);
 			free_token_tab(token);
 		}
@@ -82,7 +81,7 @@ void	token_manager_2(t_token *token)
 	t_token	*current;
 
 	if (token == NULL)
-		return;
+		return ;
 	current = token;
 	while (current != NULL)
 	{
@@ -100,7 +99,7 @@ void	token_manager(t_token *token, char *envp[])
 	t_token	*current;
 
 	if (token == NULL)
-		return;
+		return ;
 	current = token;
 	while (current != NULL)
 	{

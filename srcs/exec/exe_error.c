@@ -9,7 +9,7 @@ static void	print_execve_error(char *str, t_token *token, struct stat *stats)
 	else if (stat(token->str, stats) != -1)
 	{
 		if (S_ISDIR(stats->st_mode) == 1)
-			printf("%s: %s: Is a direcsddddtory\n", str, token->str);
+			printf("%s: %s: Is a directory\n", str, token->str);
 		else if (errno == EACCES)
 			printf("%s: %s: Permission denied\n", str, token->str);
 		else
@@ -19,21 +19,34 @@ static void	print_execve_error(char *str, t_token *token, struct stat *stats)
 		printf("%s: %s: No such file or directory\n", str, token->str);
 }
 
-void	handle_err_execve(t_token *token)
+void handle_err_execve(t_token *token)
 {
-	int			tmp_fd;
-	char		*str;
-	struct stat	stats;
+    int         tmp_fd;
+    char        *str;
+    struct stat stats;
 
-	tmp_fd = dup(STDOUT_FILENO);
-	str = get_prompt_name(token);
-	if (str == NULL)
-		str = ft_strdup("Minishell");
-	dup2(STDERR_FILENO, STDOUT_FILENO);
-	print_execve_error(str, token, &stats);
-	free(str);
-	dup2(tmp_fd, STDOUT_FILENO);
+    tmp_fd = dup(STDOUT_FILENO);
+    if (tmp_fd == -1)
+        return (perror("dup failed"));
+    str = get_prompt_name(token);
+    if (str == NULL)
+        str = ft_strdup("Minishell");
+    if (dup2(STDERR_FILENO, STDOUT_FILENO) == -1)
+    {
+        perror("dup2 failed");
+        free(str);
+        return;
+    }
+    print_execve_error(str, token, &stats);
+    free(str);
+    if (dup2(tmp_fd, STDOUT_FILENO) == -1)
+    {
+        perror("dup2 failed");
+        return;
+    }
+    close(tmp_fd);
 }
+
 
 char	*get_prompt_name(t_token *token)
 {
