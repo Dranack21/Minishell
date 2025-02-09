@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:05:33 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/09 23:05:57 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/10 00:04:40 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	handle_ouput_redirection(t_token *cmd_token, int fd)
 {
 	if (cmd_token->int_redir_out == O_APPEND)
 	{
-		fd = open(cmd_token->file_redir_out, O_CREAT | O_RDWR | O_APPEND, 0644);
+		fd = open(cmd_token->file_redir_out, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	}
 	else if (cmd_token->int_redir_out == 577)
 	{

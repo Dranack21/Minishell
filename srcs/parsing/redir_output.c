@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:05:31 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/09 23:05:57 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/10 00:03:16 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	apply_append_redirection(t_token *back, t_token *file, t_token *current)
 
 	if (current->type == APPEND_REDIR)
 	{
-		fd = open(file->str, O_CREAT, 0644);
+		fd = open(file->str, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (fd < 0)
 			perror(file->str);
 		else
