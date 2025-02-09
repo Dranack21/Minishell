@@ -133,6 +133,7 @@ void				special_cases_export_traductor(t_token *current,
 						t_shell *shell);
 void				clean_empty_tokens(t_token **head);
 void				handle_dollar_sign(t_expand *exp);
+int					init_heredoc(char **heredoc_file, int *fd);
 ///////// TOKEN COUNTER////////
 int					token_counter(char *rl);
 int					process_quotes(char *str, int i, int *in_token);
