@@ -16,7 +16,7 @@ int	is_numeric(const char *str)
 	return (EXIT_FAILURE);
 }
 
-void	ft_exit(t_shell *shell, t_token *tokens)
+int	ft_exit(t_shell *shell, t_token *tokens)
 {
 	t_token	*arg;
 	int		exit_code;
@@ -25,19 +25,21 @@ void	ft_exit(t_shell *shell, t_token *tokens)
 	printf("exit\n");
 	arg = tokens->next;
 	if (!arg)
-		exit(0);
+		return (0);
 	if (!is_numeric(arg->str))
 	{
-		printf("exit: %s: numeric argument required\n", arg->str);
-		exit(2);
+		write(2, "exit: ", 7);
+		write(2, arg->str, ft_strlen(arg->str));
+		write(2, ": numeric argument required\n", 29);
+		return (2);
 	}
 	exit_code = atoi(arg->str);
 	temp = exit_code % 256;
 	if (arg->next)
 	{
-		printf("exit: too many arguments\n");
+		write(2, "exit: too many arguments\n", 26);
 		shell->exit_code = 2;
-		return ;
+		return (2);
 	}
-	exit(temp);
+	return (temp);
 }

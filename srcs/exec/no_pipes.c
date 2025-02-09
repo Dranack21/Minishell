@@ -28,19 +28,29 @@ void	no_pipes(t_token *token, t_shell *shell)
 void	builtin_wo_pipes(t_token *token, t_shell *shell)
 {
 	int	original_stdout;
+	int	i;
 
+	i = -1;
 	original_stdout = dup(STDOUT_FILENO);
 	handle_file_redirection(token);
 	if (token->is_valid == IS_VALID)
 	{
-		identify_builtin(token, shell);
+		i = identify_builtin_no_pipes(token, shell);
 		dup2(original_stdout, STDOUT_FILENO);
 		close(original_stdout);
 	}
+	if (i != -1)
+	{
+		free_exit_main(token, shell);
+		exit(i);
+	}
 }
 
-void	identify_builtin(t_token *token, t_shell *shell)
+int	identify_builtin_no_pipes(t_token *token, t_shell *shell)
 {
+	int i;
+
+	i = -1;
 	if (ft_strcmp("echo", token->str) == 0)
 	{
 		ft_echo(token, shell->env);
@@ -49,7 +59,7 @@ void	identify_builtin(t_token *token, t_shell *shell)
 	if (ft_strcmp("pwd", token->str) == 0)
 	{
 		ft_pwd(shell);
-		
+		shell->exit_code = 0;
 	}
 	if (ft_strcmp("cd", token->str) == 0)
 		cd_builtin(shell, token, shell->env);
@@ -61,9 +71,15 @@ void	identify_builtin(t_token *token, t_shell *shell)
 		shell->exit_code = 0;
 	}
 	if (ft_strcmp("env", token->str) == 0)
+	{
 		ft_envp(shell->env, shell);
+		shell->exit_code = 0;
+	}
 	if (ft_strcmp("exit", token->str) == 0)
-		ft_exit(shell, token);
+	{
+		i = ft_exit(shell, token);
+	}
+	return (i);
 }
 
 void	cmd_wo_pipes(t_token *token, t_shell *shell)

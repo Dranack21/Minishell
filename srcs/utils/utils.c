@@ -15,7 +15,7 @@ void	export_traductor(t_token *token, char *envp[], t_shell *shell)
 				shell) == 1)
 		{
 			printf("current str %s\n", current->str);
-			processed_str = expanded_var(current->str , envp);
+			processed_str = expanded_var(current->str, envp);
 			printf("processed str %s\n", processed_str);
 			if (processed_str)
 			{

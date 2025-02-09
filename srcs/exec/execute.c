@@ -33,7 +33,7 @@ void	redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe)
 	if (cmd_token->type == CMD)
 		execute_cmd(cmd_token, shell);
 	else if (cmd_token->type == BUILTIN)
-		builtin_wo_pipes(cmd_token, shell);
+		builtin_with_pipes(cmd_token, shell, pipe);
 	else if (is_redir(cmd_token) == EXIT_FAILURE)
 	{
 		fprintf(stderr, "%s : command not found gros bouffon\n", temp->str);

@@ -41,6 +41,7 @@ void	process_echo_string(char *str, char **env, int quote_type)
 		}
 	}
 }
+
 int	process_echo_helper(char *str, char **env)
 {
 	int		start;
@@ -125,4 +126,3 @@ int	ft_echo(t_token *tokens, char **env)
 		printf("\n");
 	return (0);
 }
-
