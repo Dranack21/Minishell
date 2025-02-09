@@ -5,18 +5,21 @@ void	handle_file_redirection(t_token *cmd_token)
 	int	fd;
 	fd = 0;
 
+	fprintf(stderr, "cmd_token derniere %s\n", cmd_token->str);
 	if (cmd_token->int_redir_out != 0 && cmd_token->file_redir_out != NULL)
 	{
 		handle_ouput_redirection(cmd_token, fd);
 	}
-	if (cmd_token->int_redir != 0 && cmd_token->file_redir != NULL
-		&& cmd_token->heredoc_file != NULL)
+	if (cmd_token->int_redir != 0 && cmd_token->file_redir != NULL && cmd_token->heredoc_file != NULL)
 	{
-		fprintf(stderr ,"TESTTTTTTT\n");
+		fprintf(stderr ,"heredoc redir\n");
 		handle_heredoc_redirection(cmd_token, fd);
 	}
 	if (cmd_token->int_redir != 0 && cmd_token->file_redir != NULL && cmd_token->heredoc_file == NULL)
+	{
+		fprintf(stderr, "redir in classiaue \n");
 		handle_input_redirection(cmd_token, fd);
+	}
 }
 
 void	handle_ouput_redirection(t_token *cmd_token, int fd)
@@ -24,12 +27,12 @@ void	handle_ouput_redirection(t_token *cmd_token, int fd)
 	if (cmd_token->int_redir_out == O_APPEND)
 	{
 		fd = open(cmd_token->file_redir_out, O_CREAT | O_RDWR | O_APPEND, 0644);
-		fprintf(stderr, "messire suis-je rentrer ici\n");
+		fprintf(stderr, "redir append \n");
 	}
 	else if (cmd_token->int_redir_out == 577)
 	{
 		fd = open(cmd_token->file_redir_out, O_CREAT | O_RDWR |O_TRUNC, 0644);
-		fprintf(stderr, "%s redirection\n", cmd_token->file_redir_out);
+		fprintf(stderr, "%s redir > \n", cmd_token->file_redir_out);
 	}
 	if (fd < 0)
 	{

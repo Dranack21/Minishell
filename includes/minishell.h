@@ -48,8 +48,6 @@ typedef struct s_token
 	int				is_valid;
 	int				has_trailing_spaces;
 	char			*heredoc_file;
-	int				old_out;
-	int				old_in;
 	struct s_token	*prev;
 	struct s_token	*next;
 }					t_token;
@@ -143,10 +141,9 @@ void				close_fds_and_wait_for_childs(t_shell *shell, t_pipe *head);
 void				execute_main(t_shell *shell, t_token *token);
 void				redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe);
 void				apply_pipe_redirection(t_shell *shell, t_pipe *pipe);
-void				apply_file_redir_and_go_to_cmd_token(t_token *cmd_token,
-						t_token *temp);
+void	apply_file_redir_and_go_to_cmd_token(t_token **cmd_token);
 void				skip_to_good_pipe(t_token **cmd_token, t_pipe *pipe);
-void				execute_cmd(t_token *token, t_shell *shell, t_pipe *pipe);
+void	execute_cmd(t_token *token, t_shell *shell);
 t_token				*check_pipe_line(t_token *token);
 
 ////////////// EXECUTE COMMANDS WHEN NO PIPES /////////////

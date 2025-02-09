@@ -28,11 +28,12 @@ void	redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe)
 		exit(127);
 	}
 	temp = cmd_token;
-	apply_file_redir_and_go_to_cmd_token(cmd_token, temp);
+	fprintf(stderr, "JUSTE AVAN DE RENTRER DSANS APPLY FILE REDIR LA COMMANDE EST : %s\n", cmd_token->str);
+	apply_file_redir_and_go_to_cmd_token(&cmd_token);
 	if (cmd_token->type == CMD)
-		execute_cmd(token, shell, pipe);
+		execute_cmd(cmd_token, shell);
 	else if (cmd_token->type == BUILTIN)
-		builtin_wo_pipes(token, shell);
+		builtin_wo_pipes(cmd_token, shell);
 	else if (is_redir(cmd_token) == EXIT_FAILURE)
 	{
 		fprintf(stderr, "%s : command not found gros bouffon\n", temp->str);
@@ -52,45 +53,35 @@ void	apply_pipe_redirection(t_shell *shell, t_pipe *pipe)
 		dup2(pipe->fd[1], STDOUT_FILENO);
 	}
 }
-
-void	apply_file_redir_and_go_to_cmd_token(t_token *cmd_token, t_token *temp)
+void	apply_file_redir_and_go_to_cmd_token(t_token **cmd_token)
 {
-	while (temp && temp->type != PIPE)
+	while (*cmd_token && (*cmd_token)->type != CMD && (*cmd_token)->type != BUILTIN)
 	{
-		if (temp->int_redir_out != 0 && cmd_token->file_redir_out != NULL)
-			handle_file_redirection(temp);
-		if (temp->int_redir != 0 && temp->file_redir != NULL
-			&& temp->heredoc_file != NULL)
-		{
-			handle_file_redirection(temp);
-		}
-		if (cmd_token->int_redir != 0 && cmd_token->file_redir != NULL
-			&& cmd_token->heredoc_file == NULL)
-		{
-			handle_file_redirection(temp);
-		}
-		temp = temp->next;
+		fprintf(stderr, "cmd token dans FEUR %s\n", (*cmd_token)->str);
+		*cmd_token = (*cmd_token)->next;
 	}
-	while (cmd_token && cmd_token->type != CMD && cmd_token->type != BUILTIN)
+	if (!(*cmd_token))
+		return ;
+	if ((*cmd_token)->int_redir_out != 0 && (*cmd_token)->file_redir_out != NULL)
 	{
-		if (cmd_token->next)
-			cmd_token = cmd_token->next;
-		else
-			break ;
+		fprintf(stderr, "cmd token dans redir %s\n", (*cmd_token)->str);
+		handle_file_redirection(*cmd_token);
+	}
+	if ((*cmd_token)->int_redir != 0 && (*cmd_token)->file_redir != NULL && (*cmd_token)->heredoc_file != NULL)
+	{
+		fprintf(stderr, "cmd token dans redir %s\n", (*cmd_token)->str);
+		handle_file_redirection(*cmd_token);
+	}
+	if ((*cmd_token)->int_redir != 0 && (*cmd_token)->file_redir != NULL && (*cmd_token)->heredoc_file == NULL)
+	{
+		fprintf(stderr, "cmd token dans redir %s\n", (*cmd_token)->str);
+		handle_file_redirection(*cmd_token);
 	}
 }
 
-void	execute_cmd(t_token *token, t_shell *shell, t_pipe *pipe)
-{
-	int	i;
 
-	i = 0;
-	while (i != pipe->id)
-	{
-		if (token->type == PIPE)
-			i++;
-		token = token->next;
-	}
+void	execute_cmd(t_token *token, t_shell *shell)
+{
 	if (token->is_valid == IS_NOT_VALID)
 	{
 		fprintf(stderr, "%s : command not found", token->str);
