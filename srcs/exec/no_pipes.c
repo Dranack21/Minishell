@@ -7,7 +7,7 @@ void	no_pipes(t_token *token, t_shell *shell)
 	current = token;
 	while (current)
 	{
-		if (current->is_valid == IS_NOT_VALID)
+		if (current->is_valid == IS_NOT_VALID && current->str != NULL)
 		{
 			printf("%s : command not found\n", current->str);
 			current->is_valid = IS_NOT_VALID;
@@ -42,9 +42,15 @@ void	builtin_wo_pipes(t_token *token, t_shell *shell)
 void	identify_builtin(t_token *token, t_shell *shell)
 {
 	if (ft_strcmp("echo", token->str) == 0)
+	{
 		ft_echo(token, shell->env);
+		shell->exit_code = 0;
+	}
 	if (ft_strcmp("pwd", token->str) == 0)
+	{
 		ft_pwd(shell);
+		
+	}
 	if (ft_strcmp("cd", token->str) == 0)
 		cd_builtin(shell, token, shell->env);
 	if (ft_strcmp("export", token->str) == 0)
@@ -55,7 +61,7 @@ void	identify_builtin(t_token *token, t_shell *shell)
 		shell->exit_code = 0;
 	}
 	if (ft_strcmp("env", token->str) == 0)
-		ft_envp(shell->env);
+		ft_envp(shell->env, shell);
 	if (ft_strcmp("exit", token->str) == 0)
 		ft_exit(shell, token);
 }

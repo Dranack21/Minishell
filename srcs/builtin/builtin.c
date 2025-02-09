@@ -8,20 +8,22 @@ int	ft_pwd(t_shell *shell)
 	if (cwd == NULL)
 	{
 		perror("getcwd");
-		shell->exit_code = 0;
+		shell->exit_code = 2;
 		return (EXIT_FAILURE);
 	}
 	printf("%s\n", cwd);
 	free(cwd);
+	shell->exit_code = 0;
 	return (EXIT_SUCCESS);
 }
 
-int	ft_envp(char **envp)
+int	ft_envp(char **envp, t_shell *shell)
 {
 	while (*envp)
 	{
 		printf("%s\n", *envp);
 		envp++;
 	}
+	shell->exit_code = 0;
 	return (EXIT_SUCCESS);
 }

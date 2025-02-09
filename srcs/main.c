@@ -53,6 +53,7 @@ void	main_2(t_shell *shell, char *rl)
 	if (token != NULL)
 	{
 		export_traductor(token, shell->env, shell);
+		clean_empty_tokens(&token);
 		update_all_tokens_quotes(token);
 		token_manager(token, shell->env);
 		if (synthax_parser(token) == EXIT_FAILURE)
@@ -77,6 +78,8 @@ void	token_manager(t_token *token, char *envp[])
 {
 	t_token	*current;
 
+	if (token == NULL)
+		return;
 	current = token;
 	while (current != NULL)
 	{

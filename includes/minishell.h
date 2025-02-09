@@ -48,6 +48,8 @@ typedef struct s_token
 	int				is_valid;
 	int				has_trailing_spaces;
 	char			*heredoc_file;
+	int				old_out;
+	int				old_in;
 	struct s_token	*prev;
 	struct s_token	*next;
 }					t_token;
@@ -102,12 +104,7 @@ int					is_special_token(char *str);
 
 ///////// TOKEN TYPE ///////////
 void				token_manager(t_token *token, char *envp[]);
-
 void				get_token_type(t_token *token, char *envp[]);
-//// CORE OF LEXING CALLS ALL OF THE FUNCTIONS TO CHECK TOKEN TYPE/////
-int					skip_string_in_quotes(char *rl, int i);
-int					skip_string_in_single_quotes(char *rl, int i);
-
 //////////////UTILS///////////////
 int 				handle_exit_code(t_token *token, t_shell *shell);
 char 				*process_dollar_string(char *str, char **env, int quote_type);
@@ -116,8 +113,7 @@ int     calculate_expanded_length(char *str,char  **env);
 char	*is_var_name(char *str, int *i);
 void				export_traductor(t_token *token, char *envp[], t_shell *shell);
 void				special_cases_export_traductor(t_token *current, t_shell *shell);
-char				*mini_process_dollar(char *str, char *result, char **env);
-char				*mini_mini_process_dollar(char *str, char **env, char *result, int *i);
+void				clean_empty_tokens(t_token **head);
 ///////// TOKEN COUNTER////////
 int					token_counter(char *rl);
 int					process_quotes(char *str, int i, int *in_token);
@@ -127,7 +123,6 @@ int					ft_isdelim(char c);
 int					skip_spaces(char *str, int i);
 int					handle_double_delim(char *str, int i);
 ///////// LEXING CHECKERS ///////////
-
 int					check_if_command_before(t_token *token);
 int					check_if_builtin(t_token *token);
 int					check_if_command(t_token *token, char *envp[]);
@@ -223,7 +218,7 @@ char				*get_prompt_name(t_token *token);
 void				identify_builtin(t_token *token, t_shell *shell);
 void				builtin_wo_pipes(t_token *token, t_shell *shell);
 int					ft_pwd(t_shell *shell);
-int					ft_envp(char **envp);
+int					ft_envp(char **envp, t_shell *shell);
 int					ft_echo(t_token *tokens, char **env);
 char				*extract_var_name(char *str, int dollar_pos, int str_len);	
 int					is_n_arg(char *arg);

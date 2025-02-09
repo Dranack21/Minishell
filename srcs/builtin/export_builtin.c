@@ -11,7 +11,7 @@ int	is_valid_identifier(char *str)
 	{
 		if (!str[i])
 			return (0);
-		if (ft_isalpha(str[i]) == 1 || str[i] == '_')
+		if (ft_isalpha(str[i]) == 1 && str[i] != '_')
 			return (1);
 		i++;
 	}

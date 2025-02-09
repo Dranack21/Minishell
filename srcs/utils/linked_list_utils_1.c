@@ -58,7 +58,7 @@ void	*create_node_shell(void)
 	new_node = (t_token *)malloc(sizeof(t_token));
 	if (!new_node)
 		return (NULL);
-	new_node->prev = NULL;
+	new_node->prev = NULL;						       
 	new_node->next = NULL;
 	new_node->str = NULL;
 	new_node->full_path = NULL;
