@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:05:29 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/09 23:53:35 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/10 01:02:37 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,10 @@ if (current->type == HERE_DOC)
 	if (process_heredoc(backward, shell, file) != 0)
 		return (EXIT_FAILURE);
 	if (!backward)
+	{
+		fprintf(stderr, "JE SUIS LA\n");
 		return (EXIT_FAILURE);
+	}
 	if (backward->file_redir)
 		free(backward->file_redir);
 	backward->file_redir = ft_strdup(file->str);

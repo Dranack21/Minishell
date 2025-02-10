@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:05:06 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/10 00:53:25 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/10 01:10:21 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	free_token_tab(t_token *head)
 {
 	t_token	*temp;
 
-	fprintf(stderr, "do i enter here\n");
 	while (head)
 	{
 		if (head->prev)
@@ -87,6 +86,7 @@ void	free_inside_heredoc(t_token *token, t_shell *shell)
 	{
 		ft_free_array(shell->env);
 	}
+	token = *shell->token;
 	while (token)
 	{
 		if (token->prev)

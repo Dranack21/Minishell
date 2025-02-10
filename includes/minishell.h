@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:06:32 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/09 23:06:33 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/10 01:08:11 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ typedef struct s_shell
 	int				token_count;
 	int				export;
 	char			**env;
+	t_token			**token;
 }					t_shell;
 
 typedef struct s_expand
