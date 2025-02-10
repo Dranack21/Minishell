@@ -39,7 +39,7 @@ int	is_n_arg(char *arg)
 		}
 		if (arg[i] != '\0')
 			return (1);
-		if (arg[i] == '\0')
+		if (arg[i] == '\0' && arg[i - 1] == 'n')
 			return (0);
 	}
 	return (1);

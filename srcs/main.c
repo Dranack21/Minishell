@@ -29,6 +29,7 @@ int	main(int argc, char *argv[], char *envp[])
 	(void)argv;
 	loop(shell);
 	ft_free_array(shell->env);
+	free(shell);
 	return (0);
 }
 
