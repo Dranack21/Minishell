@@ -87,15 +87,15 @@ void	update_env_var(char ***env, char *var)
 		return ;
 	i = 0;
 	while ((*env)[i])
-    {
-        new_env[i] = (*env)[i];
-        i++;
-    }
-    new_env[i] = ft_strdup(var);
-    new_env[i + 1] = NULL;
-    free(*env);
-    *env = new_env;
-    free(name);
+	{
+		new_env[i] = (*env)[i];
+		i++;
+	}
+	new_env[i] = ft_strdup(var);
+	new_env[i + 1] = NULL;
+	free(*env);
+	*env = new_env;
+	free(name);
 }
 
 int	ft_export(t_token *token, char ***env, t_shell *data)

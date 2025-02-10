@@ -211,13 +211,16 @@ t_token				*find_cmd_token_redir(t_token *current, int direction);
 void				handle_file_redirection(t_token *cmd_token);
 //// MAIN PART OF REDIRECTIONS /////
 void				handle_input_redirection(t_token *cmd_token, int fd);
-void				handle_ouput_redirection(t_token *cmd_token, int fd);
+void				handle_ouput_redirection(t_token *cmd, int fd);
 void				handle_heredoc_redirection(t_token *cmd_token, int fd);
 
 int					prepare_redir_output(t_token *token);
 int					apply_output_redirection(t_token *back, t_token *file,
 						t_token *current);
-
+int					apply_file_redir(t_token *backward, t_token *file,
+						t_token *current);
+int					apply_heredoc_redir(t_token *backward, t_token *file,
+						t_shell *shell, t_token *current);
 int					prepare_redir_input(t_token *token, t_shell *shell);
 int					process_backward_heredoc(t_token *backward, t_token *file,
 						t_shell *shell, t_token *current);

@@ -29,7 +29,8 @@ void	no_pipes(t_token *token, t_shell *shell)
 		current = current->next;
 	}
 	current = token;
-	while (current && current->type != CMD && current->type != BUILTIN && current->next)
+	while (current && current->type != CMD
+		&& current->type != BUILTIN && current->next)
 		current = current->next;
 	if (current->type == CMD && current)
 		cmd_wo_pipes(current, shell);

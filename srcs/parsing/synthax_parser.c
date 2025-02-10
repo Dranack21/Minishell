@@ -15,9 +15,15 @@
 int	synthax_parser(t_token *token)
 {
 	if (check_pipes_parser(token) == EXIT_FAILURE)
+	{
+		printf("synthax error test \n ");
 		return (EXIT_FAILURE);
+	}
 	if (check_for_redirs_parser(token) == EXIT_FAILURE)
+	{
+		printf("synthax error test \n ");
 		return (EXIT_FAILURE);
+	}
 	return (EXIT_SUCCESS);
 }
 

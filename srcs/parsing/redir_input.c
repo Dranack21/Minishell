@@ -74,40 +74,21 @@ int	prepare_redir_input(t_token *token, t_shell *shell)
 	return (i);
 }
 
-int    process_backward_heredoc(t_token *backward, t_token *file, t_shell *shell,
-	t_token *current)
+int	process_backward_heredoc(t_token *backward, t_token *file, t_shell *shell,
+		t_token *current)
 {
-int    fd;
+	int	i;
 
-if (current->type == HERE_DOC)
-{
-	if (process_heredoc(backward, shell, file) != 0)
-		return (EXIT_FAILURE);
-	if (!backward)
+	i = 0;
+	if (current->type == HERE_DOC)
 	{
-		fprintf(stderr, "JE SUIS LA\n");
-		return (EXIT_FAILURE);
+		i = apply_heredoc_redir(backward, file, shell, current);
 	}
-	if (backward->file_redir)
-		free(backward->file_redir);
-	backward->file_redir = ft_strdup(file->str);
-	backward->int_redir = HERE_DOC;
-}
-if (current->type == INPUT)
-{
-	fd = open(file->str, O_RDONLY);
-	if (fd < 0)
-		return (perror("open"), EXIT_FAILURE);
-	close(fd);
-	if (!backward)
-		return (EXIT_FAILURE);
-	if (backward->file_redir)
-		free(backward->file_redir);
-	backward->file_redir = ft_strdup(file->str);
-	backward->int_redir = INPUT;
-	backward->heredoc_file = NULL;
-}
-return (EXIT_SUCCESS);
+	if (current->type == INPUT)
+	{
+		i = apply_file_redir(backward, file, current);
+	}
+	return (i);
 }
 
 int	process_heredoc(t_token *token, t_shell *shell, t_token *file)
@@ -123,7 +104,7 @@ int	process_heredoc(t_token *token, t_shell *shell, t_token *file)
 	pid1 = fork();
 	if (pid1 == 0)
 	{
-		free(heredoc_file);	
+		free(heredoc_file);
 		handle_heredoc_child(fd, token, shell, file);
 	}
 	else
@@ -131,8 +112,8 @@ int	process_heredoc(t_token *token, t_shell *shell, t_token *file)
 	if (token)
 	{
 		if (token->heredoc_file)
-            free(token->heredoc_file);
-        token->heredoc_file = ft_strdup(heredoc_file);
+			free(token->heredoc_file);
+		token->heredoc_file = ft_strdup(heredoc_file);
 	}
 	free(heredoc_file);
 	return (close(fd), ft_restore_signals(), 0);

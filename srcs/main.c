@@ -76,7 +76,6 @@ void	main_2(t_shell *shell, char *rl)
 		clean_empty_tokens(&token);
 		if (synthax_parser(token) == EXIT_FAILURE)
 		{
-			printf("synthax error test \n ");
 			shell->exit_code = 2;
 			free_token_tab(token);
 		}
@@ -84,7 +83,6 @@ void	main_2(t_shell *shell, char *rl)
 		{
 			prepare_redir_output(token);
 			prepare_redir_input(token, shell);
-			print_list(token);
 			verify_all(shell, token);
 			execute_main(shell, token);
 			free_token_tab(token);

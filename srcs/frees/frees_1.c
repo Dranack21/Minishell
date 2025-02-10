@@ -21,7 +21,7 @@ void	free_token_tab(t_token *head)
 		if (head->prev)
 			head = head->prev;
 		else
-			break;
+			break ;
 	}
 	while (head != NULL)
 	{

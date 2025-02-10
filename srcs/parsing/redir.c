@@ -33,15 +33,15 @@ void	handle_file_redirection(t_token *cmd_token)
 	}
 }
 
-void	handle_ouput_redirection(t_token *cmd_token, int fd)
+void	handle_ouput_redirection(t_token *cmd, int fd)
 {
-	if (cmd_token->int_redir_out == O_APPEND)
+	if (cmd->int_redir_out == O_APPEND)
 	{
-		fd = open(cmd_token->file_redir_out, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		fd = open(cmd->file_redir_out, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	}
-	else if (cmd_token->int_redir_out == 577)
+	else if (cmd->int_redir_out == 577)
 	{
-		fd = open(cmd_token->file_redir_out, O_CREAT | O_RDWR | O_TRUNC, 0644);
+		fd = open(cmd->file_redir_out, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	}
 	if (fd < 0)
 	{
