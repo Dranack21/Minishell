@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:06:09 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/10 01:08:49 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/10 19:04:43 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,17 @@
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_shell	*shell;
+	int		i;
 
+	i = 0;
 	shell = malloc(sizeof(t_shell));
 	if (!shell)
 		return (0);
 	shell->env = NULL;
 	shell->env = copy_env(envp);
+	while (shell->env[i])
+		i++;
+	shell->env[i - 1] = ft_strdup("?=0");
 	shell->token = NULL;
 	shell->exit_code = 0;
 	if (!shell->env)
@@ -57,6 +62,7 @@ void	loop(t_shell *shell)
 		else
 			main_2(shell, rl);
 		free(rl);
+		shell->env = copy_env2(shell, shell->env);
 	}
 	rl_clear_history();
 }
@@ -69,7 +75,7 @@ void	main_2(t_shell *shell, char *rl)
 	shell->token = &token;
 	if (token != NULL)
 	{
-		export_traductor(token, shell->env, shell);
+		export_traductor(token, shell->env);
 		token_manager_2(token);
 		update_all_tokens_quotes(token);
 		token_manager(token, shell->env);

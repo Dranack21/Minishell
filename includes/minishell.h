@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:06:32 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/10 01:08:11 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/10 19:08:09 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ typedef struct s_global
 
 extern t_global		g_state;
 
+char				**copy_env2(t_shell *shell, char **env);
 void				loop(t_shell *shell);
 void				main_2(t_shell *shell, char *rl);
 /////// EARLY PARSING //////////////
@@ -141,8 +142,7 @@ char				*process_dollar_string(char *str, char **env,
 char				*expanded_var(char *str, char **env);
 int					calculate_expanded_length(char *str, char **env);
 char				*is_var_name(char *str, int *i);
-void				export_traductor(t_token *token, char *envp[],
-						t_shell *shell);
+void				export_traductor(t_token *token, char *envp[]);
 void				special_cases_export_traductor(t_token *current,
 						t_shell *shell);
 void				clean_empty_tokens(t_token **head);

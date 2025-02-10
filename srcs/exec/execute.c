@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:04:59 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/10 05:48:36 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/10 19:02:08 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,20 @@
 
 void	execute_main(t_shell *shell, t_token *token)
 {
+	t_token	*current;
+
+	current = token;
 	shell->pipe_count = count_pipes(token);
 	if (shell->pipe_count == 0)
 		no_pipes(token, shell);
 	else
 		create_pipes(shell, token);
+	while (current)
+	{
+		if (current->heredoc_file)
+			unlink(current->heredoc_file);
+		current = current->next;
+	}
 }
 
 void	redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe)

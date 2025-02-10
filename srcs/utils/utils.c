@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:06:07 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/10 05:56:18 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/10 19:07:56 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void	export_traductor(t_token *token, char *envp[], t_shell *shell)
+void	export_traductor(t_token *token, char *envp[])
 {
 	t_token	*current;
 	char	*processed_str;
@@ -22,9 +22,7 @@ void	export_traductor(t_token *token, char *envp[], t_shell *shell)
 	current = token;
 	while (current)
 	{
-		special_cases_export_traductor(current, shell);
-		if (position_dollar(current->str) != -1 && handle_exit_code(token,
-				shell) == 1)
+		if (position_dollar(current->str) != -1)
 		{
 			processed_str = expanded_var(current->str, envp);
 			if (processed_str)
@@ -68,14 +66,16 @@ char	*is_var_name(char *str, int *i)
 
 	start = *i + 1;
 	len = 0;
-	if (str[start] == '\0' || !(str[start] == '_' || (str[start] >= 'a'
+	if (str[start] == '?')
+		len = len + 0;
+	else if (str[start] == '\0' || !(str[start] == '_' || (str[start] >= 'a'
 				&& str[start] <= 'z') || (str[start] >= 'A'
 				&& str[start] <= 'Z')))
 		return (NULL);
 	while (str[start + len] == '_' || (str[start + len] >= 'a' && str[start
 				+ len] <= 'z') || (str[start + len] >= 'A' && str[start
 				+ len] <= 'Z') || (str[start + len] >= '0' && str[start
-				+ len] <= '9'))
+				+ len] <= '9') || str[start + len] == '?')
 		len++;
 	name = malloc(len + 1);
 	if (!name)
