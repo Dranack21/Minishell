@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:04:50 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/09 23:05:57 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/10 01:38:56 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,15 +87,15 @@ void	update_env_var(char ***env, char *var)
 		return ;
 	i = 0;
 	while ((*env)[i])
-	{
-		new_env[i] = ft_strdup((*env)[i]);
-		i++;
-	}
-	new_env[i] = ft_strdup(var);
-	new_env[i + 1] = NULL;
-	ft_free_array(*env);
-	*env = new_env;
-	free(name);
+    {
+        new_env[i] = (*env)[i];
+        i++;
+    }
+    new_env[i] = ft_strdup(var);
+    new_env[i + 1] = NULL;
+    free(*env);
+    *env = new_env;
+    free(name);
 }
 
 int	ft_export(t_token *token, char ***env, t_shell *data)

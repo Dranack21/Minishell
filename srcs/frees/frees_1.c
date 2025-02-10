@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:05:06 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/10 01:10:21 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/10 01:47:43 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,8 @@ void	free_exit_main(t_token *token, t_shell *shell)
 
 void	free_child(t_token *token, t_shell *shell, t_pipe *pipe)
 {
-	if (shell->env)
-	{
-		ft_free_array(shell->env);
-	}
+	ft_free_array(shell->env);
+	free(shell);
 	while (pipe)
 	{
 		if (pipe->prev)
@@ -76,7 +74,6 @@ void	free_child(t_token *token, t_shell *shell, t_pipe *pipe)
 		else
 			break ;
 	}
-	free(shell);
 	free_token_tab(token);
 }
 
