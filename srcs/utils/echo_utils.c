@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:05:47 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/09 23:05:57 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/10 06:08:05 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ char	*extract_var_name(char *str, int dollar_pos, int str_len)
 	char	*var_name;
 
 	var_end = dollar_pos + 1;
-	while (var_end < str_len && (isalnum(str[var_end]) || str[var_end] == '_'))
+	while (var_end < str_len && (ft_isalnum(str[var_end])
+			|| str[var_end] == '_'))
 		var_end++;
 	var_name = malloc(var_end - dollar_pos);
 	if (!var_name)

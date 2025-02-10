@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:04:55 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/09 23:05:57 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/10 05:45:58 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,12 @@ char	**create_cmd_tab(t_token *token)
 	{
 		if (token->type == CMD || token->type == BUILTIN)
 		{
-			cmd[i++] = strip_quotes(token->str);
+			cmd[i++] = ft_strdup(token->str);
 			token = token->next;
 			while (token && token->type != PIPE)
 			{
 				if (token->type == ARG || token->type == 0)
-					cmd[i++] = strip_quotes(token->str);
+					cmd[i++] = ft_strdup(token->str);
 				token = token->next;
 			}
 			break ;

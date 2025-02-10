@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:04:59 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/09 23:05:57 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/10 05:48:36 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe)
 	temp = check_pipe_line(cmd_token);
 	if (temp && temp->type == ARG)
 	{
-		write(STDERR_FILENO, temp->str, strlen(temp->str));
+		write(STDERR_FILENO, temp->str, ft_strlen(temp->str));
 		write(STDERR_FILENO, " : command not found gros bouffon\n", 34);
 		free_child(token, shell, pipe);
 		exit(127);
@@ -92,7 +92,8 @@ void	execute_cmd(t_token *token, t_shell *shell)
 {
 	if (token->is_valid == IS_NOT_VALID)
 	{
-		fprintf(stderr, "%s : command not found", token->str);
+		write(STDERR_FILENO, token->str, ft_strlen(token->str));
+		write(STDERR_FILENO, " : command not found", 21);
 		exit(127);
 	}
 	token->full_cmd = create_cmd_tab(token);

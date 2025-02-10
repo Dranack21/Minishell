@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:06:01 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/09 23:06:02 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/10 06:08:19 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ char	*replace_var_in_line(char *line, int i, char *value, int var_len)
 {
 	char	*result;
 
-	result = malloc(i + strlen(value) + strlen(line + i + var_len + 1) + 1);
+	result = malloc(i + ft_strlen(value) + ft_strlen(line + i + var_len + 1)
+			+ 1);
 	if (!result)
 		return (line);
 	ft_strncpy(result, line, i);

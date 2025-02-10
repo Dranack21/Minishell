@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:04:57 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/09 23:05:57 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/10 05:47:51 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,8 @@ char	*get_prompt_name(t_token *token)
 
 void	mini_x(t_token *token, t_shell *shell, t_pipe *pipe, t_token *temp)
 {
-	fprintf(stderr, "%s : command not found gros bouffon\n", temp->str);
+	write(STDERR_FILENO, temp->str, ft_strlen(temp->str));
+	write(STDERR_FILENO, " : command not found\n", 22);
 	free_child(token, shell, pipe);
 	exit(127);
 }

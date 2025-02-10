@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:06:07 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/09 23:06:09 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/10 05:56:18 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,7 @@ void	export_traductor(t_token *token, char *envp[], t_shell *shell)
 		if (position_dollar(current->str) != -1 && handle_exit_code(token,
 				shell) == 1)
 		{
-			printf("current str %s\n", current->str);
 			processed_str = expanded_var(current->str, envp);
-			printf("processed str %s\n", processed_str);
 			if (processed_str)
 			{
 				free(current->str);
@@ -51,7 +49,6 @@ int	handle_exit_code(t_token *token, t_shell *shell)
 
 	if (ft_strcmp("$?", token->str) == 0)
 	{
-		printf("processed str %d\n", shell->exit_code);
 		exit_str = ft_itoa(shell->exit_code);
 		if (exit_str)
 		{
@@ -83,7 +80,7 @@ char	*is_var_name(char *str, int *i)
 	name = malloc(len + 1);
 	if (!name)
 		return (NULL);
-	strncpy(name, &str[start], len);
+	ft_strncpy(name, &str[start], len);
 	name[len] = '\0';
 	*i += len;
 	return (name);
