@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:05:47 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/10 19:05:56 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/10 06:08:05 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int	position_dollar(char *str)
 	i = 0;
 	while (str[i])
 	{
+		if (str[i] == '$' && str[i + 1] == '?')
+			return (-2);
 		if (str[i] == '$')
 			return (i);
 		i++;
@@ -76,7 +78,7 @@ char	*extract_var_name(char *str, int dollar_pos, int str_len)
 
 	var_end = dollar_pos + 1;
 	while (var_end < str_len && (ft_isalnum(str[var_end])
-			|| str[var_end] == '?' || str[var_end] == '_'))
+			|| str[var_end] == '_'))
 		var_end++;
 	var_name = malloc(var_end - dollar_pos);
 	if (!var_name)

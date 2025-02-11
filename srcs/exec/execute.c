@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:04:59 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/10 19:02:08 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/10 05:48:36 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe)
 	if (temp && temp->type == ARG)
 	{
 		write(STDERR_FILENO, temp->str, ft_strlen(temp->str));
-		write(STDERR_FILENO, " : command not found gros bouffon\n", 34);
+		write(STDERR_FILENO, " : command not found \n", 24);
 		free_child(token, shell, pipe);
 		exit(127);
 	}

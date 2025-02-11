@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:06:32 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/10 19:08:09 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/10 01:08:11 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,6 @@ typedef struct s_global
 
 extern t_global		g_state;
 
-char				**copy_env2(t_shell *shell, char **env);
 void				loop(t_shell *shell);
 void				main_2(t_shell *shell, char *rl);
 /////// EARLY PARSING //////////////
@@ -141,13 +140,23 @@ char				*process_dollar_string(char *str, char **env,
 						int quote_type);
 char				*expanded_var(char *str, char **env);
 int					calculate_expanded_length(char *str, char **env);
+char				*over_translating(char *str, char **env, int quote_type);
+int					new_expanded_length(char *str, char **env);
 char				*is_var_name(char *str, int *i);
-void				export_traductor(t_token *token, char *envp[]);
+void				export_traductor(t_token *token, char *envp[],
+						t_shell *shell);
 void				special_cases_export_traductor(t_token *current,
 						t_shell *shell);
+void	new_traductor(t_token *token, char *envp[], t_shell	*shell);
+char	*expand_exit_new(char *str, int exit_status, int quote_type);
+int	handle_exit_var(char *expanded, char *exit_str, int *i, int *j);
+int	exit_new_length(char *str, int exit_status);
+int get_exit_str_len(int exit_status);
 void				clean_empty_tokens(t_token **head);
 void				handle_dollar_sign(t_expand *exp);
 int					init_heredoc(char **heredoc_file, int *fd);
+int					exit_expanded_length(char *str, int exit_status);
+char				*expand_exit_status(char *str, int exit_status);
 ///////// TOKEN COUNTER////////
 int					token_counter(char *rl);
 int					process_quotes(char *str, int i, int *in_token);

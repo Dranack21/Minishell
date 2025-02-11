@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:06:09 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/10 19:04:43 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/10 01:08:49 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,12 @@
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_shell	*shell;
-	int		i;
 
-	i = 0;
 	shell = malloc(sizeof(t_shell));
 	if (!shell)
 		return (0);
 	shell->env = NULL;
 	shell->env = copy_env(envp);
-	while (shell->env[i])
-		i++;
-	shell->env[i - 1] = ft_strdup("?=0");
 	shell->token = NULL;
 	shell->exit_code = 0;
 	if (!shell->env)
@@ -56,13 +51,12 @@ void	loop(t_shell *shell)
 		}
 		if (parse_for_quotes(rl) == EXIT_FAILURE)
 		{
-			printf("uneven single quote go die please\n");
+			printf("uneven single quote go\n");
 			shell->exit_code = 2;
 		}
 		else
 			main_2(shell, rl);
 		free(rl);
-		shell->env = copy_env2(shell, shell->env);
 	}
 	rl_clear_history();
 }
@@ -75,9 +69,10 @@ void	main_2(t_shell *shell, char *rl)
 	shell->token = &token;
 	if (token != NULL)
 	{
-		export_traductor(token, shell->env);
+		export_traductor(token, shell->env, shell);
 		token_manager_2(token);
 		update_all_tokens_quotes(token);
+		new_traductor(token, shell->env, shell);
 		token_manager(token, shell->env);
 		clean_empty_tokens(&token);
 		if (synthax_parser(token) == EXIT_FAILURE)
@@ -90,6 +85,7 @@ void	main_2(t_shell *shell, char *rl)
 			prepare_redir_output(token);
 			prepare_redir_input(token, shell);
 			verify_all(shell, token);
+			print_list(token);
 			execute_main(shell, token);
 			free_token_tab(token);
 		}
