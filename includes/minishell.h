@@ -135,9 +135,6 @@ int					is_special_token(char *str);
 void				token_manager(t_token *token, char *envp[]);
 void				get_token_type(t_token *token, char *envp[]);
 //////////////UTILS///////////////
-int					handle_exit_code(t_token *token, t_shell *shell);
-char				*process_dollar_string(char *str, char **env,
-						int quote_type);
 char				*expanded_var(char *str, char **env);
 int					calculate_expanded_length(char *str, char **env);
 char				*over_translating(char *str, char **env, int quote_type);
@@ -145,13 +142,13 @@ int					new_expanded_length(char *str, char **env);
 char				*is_var_name(char *str, int *i);
 void				export_traductor(t_token *token, char *envp[],
 						t_shell *shell);
-void				special_cases_export_traductor(t_token *current,
-						t_shell *shell);
-void	new_traductor(t_token *token, char *envp[], t_shell	*shell);
-char	*expand_exit_new(char *str, int exit_status, int quote_type);
-int	handle_exit_var(char *expanded, char *exit_str, int *i, int *j);
-int	exit_new_length(char *str, int exit_status);
-int get_exit_str_len(int exit_status);
+void				new_traductor(t_token *token, char *envp[], t_shell *shell);
+char				*expand_exit_new(char *str, int exit_status,
+						int quote_type);
+int					handle_exit_var(char *expanded, char *exit_str, int *i,
+						int *j);
+int					exit_new_length(char *str, int exit_status);
+int					get_exit_str_len(int exit_status);
 void				clean_empty_tokens(t_token **head);
 void				handle_dollar_sign(t_expand *exp);
 int					init_heredoc(char **heredoc_file, int *fd);

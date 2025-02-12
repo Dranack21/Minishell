@@ -55,6 +55,8 @@ SRCS		= srcs/builtin/builtin_utils.c\
 				srcs/lexing/token_counter_utils.c\
 				srcs/lexing/token_counter.c\
 				srcs/lexing/tokenize.c\
+				srcs/lexing/exit_translator.c\
+				srcs/lexing/retranslator.c\
 				srcs/parsing/apply_input_redir.c\
 			  	srcs/parsing/here_doc_utils.c\
 				srcs/parsing/read_line_handler.c\

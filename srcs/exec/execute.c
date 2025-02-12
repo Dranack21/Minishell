@@ -28,6 +28,7 @@ void	execute_main(t_shell *shell, t_token *token)
 			unlink(current->heredoc_file);
 		current = current->next;
 	}
+	free_token_tab(token);
 }
 
 void	redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe)

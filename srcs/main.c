@@ -87,7 +87,6 @@ void	main_2(t_shell *shell, char *rl)
 			verify_all(shell, token);
 			print_list(token);
 			execute_main(shell, token);
-			free_token_tab(token);
 		}
 	}
 }

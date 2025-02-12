@@ -40,59 +40,36 @@ void	update_all_tokens_quotes(t_token *token)
 	while (current)
 	{
 		if (!is_special_token(current->str))
-			update_token_quotes(current);		
+			update_token_quotes(current);
 		current = current->next;
 	}
 }
-void	new_traductor(t_token *token, char *envp[], t_shell	*shell)
-{
-	t_token	*current;
-	char	*processed_str;
 
-	current = token;
-	while (current)
+int	get_clean_size(char *str)
+{
+	int		i;
+	int		size;
+	char	quote_type;
+
+	i = 0;
+	size = 0;
+	quote_type = 0;
+	while (str[i])
 	{
-		fprintf(stderr, "%s\n", current->str);
-		if (position_dollar(current->str) != -1)
+		if (ft_isquote(str[i]))
 		{
-			if (position_dollar(current->str) == -2)
-				processed_str = expand_exit_new(current->str , shell->exit_code, current->quote_type);
+			if (!quote_type)
+				quote_type = str[i];
+			else if (str[i] == quote_type)
+				quote_type = 0;
 			else
-				processed_str = over_translating(current->str, envp, current->quote_type);
-			if (processed_str)
-			{
-				free(current->str);
-				current->str = processed_str;
-			}
+				size++;
 		}
-		current = current->next;
+		else
+			size++;
+		i++;
 	}
-}
-int    get_clean_size(char *str)
-{
-    int        i;
-    int        size;
-    char    quote_type;
-
-    i = 0;
-    size = 0;
-    quote_type = 0;
-    while (str[i])
-    {
-        if (ft_isquote(str[i]))
-        {
-            if (!quote_type)
-                quote_type = str[i];
-            else if (str[i] == quote_type)
-                quote_type = 0;
-            else
-                size++;
-        }
-        else
-            size++;
-        i++;
-    }
-    return (size);
+	return (size);
 }
 
 char	*clean_quotes(char *str)
@@ -147,127 +124,4 @@ void	update_token_quotes(t_token *token)
 		token->str = cleaned;
 		free(old_str);
 	}
-}
-char	*over_translating(char *str, char **env, int quote_type)
-{
-	int		i;
-	int		j;
-	char	*expanded;
-	char	*name;
-	char	*val;
-
-	i = 0;
-	j = 0;
-	expanded = malloc(new_expanded_length( str, env) + 2);
-	if (!expanded)
-		return (NULL);
-	expanded[0] = '\0';
-	while (str[i])
-	{
-		if (str[i] == '$' && quote_type != 1)
-		{
-			name = is_var_name(str, &i);
-			if (name)
-			{
-				val = get_env_value(name, env);
-				if (val)
-				{
-					ft_strlcat(expanded, val, new_expanded_length(str, env) + 1);
-					j += ft_strlen(val);
-				}
-				free(name);
-			}
-		}
-		else
-		{
-			expanded[j] = str[i];
-			expanded[j + 1] = '\0';
-			j++;
-		}
-		i++;
-	}
-	expanded[j] = '\0';
-	return (expanded);
-}
-
-
-int	new_expanded_length(char *str, char **env)
-{
-	char	*name;
-	char	*val;
-	int		len;
-	int		i;
-
-	len = 0;
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == '$')
-		{
-			name = is_var_name(str, &i);
-			if (name)
-			{
-				val = get_env_value(name, env);
-				if (val)
-					len += ft_strlen(val);
-				free(name);
-			}
-		}
-		else
-			len++;
-		i++;
-	}
-	return (len);
-}
-char	*expand_exit_new(char *str, int exit_status, int quote_type)
-{
-	int		i;
-	int		j;
-	char	*expanded;
-	char	*exit_str;
-
-	i = -1;
-	j = 0;
-	expanded = malloc(exit_new_length(str, exit_status) + 3);
-	if (!expanded)
-		return (NULL);
-	exit_str = ft_itoa(exit_status);
-	if (!exit_str)
-		return (free(expanded), NULL);
-	while (str[++i])
-	{
-		if (str[i] == '$' && str[i + 1] == '?' && quote_type != 1)
-			handle_exit_var(expanded, exit_str, &i, &j);
-		else
-		{
-			expanded[j] = str[i];
-			expanded[j + 1] = '\0';
-			j++;
-		}
-	}
-	return (free(exit_str), expanded[j] = '\0', expanded);
-}
-
-int	exit_new_length(char *str, int exit_status)
-{
-	int	len;
-	int	i;
-	int	exit_len;
-
-	len = 0;
-	i = 0;
-	exit_len = get_exit_str_len(exit_status);
-	while (str[i])
-	{
-		if (str[i] == '$' && str[i + 1] == '?')
-		{
-			len += exit_len;
-			i++;
-		}
-		else
-			len++;
-		i++;
-	}
-	fprintf(stderr, "LEN %d\n", len);
-	return (len);
 }

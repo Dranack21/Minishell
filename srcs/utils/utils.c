@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int get_exit_str_len(int exit_status)
+int	get_exit_str_len(int exit_status)
 {
 	char	*exit_str;
 	int		len;
@@ -26,6 +26,7 @@ int get_exit_str_len(int exit_status)
 	free(exit_str);
 	return (len);
 }
+
 int	handle_exit_var(char *expanded, char *exit_str, int *i, int *j)
 {
 	int	exit_len;
@@ -48,7 +49,8 @@ void	export_traductor(t_token *token, char *envp[], t_shell *shell)
 		if (position_dollar(current->str) != -1)
 		{
 			if (position_dollar(current->str) == -2)
-				processed_str = expand_exit_status(current->str , shell->exit_code);
+				processed_str = expand_exit_status(current->str,
+						shell->exit_code);
 			else
 				processed_str = expanded_var(current->str, envp);
 			if (processed_str)
@@ -104,68 +106,4 @@ void	handle_dollar_sign(t_expand *exp)
 		}
 		free(name);
 	}
-}
-
-
-char	*expand_exit_status(char *str, int exit_status)
-{
-	int		i;
-	int		j;
-	int		in_quote;
-	char	*expanded;
-	char	*exit_str;
-
-	i = 0;
-	j = 0;
-	in_quote = 0;
-	fprintf(stderr, "%d expanded lengt\n",exit_expanded_length(str, exit_status));
-	expanded = malloc(exit_expanded_length(str, exit_status) + 1);
-	if (!expanded)
-		return (NULL);
-	exit_str = ft_itoa(exit_status);
-	if (!exit_str)
-		return (free(expanded), NULL);
-	expanded[0] = '\0';
-	while (str[i])
-	{
-		if (str[i] == '\'')
-			in_quote = !in_quote;
-		if (!in_quote && str[i] == '$' && str[i + 1] == '?')
-			handle_exit_var(expanded, exit_str, &i, &j);
-		else
-		{
-			expanded[j] = str[i];
-			expanded[j + 1] = '\0';
-			j++;
-		}
-		i++;
-	}
-	return (free(exit_str), expanded[j] = '\0', expanded);
-}
-
-int	exit_expanded_length(char *str, int exit_status)
-{
-	int	len;
-	int	i;
-	int	in_quote;
-	int	exit_len;
-
-	len = 0;
-	i = 0;
-	in_quote = 0;
-	exit_len = get_exit_str_len(exit_status);
-	while (str[i])
-	{
-		if (str[i] == '\'')
-			in_quote = !in_quote;
-		if (str[i] == '$' && str[i + 1] == '?' && !in_quote)
-		{
-			len += exit_len;
-			i++;
-		}
-		else
-			len++;
-		i++;
-	}
-	return (len);
 }
