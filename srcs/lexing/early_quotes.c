@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:05:13 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/09 23:05:57 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/12 04:44:40 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	new_traductor(t_token *token, char *envp[], t_shell	*shell)
 	current = token;
 	while (current)
 	{
+		fprintf(stderr, "%s\n", current->str);
 		if (position_dollar(current->str) != -1)
 		{
 			if (position_dollar(current->str) == -2)
@@ -157,7 +158,7 @@ char	*over_translating(char *str, char **env, int quote_type)
 
 	i = 0;
 	j = 0;
-	expanded = malloc(new_expanded_length( str, env) + 1);
+	expanded = malloc(new_expanded_length( str, env) + 2);
 	if (!expanded)
 		return (NULL);
 	expanded[0] = '\0';
@@ -227,7 +228,7 @@ char	*expand_exit_new(char *str, int exit_status, int quote_type)
 
 	i = 0;
 	j = 0;
-	expanded = malloc(exit_new_length(str, exit_status) + 1);
+	expanded = malloc(exit_new_length(str, exit_status) + 3);
 	if (!expanded)
 		return (NULL);
 	exit_str = ft_itoa(exit_status);
@@ -269,5 +270,6 @@ int	exit_new_length(char *str, int exit_status)
 			len++;
 		i++;
 	}
+	fprintf(stderr, "LEN %d\n", len);
 	return (len);
 }

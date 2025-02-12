@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:06:07 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/10 05:56:18 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/12 04:30:45 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ char	*expand_exit_status(char *str, int exit_status)
 	i = 0;
 	j = 0;
 	in_quote = 0;
+	fprintf(stderr, "%d expanded lengt\n",exit_expanded_length(str, exit_status));
 	expanded = malloc(exit_expanded_length(str, exit_status) + 1);
 	if (!expanded)
 		return (NULL);
@@ -157,7 +158,7 @@ int	exit_expanded_length(char *str, int exit_status)
 	{
 		if (str[i] == '\'')
 			in_quote = !in_quote;
-		else if (str[i] == '$' && str[i + 1] == '?' && !in_quote)
+		if (str[i] == '$' && str[i + 1] == '?' && !in_quote)
 		{
 			len += exit_len;
 			i++;
