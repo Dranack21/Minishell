@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:05:13 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/12 04:44:40 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/12 04:49:43 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,7 +226,7 @@ char	*expand_exit_new(char *str, int exit_status, int quote_type)
 	char	*expanded;
 	char	*exit_str;
 
-	i = 0;
+	i = -1;
 	j = 0;
 	expanded = malloc(exit_new_length(str, exit_status) + 3);
 	if (!expanded)
@@ -234,8 +234,7 @@ char	*expand_exit_new(char *str, int exit_status, int quote_type)
 	exit_str = ft_itoa(exit_status);
 	if (!exit_str)
 		return (free(expanded), NULL);
-	expanded[0] = '\0';
-	while (str[i])
+	while (str[++i])
 	{
 		if (str[i] == '$' && str[i + 1] == '?' && quote_type != 1)
 			handle_exit_var(expanded, exit_str, &i, &j);
@@ -245,7 +244,6 @@ char	*expand_exit_new(char *str, int exit_status, int quote_type)
 			expanded[j + 1] = '\0';
 			j++;
 		}
-		i++;
 	}
 	return (free(exit_str), expanded[j] = '\0', expanded);
 }
