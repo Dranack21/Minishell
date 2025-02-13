@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:06:07 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/12 04:30:45 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/13 01:43:09 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ void	export_traductor(t_token *token, char *envp[], t_shell *shell)
 	current = token;
 	while (current)
 	{
-		if (position_dollar(current->str) != -1)
+		if (position_dollar(current->str) != -1
+			&& is_single_dollar(current->str) == 0)
 		{
 			if (position_dollar(current->str) == -2)
 				processed_str = expand_exit_status(current->str,
@@ -76,9 +77,9 @@ char	*is_var_name(char *str, int *i)
 				&& str[start] <= 'Z')))
 		return (NULL);
 	while (str[start + len] == '_' || (str[start + len] >= 'a' && str[start
-				+ len] <= 'z') || (str[start + len] >= 'A' && str[start
-				+ len] <= 'Z') || (str[start + len] >= '0' && str[start
-				+ len] <= '9'))
+			+ len] <= 'z') || (str[start + len] >= 'A' && str[start
+			+ len] <= 'Z') || (str[start + len] >= '0' && str[start
+			+ len] <= '9'))
 		len++;
 	name = malloc(len + 1);
 	if (!name)

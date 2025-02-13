@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 22:33:59 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/12 22:40:42 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/13 01:28:36 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ void	new_traductor(t_token *token, char *envp[], t_shell *shell)
 	current = token;
 	while (current)
 	{
-		if (position_dollar(current->str) != -1)
+		if (position_dollar(current->str) != -1
+			&& is_single_dollar(current->str) == 0)
 		{
 			if (position_dollar(current->str) == -2)
 				processed_str = expand_exit_new(current->str, shell->exit_code,

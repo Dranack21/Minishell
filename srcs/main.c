@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:06:09 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/13 00:59:33 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/13 01:43:45 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	loop(t_shell *shell)
 		}
 		if (parse_for_quotes(rl) == EXIT_FAILURE)
 		{
-			printf("uneven single quote go\n");
+			printf("uneven single quotes be please kind with minishell\n");
 			shell->exit_code = 2;
 		}
 		else
@@ -85,6 +85,7 @@ void	main_2(t_shell *shell, char *rl)
 			prepare_redir_output(token);
 			prepare_redir_input(token, shell);
 			verify_all(shell, token);
+			print_list(token);
 			execute_main(shell, token);
 		}
 	}
@@ -118,9 +119,6 @@ void	token_manager(t_token *token, char *envp[])
 	while (current != NULL)
 	{
 		get_token_type(current, envp);
-		if (current->next)
-			current = current->next;
-		else
-			break ;
+		current = current->next;
 	}
 }

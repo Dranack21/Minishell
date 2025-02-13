@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:05:01 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/13 01:00:28 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/13 02:04:35 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,25 +35,35 @@ void	no_pipes(t_token *token, t_shell *shell)
 	while (current && current->type != CMD && current->type != BUILTIN
 		&& current->next)
 		current = current->next;
-	if (current->type == CMD && current)
+	if (current && current->type == CMD)
+	{
+		fprintf(stderr, "%s\n", current->str);
 		cmd_wo_pipes(current, shell);
-	if (current->type == BUILTIN && current)
-		builtin_wo_pipes(token, shell);
+	}
+	if (current && current->type == BUILTIN)
+	{
+		fprintf(stderr, "%s\n", current->str);
+		builtin_wo_pipes(current, shell);
+	}
 }
 
 void	builtin_wo_pipes(t_token *token, t_shell *shell)
 {
 	int	original_stdout;
+	int	original_stdin;
 	int	i;
 
 	i = -1;
+	original_stdin = dup(STDIN_FILENO);
 	original_stdout = dup(STDOUT_FILENO);
 	handle_file_redirection(token);
 	if (token->is_valid == IS_VALID)
 	{
 		i = identify_builtin_no_pipes(token, shell);
 		dup2(original_stdout, STDOUT_FILENO);
+		dup2(original_stdin, STDIN_FILENO);
 		close(original_stdout);
+		close(original_stdin);
 	}
 	if (i != -1)
 	{
@@ -107,6 +117,7 @@ void	cmd_wo_pipes(t_token *token, t_shell *shell)
 	pid_t	pid;
 
 	token->full_cmd = create_cmd_tab(token);
+	ft_print_array(token->full_cmd);
 	if (!token->full_cmd && !token->full_path)
 		return ;
 	pid = fork();

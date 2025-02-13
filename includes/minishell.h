@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:06:32 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/13 00:24:11 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/13 01:54:28 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -297,4 +297,5 @@ void				free_child(t_token *token, t_shell *shell, t_pipe *pipe);
 void				free_exit_main(t_token *token, t_shell *shell);
 
 void				token_manager_2(t_token *token);
+int 				is_single_dollar(char *str);
 #endif

@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:04:46 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/09 23:05:57 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/13 01:54:22 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,28 +94,31 @@ int	process_echo_helper(char *str, char **env)
 	return (start);
 }
 
-int	process_echo_var(char *str, char **env, int start, int dollar_pos)
+int    process_echo_var(char *str, char **env, int start, int dollar_pos)
 {
-	int		str_len;
-	char	*var_name;
-	char	*value;
+    int        str_len;
+    char    *var_name;
+    char    *value;
 
-	str_len = ft_strlen(str);
-	var_name = extract_var_name(str, dollar_pos, str_len);
-	if (var_name)
-	{
-		value = get_env_value(var_name, env);
-		if (value)
-			printf("%s", value);
-		start = dollar_pos + ft_strlen(var_name) + 1;
-		free(var_name);
-	}
-	else
-	{
-		printf("$");
-		start = dollar_pos + 1;
-	}
-	return (start);
+    str_len = ft_strlen(str);
+    if (is_single_dollar(str) == 0)
+        var_name = extract_var_name(str, dollar_pos, str_len);
+    else
+        var_name = NULL;
+    if (var_name)
+    {
+        value = get_env_value(var_name, env);
+        if (value)
+            printf("%s", value);
+        start = dollar_pos + ft_strlen(var_name) + 1;
+        free(var_name);
+    }
+    else
+    {
+        printf("$");
+        start = dollar_pos + 1;
+    }
+    return (start);
 }
 
 int	ft_echo(t_token *tokens, char **env)

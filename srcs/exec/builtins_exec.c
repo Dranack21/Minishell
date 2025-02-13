@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:04:53 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/09 23:05:57 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/13 01:25:49 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,20 @@
 void	builtin_with_pipes(t_token *token, t_shell *shell, t_pipe *pipe)
 {
 	int	original_stdout;
+	int original_stdin;
 	int	i;
 
 	i = -1;
 	original_stdout = dup(STDOUT_FILENO);
+	original_stdin = dup(STDIN_FILENO);
 	handle_file_redirection(token);
 	if (token->is_valid == IS_VALID)
 	{
 		i = identify_builtin_pipes(token, shell);
 		dup2(original_stdout, STDOUT_FILENO);
+		dup2(original_stdin, STDIN_FILENO);
 		close(original_stdout);
+		close(original_stdin);
 	}
 	if (i != -1)
 	{
