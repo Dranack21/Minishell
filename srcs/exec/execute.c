@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:04:59 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/10 05:48:36 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/13 01:00:49 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,17 @@ void	redirect_exe(t_shell *shell, t_token *token, t_pipe *pipe)
 	t_token	*cmd_token;
 	t_token	*temp;
 
-	temp = NULL;
 	cmd_token = token;
 	apply_pipe_redirection(shell, pipe);
 	skip_to_good_pipe(&cmd_token, pipe);
-	close_unused_pipes(pipe);
 	temp = check_pipe_line(cmd_token);
 	if (temp && temp->type == ARG)
 	{
-		write(STDERR_FILENO, temp->str, ft_strlen(temp->str));
-		write(STDERR_FILENO, " : command not found \n", 24);
+		write(2, temp->str, ft_strlen(temp->str));
+		if (ft_strncmp(temp->str, "/", 1) == 0)
+			write(2, ": No such file or directory \n", 30);
+		else
+			write(2, ": command not found\n", 21);
 		free_child(token, shell, pipe);
 		exit(127);
 	}
@@ -109,7 +110,9 @@ void	execute_cmd(t_token *token, t_shell *shell)
 	token->full_cmd = create_cmd_tab(token);
 	if (token->full_cmd && token->full_path)
 	{
-		if (execve(token->full_path, token->full_cmd, shell->env) == -1)
+		if (ft_strncmp(token->str, "/", 1) == 0)
+			handle_err_execve(token);
+		else if (execve(token->full_path, token->full_cmd, shell->env) == -1)
 			handle_err_execve(token);
 		else
 			shell->exit_code = 0;

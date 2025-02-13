@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:06:32 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/10 01:08:11 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/13 00:24:11 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <dirent.h>
+# include <sys/types.h>
 # include <string.h>
 # include <sys/stat.h>
 # include <sys/wait.h>

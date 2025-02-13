@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:04:50 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/10 01:38:56 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/12 23:01:46 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ char	*get_var_name(char *str)
 	i = 0;
 	while (str[i] && str[i] != '=')
 		i++;
-	if (str[i] == '=' && str[i - 1])
+	if (i > 0 && str[i] == '=' && str[i - 1])
 		name = ft_strndup(str, i);
 	else
 		return (NULL);
@@ -124,5 +124,5 @@ int	ft_export(t_token *token, char ***env, t_shell *data)
 		}
 		token = token->next;
 	}
-	return (free(name), EXIT_SUCCESS);
+	return (free(name), data->exit_code = 0, EXIT_SUCCESS);
 }

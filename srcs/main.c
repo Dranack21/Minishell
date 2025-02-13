@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:06:09 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/10 01:08:49 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/13 00:59:33 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ void	main_2(t_shell *shell, char *rl)
 			prepare_redir_output(token);
 			prepare_redir_input(token, shell);
 			verify_all(shell, token);
-			print_list(token);
 			execute_main(shell, token);
 		}
 	}

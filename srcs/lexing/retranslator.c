@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   retranslator.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/12 22:33:59 by habouda           #+#    #+#             */
+/*   Updated: 2025/02/12 22:40:42 by habouda          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	translate_variable(char *str, int *i, char *expanded, char **env)
@@ -35,7 +47,6 @@ void	new_traductor(t_token *token, char *envp[], t_shell *shell)
 	current = token;
 	while (current)
 	{
-		fprintf(stderr, "%s\n", current->str);
 		if (position_dollar(current->str) != -1)
 		{
 			if (position_dollar(current->str) == -2)

@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:05:01 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/10 00:46:06 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/13 01:00:28 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,19 @@ void	no_pipes(t_token *token, t_shell *shell)
 	{
 		if (current->is_valid == IS_NOT_VALID && current->str != NULL)
 		{
-			printf("%s : command not found\n", current->str);
-			current->is_valid = IS_NOT_VALID;
+			write(2, current->str, ft_strlen(current->str));
+			if (ft_strncmp(current->str, "/", 1) == 0)
+				write(2, ": No such file or directory \n", 30);
+			else
+				write(2, ": command not found\n", 21);
 			shell->exit_code = 127;
 			return ;
 		}
 		current = current->next;
 	}
 	current = token;
-	while (current && current->type != CMD
-		&& current->type != BUILTIN && current->next)
+	while (current && current->type != CMD && current->type != BUILTIN
+		&& current->next)
 		current = current->next;
 	if (current->type == CMD && current)
 		cmd_wo_pipes(current, shell);
@@ -87,10 +90,21 @@ int	identify_builtin_no_pipes(t_token *token, t_shell *shell)
 	return (i);
 }
 
+static void	cmd_wo_pipe2(pid_t pid, t_token *token, t_shell *shell)
+{
+	int	status;
+
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		shell->exit_code = WEXITSTATUS(status);
+	else
+		shell->exit_code = status;
+	ft_free_array(token->full_cmd);
+}
+
 void	cmd_wo_pipes(t_token *token, t_shell *shell)
 {
 	pid_t	pid;
-	int		status;
 
 	token->full_cmd = create_cmd_tab(token);
 	if (!token->full_cmd && !token->full_path)
@@ -101,17 +115,15 @@ void	cmd_wo_pipes(t_token *token, t_shell *shell)
 		handle_file_redirection(token);
 		if (token->is_valid == IS_VALID)
 		{
-			if (execve(token->full_path, token->full_cmd, shell->env) == -1)
+			if (ft_strncmp(token->str, "/", 1) == 0)
+				handle_err_execve(token);
+			else if (execve(token->full_path, token->full_cmd,
+					shell->env) == -1)
 				handle_err_execve(token);
 		}
 		ft_free_array(token->full_cmd);
 		free_exit_main(token, shell);
 		exit(0);
 	}
-	waitpid(pid, &status, 0);
-	if (WIFEXITED(status))
-		shell->exit_code = WEXITSTATUS(status);
-	else
-		shell->exit_code = status;
-	ft_free_array(token->full_cmd);
+	cmd_wo_pipe2(pid, token, shell);
 }

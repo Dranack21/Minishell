@@ -6,7 +6,7 @@
 /*   By: habouda <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 23:05:03 by habouda           #+#    #+#             */
-/*   Updated: 2025/02/09 23:05:57 by habouda          ###   ########.fr       */
+/*   Updated: 2025/02/13 00:59:16 by habouda          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,4 +108,5 @@ void	skip_to_good_pipe(t_token **cmd_token, t_pipe *pipe)
 			i++;
 		*cmd_token = (*cmd_token)->next;
 	}
+	close_unused_pipes(pipe);
 }
